@@ -1,4 +1,3 @@
-
 import sys
 import os
 from PyQt5.QtWidgets import (
@@ -15,7 +14,7 @@ from PyQt5.QtCore import QThread
 from com_manager import ComManager
 from lane_controller import LaneController
 
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.0.1"
 COM_PORT = "COM1"
 
 
@@ -40,9 +39,10 @@ class WorkerThread(QThread):
                 last_job_was_to_send = False
 
             if not last_job_was_to_send:
-                number_sent_bytes, x = self.__com_manager.send()
+                number_sent_bytes, sent_msg = self.__com_manager.send()
                 if number_sent_bytes > 0:
-                    print("SEND: ", x)
+                    if len(sent_msg) != 7:
+                        print("SENT: ", sent_msg)
                     last_job_was_to_send = True
             self.msleep(self.__loop_time_interval)
 
@@ -57,6 +57,7 @@ class GUI(QDialog):
         self.__list_lane_controller = []
         self.__init_window()
         self.__layout = QGridLayout()
+        self.__settings_menu = {}
         self.setLayout(self.__layout)
 
         self.__thread = WorkerThread(self.__com_manager, 200, self.__recv_msg)
@@ -90,6 +91,29 @@ class GUI(QDialog):
 
     def __create_menu_bar(self):
         menu_bar = QMenuBar(self)
+
+        settings_menu = menu_bar.addMenu("Ustawienia")
+        options = [
+            ["change_next_layout", "Przy zmienie ustaw next layout jako 000"],
+            None,
+            ["change_all_knocked_down", "Przy zmienie ustaw że zbito wszystkie kręgle"],
+            ["change_no_knocked_down", "Przy zmienie ustaw że nie zbito żadego kręgle"],
+            None,
+            ["pick_up", "Podnoś po zmianie"],
+            None,
+            ["time_speed", "Szybszy czas"],
+            ["time_very_speed", "Dużo szybszy czas"],
+        ]
+        for option in options:
+            if option is None:
+                settings_menu.addSeparator()
+                continue
+            key, name = option
+            action = QAction(name, self)
+            action.setCheckable(True)
+            action.triggered.connect(lambda checked, k=key: self.__set_settings(k, checked))
+            settings_menu.addAction(action)
+            self.__settings_menu[key] = action
 
         help_menu = menu_bar.addMenu("Pomoc")
         about_action = QAction("O aplikacji", self)
@@ -132,6 +156,19 @@ class GUI(QDialog):
         lane_index = int(msg[3:4])
         if lane_index < len(self.__list_lane_controller):
             self.__list_lane_controller[lane_index].on_recv_message(msg)
+
+    def __set_settings(self, name, value):
+        related_options = [
+            ["change_all_knocked_down", "change_no_knocked_down"], ["change_no_knocked_down", "change_all_knocked_down"],
+            ["time_speed", "time_very_speed"], ["time_very_speed", "time_speed"]
+        ]
+        for option_a, option_b in related_options:
+            if name == option_a and value and option_b in self.__settings_menu:
+                if self.__settings_menu[option_b].isChecked():
+                    self.__set_settings(option_b, False)
+                    self.__settings_menu[option_b].setChecked(False)
+        for lane_controller in self.__list_lane_controller:
+            lane_controller.set_settings(name, value)
 
 
 if __name__ == '__main__':
