@@ -99,7 +99,10 @@ class GUI(QDialog):
             ["change_all_knocked_down", "Przy zmienie ustaw że zbito wszystkie kręgle"],
             ["change_no_knocked_down", "Przy zmienie ustaw że nie zbito żadego kręgle"],
             None,
-            ["pick_up", "Podnoś po zmianie"]
+            ["pick_up", "Podnoś po zmianie"],
+            None,
+            ["time_speed", "Szybszy czas"],
+            ["time_very_speed", "Dużo szybszy czas"],
         ]
         for option in options:
             if option is None:
@@ -155,7 +158,10 @@ class GUI(QDialog):
             self.__list_lane_controller[lane_index].on_recv_message(msg)
 
     def __set_settings(self, name, value):
-        related_options = [["change_all_knocked_down", "change_no_knocked_down"], ["change_no_knocked_down", "change_all_knocked_down"]]
+        related_options = [
+            ["change_all_knocked_down", "change_no_knocked_down"], ["change_no_knocked_down", "change_all_knocked_down"],
+            ["time_speed", "time_very_speed"], ["time_very_speed", "time_speed"]
+        ]
         for option_a, option_b in related_options:
             if name == option_a and value and option_b in self.__settings_menu:
                 if self.__settings_menu[option_b].isChecked():
