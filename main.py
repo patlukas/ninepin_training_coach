@@ -14,7 +14,7 @@ from PyQt5.QtCore import QThread
 from com_manager import ComManager
 from lane_controller import LaneController
 
-APP_VERSION = "1.0.1"
+APP_VERSION = "1.0.2"
 COM_PORT = "COM1"
 
 

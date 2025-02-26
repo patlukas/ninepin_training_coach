@@ -163,7 +163,6 @@ class _LaneCommunicationManager:
             return self.__sub_to_hex(current_value, 10)
         return current_value
 
-
     @staticmethod
     def __add_to_hex(hex_bytes, x):
         hex_str = hex_bytes.decode('utf-8')
@@ -179,6 +178,8 @@ class _LaneCommunicationManager:
     def __sub_to_hex(hex_bytes, x):
         hex_str = hex_bytes.decode('utf-8')
         hex_value = int(hex_str, 16)
+        if x >= hex_value:
+            return b"000"
         new_hex_value = hex_value - x
 
         new_hex_str = hex(new_hex_value)[2:].upper().zfill(3)
@@ -204,11 +205,11 @@ class _LaneCommunicationManager:
             self.__change_no_knocked_down = value
         elif name == "pick_up":
             self.__pick_up = value
-        elif "change_next_layout":
+        elif name == "change_next_layout":
             self.__change_next_layout = value
-        elif "time_speed":
+        elif name == "time_speed":
             self.__time_speed = value
-        elif "time_very_speed":
+        elif name == "time_very_speed":
             self.__time_very_speed = value
 
 
