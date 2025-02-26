@@ -49,7 +49,7 @@ class _LaneControllerSection(QGroupBox):
 
 
 class _LaneCommunicationManager:
-    def __init__(self, lane_number, on_send_message, show_start_layout):
+    def __init__(self, lane_number, on_send_message, show_start_layout, time_break_after_recv):
         self.__lane_number = lane_number
         self.__message_head = b"3" + str(self.__lane_number).encode('utf-8') + b"38"
         self.__on_send_message = on_send_message
@@ -63,6 +63,7 @@ class _LaneCommunicationManager:
         self.__pick_up = False
         self.__time_speed = False
         self.__time_very_speed = False
+        self.__time_break_after_recv = time_break_after_recv
 
     def start(self, mode):
         self.__throws_to_current_layout = 0
@@ -73,6 +74,7 @@ class _LaneCommunicationManager:
         self.__on_send_message(self.__message_head + b"IG0000633E70000000000")
 
     def stop(self):
+        self.__on_send_message(self.__message_head + b"E0")
         self.__run = False
 
     def analyze_message(self, message):
@@ -96,7 +98,7 @@ class _LaneCommunicationManager:
             elif "Zbierane na " in self.__mode:
                 self.__analyse_max_throw_clearoff(message)
 
-        time.sleep(0.1)
+        time.sleep(self.__time_break_after_recv)
         self.__on_send_message(self.__message_head)
 
     def __analyse_optimistic_clearoff(self, next_layout, message):
@@ -214,8 +216,8 @@ class _LaneCommunicationManager:
 
 
 class LaneController:
-    def __init__(self, lane_number, on_send_message):
-        self.__communication_manager = _LaneCommunicationManager(lane_number, on_send_message, self.__show_start_layout)
+    def __init__(self, lane_number, on_send_message, time_break_after_recv):
+        self.__communication_manager = _LaneCommunicationManager(lane_number, on_send_message, self.__show_start_layout, time_break_after_recv)
         self.__modes = [
             "Zbierane na 2",
             "Zbierane na 3",
