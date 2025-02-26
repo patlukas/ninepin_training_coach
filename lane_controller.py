@@ -111,7 +111,7 @@ class _LaneCommunicationManager:
         max_throw = int(self.__mode.replace("Zbierane na ", ""))
         if self.__throws_to_current_layout < max_throw:
             return
-        self.__on_send_message(self.__meassage_head + b"Z" + message[6:17] + b"000" + message[20:-2])
+        self.__on_send_message(self.__meassage_head + b"Z" + message[5:17] + b"000" + message[20:-2])
 
     @staticmethod
     def __add_to_hex(hex_bytes, x):
