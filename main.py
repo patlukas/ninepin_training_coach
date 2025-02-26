@@ -1,4 +1,3 @@
-
 import sys
 import os
 from PyQt5.QtWidgets import (
@@ -58,6 +57,7 @@ class GUI(QDialog):
         self.__list_lane_controller = []
         self.__init_window()
         self.__layout = QGridLayout()
+        self.__settings_menu = {}
         self.setLayout(self.__layout)
 
         self.__thread = WorkerThread(self.__com_manager, 200, self.__recv_msg)
@@ -93,29 +93,24 @@ class GUI(QDialog):
         menu_bar = QMenuBar(self)
 
         settings_menu = menu_bar.addMenu("Ustawienia")
-        s_2_action = QAction("Przy zmienie ustaw next layout jako 000", self)
-        s_2_action.setCheckable(True)
-        s_2_action.setChecked(False)
-        s_2_action.triggered.connect(lambda checked: self.__set_settings("change_next_layout", checked))
-        settings_menu.addAction(s_2_action)
-
-        s_1_action = QAction("Przy zmienie ustaw że zbito wszystkie kręgle", self)
-        s_1_action.setCheckable(True)
-        s_1_action.setChecked(False)
-        s_1_action.triggered.connect(lambda checked: self.__set_settings("change_all_knocked_down", checked))
-        settings_menu.addAction(s_1_action)
-
-        s_1_action = QAction("Przy zmienie ustaw że nie zbito żadego kręgle", self)
-        s_1_action.setCheckable(True)
-        s_1_action.setChecked(False)
-        s_1_action.triggered.connect(lambda checked: self.__set_settings("change_no_knocked_down", checked))
-        settings_menu.addAction(s_1_action)
-
-        s_2_action = QAction("Podnoś po zmianie", self)
-        s_2_action.setCheckable(True)
-        s_2_action.setChecked(False)
-        s_2_action.triggered.connect(lambda checked: self.__set_settings("pick_up", checked))
-        settings_menu.addAction(s_2_action)
+        options = [
+            ["change_next_layout", "Przy zmienie ustaw next layout jako 000"],
+            None,
+            ["change_all_knocked_down", "Przy zmienie ustaw że zbito wszystkie kręgle"],
+            ["change_no_knocked_down", "Przy zmienie ustaw że nie zbito żadego kręgle"],
+            None,
+            ["pick_up", "Podnoś po zmianie"]
+        ]
+        for option in options:
+            if option is None:
+                settings_menu.addSeparator()
+                continue
+            key, name = option
+            action = QAction(name, self)
+            action.setCheckable(True)
+            action.triggered.connect(lambda checked, k=key: self.__set_settings(k, checked))
+            settings_menu.addAction(action)
+            self.__settings_menu[key] = action
 
         help_menu = menu_bar.addMenu("Pomoc")
         about_action = QAction("O aplikacji", self)
@@ -160,6 +155,12 @@ class GUI(QDialog):
             self.__list_lane_controller[lane_index].on_recv_message(msg)
 
     def __set_settings(self, name, value):
+        related_options = [["change_all_knocked_down", "change_no_knocked_down"], ["change_no_knocked_down", "change_all_knocked_down"]]
+        for option_a, option_b in related_options:
+            if name == option_a and value and option_b in self.__settings_menu:
+                if self.__settings_menu[option_b].isChecked():
+                    self.__set_settings(option_b, False)
+                    self.__settings_menu[option_b].setChecked(False)
         for lane_controller in self.__list_lane_controller:
             lane_controller.set_settings(name, value)
 
