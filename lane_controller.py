@@ -57,6 +57,10 @@ class _LaneCommunicationManager:
         self.__show_start_layout = show_start_layout
         self.__run = False
         self.__mode = ""
+        self.__change_all_knocked_down = False
+        self.__change_no_knocked_down = False
+        self.__change_next_layout = False
+        self.__pick_up = False
 
     def start(self, mode):
         self.__throws_to_current_layout = 0
@@ -64,7 +68,7 @@ class _LaneCommunicationManager:
         self.__run = True
 
         self.__on_send_message(self.__meassage_head + b"E1")
-        self.__on_send_message(self.__meassage_head + b"IG0000322580000000000")
+        self.__on_send_message(self.__meassage_head + b"IG0000633E70000000000")
 
     def stop(self):
         self.__run = False
@@ -103,15 +107,50 @@ class _LaneCommunicationManager:
             x = 3
         else:
             return
-        throws = self.__add_to_hex(message[5:8], x)
-        total_sum = self.__add_to_hex(message[14:17], x)
-        self.__on_send_message(self.__meassage_head + b"Z" + throws + message[8:14] + total_sum + b"000" + message[20:-2])
+        self.__on_send_message(
+            self.__meassage_head +
+            b"Z" +
+            self.__add_to_hex(message[5:8], x) +
+            message[8:14] +
+            self.__add_to_hex(message[14:17], x) +
+            self.__get_next_layout(message[17:20], self.__change_next_layout) +
+            message[20:26] +
+            self.__get_knocked_down(message[26:29], self.__change_all_knocked_down, self.__change_no_knocked_down) +
+            message[29:-2]
+        )
+        if self.__pick_up:
+            self.__on_send_message(self.__meassage_head + b"T41")
 
     def __analyse_max_throw_clearoff(self, message):
         max_throw = int(self.__mode.replace("Zbierane na ", ""))
         if self.__throws_to_current_layout < max_throw:
             return
-        self.__on_send_message(self.__meassage_head + b"Z" + message[5:17] + b"000" + message[20:-2])
+        self.__on_send_message(
+            self.__meassage_head +
+            b"Z" +
+            message[5:17] +
+            self.__get_next_layout(message[17:20], self.__change_next_layout) +
+            message[20:26] +
+            self.__get_knocked_down(message[26:29], self.__change_all_knocked_down, self.__change_no_knocked_down) +
+            message[29:-2]
+        )
+        self.__throws_to_current_layout = 0
+        if self.__pick_up:
+            self.__on_send_message(self.__meassage_head + b"T41")
+
+    @staticmethod
+    def __get_next_layout(current_value, return_empty):
+        if return_empty:
+            return b"000"
+        return current_value
+
+    @staticmethod
+    def __get_knocked_down(current_value, return_all, return_no):
+        if return_all:
+            return b"1FF"
+        if return_no:
+            return b"000"
+        return current_value
 
     @staticmethod
     def __add_to_hex(hex_bytes, x):
@@ -135,6 +174,16 @@ class _LaneCommunicationManager:
         inverted_bytes = inverted_hex.encode('utf-8')
         return inverted_bytes
 
+    def set_settings(self, name, value):
+        if name == "change_all_knocked_down":
+            self.__change_all_knocked_down = value
+        elif name == "change_no_knocked_down":
+            self.__change_no_knocked_down = value
+        elif name == "pick_up":
+            self.__pick_up = value
+        elif "change_next_layout":
+            self.__change_next_layout = value
+
 
 class LaneController:
     def __init__(self, lane_number, on_send_message):
@@ -156,3 +205,6 @@ class LaneController:
 
     def on_recv_message(self, message: bytes):
         self.__communication_manager.analyze_message(message)
+
+    def set_settings(self, name, value):
+        self.__communication_manager.set_settings(name, value)

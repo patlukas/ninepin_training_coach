@@ -15,7 +15,7 @@ from PyQt5.QtCore import QThread
 from com_manager import ComManager
 from lane_controller import LaneController
 
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.0.1"
 COM_PORT = "COM1"
 
 
@@ -40,9 +40,10 @@ class WorkerThread(QThread):
                 last_job_was_to_send = False
 
             if not last_job_was_to_send:
-                number_sent_bytes, x = self.__com_manager.send()
+                number_sent_bytes, sent_msg = self.__com_manager.send()
                 if number_sent_bytes > 0:
-                    print("SEND: ", x)
+                    if len(sent_msg) != 7:
+                        print("SENT: ", sent_msg)
                     last_job_was_to_send = True
             self.msleep(self.__loop_time_interval)
 
@@ -91,6 +92,31 @@ class GUI(QDialog):
     def __create_menu_bar(self):
         menu_bar = QMenuBar(self)
 
+        settings_menu = menu_bar.addMenu("Ustawienia")
+        s_2_action = QAction("Przy zmienie ustaw next layout jako 000", self)
+        s_2_action.setCheckable(True)
+        s_2_action.setChecked(False)
+        s_2_action.triggered.connect(lambda checked: self.__set_settings("change_next_layout", checked))
+        settings_menu.addAction(s_2_action)
+
+        s_1_action = QAction("Przy zmienie ustaw że zbito wszystkie kręgle", self)
+        s_1_action.setCheckable(True)
+        s_1_action.setChecked(False)
+        s_1_action.triggered.connect(lambda checked: self.__set_settings("change_all_knocked_down", checked))
+        settings_menu.addAction(s_1_action)
+
+        s_1_action = QAction("Przy zmienie ustaw że nie zbito żadego kręgle", self)
+        s_1_action.setCheckable(True)
+        s_1_action.setChecked(False)
+        s_1_action.triggered.connect(lambda checked: self.__set_settings("change_no_knocked_down", checked))
+        settings_menu.addAction(s_1_action)
+
+        s_2_action = QAction("Podnoś po zmianie", self)
+        s_2_action.setCheckable(True)
+        s_2_action.setChecked(False)
+        s_2_action.triggered.connect(lambda checked: self.__set_settings("pick_up", checked))
+        settings_menu.addAction(s_2_action)
+
         help_menu = menu_bar.addMenu("Pomoc")
         about_action = QAction("O aplikacji", self)
         about_action.triggered.connect(self.__show_about)
@@ -132,6 +158,10 @@ class GUI(QDialog):
         lane_index = int(msg[3:4])
         if lane_index < len(self.__list_lane_controller):
             self.__list_lane_controller[lane_index].on_recv_message(msg)
+
+    def __set_settings(self, name, value):
+        for lane_controller in self.__list_lane_controller:
+            lane_controller.set_settings(name, value)
 
 
 if __name__ == '__main__':
