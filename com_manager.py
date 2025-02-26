@@ -1,6 +1,24 @@
 import serial
 from typing import Union
 
+
+class ComManagerError(Exception):
+    """
+    List code:
+        "10-000" - wrong type of variable
+        "10-001" - error during port creation, wrong parameters e.g. baud rate, data bits
+        "10-002" - error during port creation, port not exists or is used
+        "10-003" - trying to read data from an unopened port
+        "10-004" - trying to send data to an unopened port
+        "10-005" - trying to close unopened port
+    """
+
+    def __init__(self, code, message):
+        self.code = code
+        self.message = message
+        super().__init__()
+
+
 class ComManager:
     def __init__(self, port_name: str, timeout: Union[int, float, None], write_timeout: Union[int, float, None]):
         self.__port_name = port_name
@@ -13,9 +31,11 @@ class ComManager:
             com_port = serial.Serial(self.__port_name, 9600, timeout=timeout, write_timeout=write_timeout)
             return com_port
         except ValueError as e:
-            print("ValueError", e)
+            raise ComManagerError("10-001", "ValueError while create {} port: parameter are out of range, "
+                                            "e.g. baud rate, data bits| {}".format(self.__port_name, e))
         except serial.SerialException as e:
-            print("serial.SerialException", e)
+            raise ComManagerError("10-002", "SerialException while create {} port: In case the device can not be "
+                                            "found or can not be configured| {}".format(self.__port_name, e))
 
     def read(self) -> bytes:
         if self.__com_port is None:
@@ -31,7 +51,7 @@ class ComManager:
         try:
             data_read.decode('Windows-1250')
         except UnicodeError as e:
-            print("UnicodeError", e)
+            print("10-003", "Port {} is closed or not was be created, so I can't read data".format(self.__port_name))
 
         if b"\r" not in self.__bytes_to_recv:
             return b""
@@ -42,7 +62,7 @@ class ComManager:
 
     def send(self) -> (int, bytes):
         if self.__com_port is None:
-            return -2, b""
+            print("10-004", "Port {} is closed or not was be created, so I can't send data".format(self.__port_name))
 
         if self.__com_port.out_waiting > 0 or self.__bytes_to_send == b"" or b"\r" not in self.__bytes_to_send:
             return 0, b""
@@ -70,6 +90,6 @@ class ComManager:
 
     def close(self) -> None:
         if self.__com_port is None:
-            print("Port {} is closed or not was be created, so I can't close port".format(self.__port_name))
+            return
         self.__com_port.close()
         self.__com_port = None

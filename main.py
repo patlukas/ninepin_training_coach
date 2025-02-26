@@ -1,17 +1,19 @@
 import sys
 import os
+
 from PyQt5.QtWidgets import (
     QApplication,
     QDialog,
     QMessageBox,
     QMenuBar,
     QAction,
-    QGridLayout
+    QGridLayout, QLabel
 )
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QThread, Qt
 
-from com_manager import ComManager
+from com_manager import ComManager, ComManagerError
+from config_reader import ConfigReader, ConfigReaderError
 from lane_controller import LaneController
 
 APP_VERSION = "1.0.2"
@@ -53,11 +55,12 @@ class WorkerThread(QThread):
 class GUI(QDialog):
     def __init__(self):
         super().__init__()
-        self.__com_manager = ComManager(COM_PORT, 0.1, 0.1)
-        self.__list_lane_controller = []
-        self.__init_window()
-        self.__layout = QGridLayout()
         self.__settings_menu = {}
+        self.__list_lane_controller = []
+
+        self.__init_window()
+        self.__init_program()
+        self.__layout = QGridLayout()
         self.setLayout(self.__layout)
 
         self.__thread = WorkerThread(self.__com_manager, 200, self.__recv_msg)
@@ -65,6 +68,14 @@ class GUI(QDialog):
         self.__set_layout()
         self.__init_program()
         self.__thread.start()
+        try:
+            self.__com_manager = ComManager(COM_PORT, 0.1, 0.1)
+            self.__set_layout()
+
+            self.__thread = WorkerThread(self.__com_manager, 200, self.__recv_msg)
+            self.__thread.start()
+        except ComManagerError as e:
+            self.__set_error_layout("Problem z utworzneiem portu szeregowego", e.code, e.message)
 
     @staticmethod
     def closeEvent(event: QtGui.QCloseEvent) -> None:
@@ -74,13 +85,26 @@ class GUI(QDialog):
         self.setWindowTitle("Trener Kręglarski")
         self.setWindowIcon(QtGui.QIcon('icon/icon.ico'))
         self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
-        self.setMinimumWidth(570)
-        self.setMinimumHeight(300)
         self.move(300, 50)
         self.layout()
 
     def __init_program(self) -> None:
         self.__set_working_directory()
+
+    def __set_error_layout(self, name, error_code, error_msg) -> None:
+        head_label = QLabel("Błąd krytyczny")
+        head_label.setAlignment(Qt.AlignCenter)
+        head_label.setStyleSheet("font-size: 30px; color: red; margin-bottom: 25px")
+        self.__layout.addWidget(head_label, 0, 0)
+
+        name_label = QLabel(name)
+        name_label.setAlignment(Qt.AlignCenter)
+        name_label.setStyleSheet("font-size: 20px;  margin-bottom: 10px")
+        self.__layout.addWidget(name_label, 1, 0)
+
+        msg_label = QLabel(error_code + ": " + error_msg)
+        msg_label.setWordWrap(True)
+        self.__layout.addWidget(msg_label, 2, 0)
 
     def __set_layout(self) -> None:
         self.__layout.setMenuBar(self.__create_menu_bar())
