@@ -1,6 +1,8 @@
 import time
 
 from PyQt5.QtWidgets import QGroupBox, QGridLayout, QPushButton, QComboBox, QLabel
+from PyQt5.QtCore import QTimer
+
 
 class _LaneControllerSection(QGroupBox):
     def __init__(self, name: str, list_modes: list, on_start, on_stop):
@@ -45,11 +47,11 @@ class _LaneControllerSection(QGroupBox):
         self.__toggle_view(True)
 
     def show_start_layout(self):
-        self.__click_stop()
+        QTimer.singleShot(0, self.__click_stop)
 
 
 class _LaneCommunicationManager:
-    def __init__(self, lane_number, on_send_message, show_start_layout):
+    def __init__(self, lane_number, on_send_message, show_start_layout, time_break_after_recv):
         self.__lane_number = lane_number
         self.__message_head = b"3" + str(self.__lane_number).encode('utf-8') + b"38"
         self.__on_send_message = on_send_message
@@ -63,6 +65,7 @@ class _LaneCommunicationManager:
         self.__pick_up = False
         self.__time_speed = False
         self.__time_very_speed = False
+        self.__time_break_after_recv = time_break_after_recv
 
     def start(self, mode):
         self.__throws_to_current_layout = 0
@@ -73,14 +76,13 @@ class _LaneCommunicationManager:
         self.__on_send_message(self.__message_head + b"IG0000633E70000000000")
 
     def stop(self):
+        self.__on_send_message(self.__message_head + b"E0")
         self.__run = False
 
     def analyze_message(self, message):
         if not self.__run:
             return
-
         if message[4:6] == b"i0":
-            self.stop()
             self.__show_start_layout()
             return
         if message[4:5] in [b"w", b"g", b"h", b"f"]:
@@ -90,14 +92,12 @@ class _LaneCommunicationManager:
                 self.__throws_to_current_layout += 1
             else:
                 self.__throws_to_current_layout = 0
-            print("Analize recv msg: ", message, self.__throws_to_current_layout)
             if self.__mode == "Optymistyczne zbierane":
                 self.__analyse_optimistic_clearoff(next_layout, message)
             elif "Zbierane na " in self.__mode:
                 self.__analyse_max_throw_clearoff(message)
-
-        time.sleep(0.1)
-        self.__on_send_message(self.__message_head)
+        time.sleep(self.__time_break_after_recv)
+        self.__on_send_message(self.__message_head, 2)
 
     def __analyse_optimistic_clearoff(self, next_layout, message):
         next_layout_invert = self.__invert_bits(next_layout)
@@ -163,7 +163,6 @@ class _LaneCommunicationManager:
             return self.__sub_to_hex(current_value, 10)
         return current_value
 
-
     @staticmethod
     def __add_to_hex(hex_bytes, x):
         hex_str = hex_bytes.decode('utf-8')
@@ -179,6 +178,8 @@ class _LaneCommunicationManager:
     def __sub_to_hex(hex_bytes, x):
         hex_str = hex_bytes.decode('utf-8')
         hex_value = int(hex_str, 16)
+        if x >= hex_value:
+            return b"000"
         new_hex_value = hex_value - x
 
         new_hex_str = hex(new_hex_value)[2:].upper().zfill(3)
@@ -204,17 +205,17 @@ class _LaneCommunicationManager:
             self.__change_no_knocked_down = value
         elif name == "pick_up":
             self.__pick_up = value
-        elif "change_next_layout":
+        elif name == "change_next_layout":
             self.__change_next_layout = value
-        elif "time_speed":
+        elif name == "time_speed":
             self.__time_speed = value
-        elif "time_very_speed":
+        elif name == "time_very_speed":
             self.__time_very_speed = value
 
 
 class LaneController:
-    def __init__(self, lane_number, on_send_message):
-        self.__communication_manager = _LaneCommunicationManager(lane_number, on_send_message, self.__show_start_layout)
+    def __init__(self, lane_number, on_send_message, time_break_after_recv):
+        self.__communication_manager = _LaneCommunicationManager(lane_number, on_send_message, self.__show_start_layout, time_break_after_recv)
         self.__modes = [
             "Zbierane na 2",
             "Zbierane na 3",

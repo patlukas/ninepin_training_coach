@@ -1,50 +1,55 @@
 import sys
 import os
+import time
+
 from PyQt5.QtWidgets import (
     QApplication,
     QDialog,
     QMessageBox,
     QMenuBar,
     QAction,
-    QGridLayout
+    QGridLayout, QLabel
 )
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QThread, Qt
 
-from com_manager import ComManager
+from com_manager import ComManager, ComManagerError
+from config_reader import ConfigReader, ConfigReaderError
+from gui.log_table import LogTable
 from lane_controller import LaneController
+from log_management import LogManagement
 
-APP_VERSION = "1.0.1"
-COM_PORT = "COM1"
+APP_VERSION = "1.0.2"
 
 
 class WorkerThread(QThread):
-    def __init__(self, com_manager, loop_interval, after_recv_msg):
+    def __init__(self, com_manager, loop_interval, after_recv_msg, max_time_between_next_send, add_log):
         super().__init__()
         self.__after_recv_msg = after_recv_msg
         self.__com_manager = com_manager
         self.__running = False
         self.__loop_time_interval = loop_interval
+        self.__max_time_between_next_send = max_time_between_next_send
+        self.__add_log = add_log
 
     def run(self):
-        print("RUN")
+        self.__add_log(5, "RUN", "")
         self.__running = True
-        last_job_was_to_send = False
+        time_next_send = 0
         while self.__running:
             read_bytes = self.__com_manager.read()
             if read_bytes != b"":
                 for msg in read_bytes.split(b"\r"):
                     if msg != b"":
+                        self.__add_log(2, "RECV", msg)
                         self.__after_recv_msg(msg)
-                last_job_was_to_send = False
-
-            if not last_job_was_to_send:
+                time_next_send = 0
+            if time.time() > time_next_send:
                 number_sent_bytes, sent_msg = self.__com_manager.send()
                 if number_sent_bytes > 0:
-                    if len(sent_msg) != 7:
-                        print("SENT: ", sent_msg)
-                    last_job_was_to_send = True
-            self.msleep(self.__loop_time_interval)
+                    self.__add_log(2, "SEND", sent_msg)
+                    time_next_send = time.time() + self.__max_time_between_next_send
+            self.msleep(int(self.__loop_time_interval*1000))
 
     def stop(self):
         self.__running = False
@@ -53,44 +58,72 @@ class WorkerThread(QThread):
 class GUI(QDialog):
     def __init__(self):
         super().__init__()
-        self.__com_manager = ComManager(COM_PORT, 0.1, 0.1)
-        self.__list_lane_controller = []
-        self.__init_window()
-        self.__layout = QGridLayout()
+        self.__log_management = LogManagement()
         self.__settings_menu = {}
-        self.setLayout(self.__layout)
+        self.__list_lane_controller = []
 
-        self.__thread = WorkerThread(self.__com_manager, 200, self.__recv_msg)
-
-        self.__set_layout()
+        self.__init_window()
         self.__init_program()
-        self.__thread.start()
+        self.__layout = QGridLayout()
+        self.setLayout(self.__layout)
+        try:
+            self.__config = ConfigReader().get_configuration()
+            self.__com_manager = ComManager(self.__config["com_port"], self.__config["com_timeout"], self.__config["com_write_timeout"], self.__log_management.add_log)
+            self.__log_table = LogTable(self.__log_management)
+            self.__set_layout()
 
-    @staticmethod
-    def closeEvent(event: QtGui.QCloseEvent) -> None:
+            self.__thread = WorkerThread(self.__com_manager, self.__config["loop_com_communication_break"], self.__recv_msg, self.__config["max_time_between_next_send"], self.__log_management.add_log)
+            self.__thread.start()
+        except ComManagerError as e:
+            self.__set_error_layout("Problem z utworzneiem portu szeregowego", e.code, e.message)
+        except ConfigReaderError as e:
+            self.__set_error_layout("Problem z odczytaniem konfiguracji", e.code, e.message)
+
+    def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        self.__com_manager.close()
         event.accept()
 
     def __init_window(self) -> None:
         self.setWindowTitle("Trener Kręglarski")
         self.setWindowIcon(QtGui.QIcon('icon/icon.ico'))
         self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
-        self.setMinimumWidth(570)
-        self.setMinimumHeight(300)
         self.move(300, 50)
         self.layout()
 
     def __init_program(self) -> None:
         self.__set_working_directory()
 
+    def __set_error_layout(self, name, error_code, error_msg) -> None:
+        head_label = QLabel("Błąd krytyczny")
+        head_label.setAlignment(Qt.AlignCenter)
+        head_label.setStyleSheet("font-size: 30px; color: red; margin-bottom: 25px")
+        self.__layout.addWidget(head_label, 0, 0)
+
+        name_label = QLabel(name)
+        name_label.setAlignment(Qt.AlignCenter)
+        name_label.setStyleSheet("font-size: 20px;  margin-bottom: 10px")
+        self.__layout.addWidget(name_label, 1, 0)
+
+        msg_label = QLabel(error_code + ": " + error_msg)
+        msg_label.setWordWrap(True)
+        self.__layout.addWidget(msg_label, 2, 0)
+
     def __set_layout(self) -> None:
         self.__layout.setMenuBar(self.__create_menu_bar())
-        for i in range(6):
-            lane_controller = LaneController(i, self.__on_add_message_to_send)
+        for i in range(self.__config["number_of_lane"]):
+            lane_controller = LaneController(i, self.__on_add_message_to_send, self.__config["break_between_recv_msg_and_send_ping_to_lane"])
             self.__list_lane_controller.append(lane_controller)
             self.__layout.addWidget(lane_controller.get_section(), i, 0)
+        self.__layout.addWidget(self.__log_table, 0, 1, self.__config["number_of_lane"], 1)
 
     def __create_menu_bar(self):
         menu_bar = QMenuBar(self)
+
+        view_menu = menu_bar.addMenu("Widok")
+        action = QAction("Pokaż logi", self)
+        action.setCheckable(True)
+        action.triggered.connect(lambda checked: self.__set_visible_log_table(checked))
+        view_menu.addAction(action)
 
         settings_menu = menu_bar.addMenu("Ustawienia")
         options = [
@@ -141,7 +174,8 @@ class GUI(QDialog):
             exe_directory = os.path.dirname(os.path.abspath(__file__))
         os.chdir(exe_directory)
 
-    def __on_add_message_to_send(self, message):
+    def __on_add_message_to_send(self, message, priority=5):
+        self.__log_management.add_log(priority, "ADD MSG", message)
         self.__com_manager.add_bytes_to_send(message + self.__calculate_control_sum(message) + b"\r")
 
     @staticmethod
@@ -169,6 +203,10 @@ class GUI(QDialog):
                     self.__settings_menu[option_b].setChecked(False)
         for lane_controller in self.__list_lane_controller:
             lane_controller.set_settings(name, value)
+
+    def __set_visible_log_table(self, show):
+        self.__log_table.set_visibility(show)
+        self.adjustSize()
 
 
 if __name__ == '__main__':

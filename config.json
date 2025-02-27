@@ -1,0 +1,9 @@
+{
+    "number_of_lane": 6,
+    "com_port": "COM1",
+    "com_timeout": 0.1,
+    "com_write_timeout": 0.1,
+    "loop_com_communication_break": 0.15,
+    "break_between_recv_msg_and_send_ping_to_lane": 0.4,
+    "max_time_between_next_send": 5.0
+}
