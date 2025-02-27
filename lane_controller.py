@@ -1,6 +1,8 @@
 import time
 
 from PyQt5.QtWidgets import QGroupBox, QGridLayout, QPushButton, QComboBox, QLabel
+from PyQt5.QtCore import QTimer
+
 
 class _LaneControllerSection(QGroupBox):
     def __init__(self, name: str, list_modes: list, on_start, on_stop):
@@ -29,17 +31,10 @@ class _LaneControllerSection(QGroupBox):
         self.__toggle_view(True)
 
     def __toggle_view(self, show_start):
-        self.__btn_stop.setVisible(True)
-        self.__btn_start.setVisible(True)
-        self.__options_combobox.setVisible(True)
-        self.__options_label.setVisible(True)
-
-        if show_start:
-            self.__btn_stop.setVisible(False)
-            self.__options_label.setVisible(False)
-        else:
-            self.__btn_start.setVisible(False)
-            self.__options_combobox.setVisible(False)
+        self.__options_combobox.setVisible(show_start)
+        self.__btn_start.setVisible(show_start)
+        self.__options_label.setVisible(not show_start)
+        self.__btn_stop.setVisible(not show_start)
 
     def __click_start(self):
         mode = self.__options_combobox.currentText()
@@ -52,7 +47,7 @@ class _LaneControllerSection(QGroupBox):
         self.__toggle_view(True)
 
     def show_start_layout(self):
-        self.__click_stop()
+        QTimer.singleShot(0, self.__click_stop)
 
 
 class _LaneCommunicationManager:
