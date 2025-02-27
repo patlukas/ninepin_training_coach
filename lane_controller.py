@@ -97,7 +97,7 @@ class _LaneCommunicationManager:
             elif "Zbierane na " in self.__mode:
                 self.__analyse_max_throw_clearoff(message)
         time.sleep(self.__time_break_after_recv)
-        self.__on_send_message(self.__message_head)
+        self.__on_send_message(self.__message_head, 2)
 
     def __analyse_optimistic_clearoff(self, next_layout, message):
         next_layout_invert = self.__invert_bits(next_layout)

@@ -174,7 +174,8 @@ class GUI(QDialog):
             exe_directory = os.path.dirname(os.path.abspath(__file__))
         os.chdir(exe_directory)
 
-    def __on_add_message_to_send(self, message):
+    def __on_add_message_to_send(self, message, priority=5):
+        self.__log_management.add_log(priority, "ADD MSG", message)
         self.__com_manager.add_bytes_to_send(message + self.__calculate_control_sum(message) + b"\r")
 
     @staticmethod
