@@ -111,7 +111,7 @@ class GUI(QDialog):
 
     def __set_layout(self) -> None:
         self.__layout.setMenuBar(self.__create_menu_bar())
-        for i in range(6):
+        for i in range(self.__config["number_of_lane"]):
             lane_controller = LaneController(i, self.__on_add_message_to_send, self.__config["break_between_recv_msg_and_send_ping_to_lane"])
             self.__list_lane_controller.append(lane_controller)
             self.__layout.addWidget(lane_controller.get_section(), i, 0)

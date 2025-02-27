@@ -1,4 +1,5 @@
 {
+    "number_of_lane": 6,
     "com_port": "COM1",
     "com_timeout": 0.1,
     "com_write_timeout": 0.1,

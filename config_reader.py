@@ -45,6 +45,7 @@ class ConfigReader:
     @staticmethod
     def __get_required_config_settings() -> list:
         list_settings = [
+            "number_of_lane",
             "com_port",
             "com_timeout",
             "com_write_timeout",
