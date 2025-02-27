@@ -29,10 +29,17 @@ class _LaneControllerSection(QGroupBox):
         self.__toggle_view(True)
 
     def __toggle_view(self, show_start):
-        self.__options_combobox.setVisible(show_start)
-        self.__btn_start.setVisible(show_start)
-        self.__options_label.setVisible(not show_start)
-        self.__btn_stop.setVisible(not show_start)
+        self.__btn_stop.setVisible(True)
+        self.__btn_start.setVisible(True)
+        self.__options_combobox.setVisible(True)
+        self.__options_label.setVisible(True)
+
+        if show_start:
+            self.__btn_stop.setVisible(False)
+            self.__options_label.setVisible(False)
+        else:
+            self.__btn_start.setVisible(False)
+            self.__options_combobox.setVisible(False)
 
     def __click_start(self):
         mode = self.__options_combobox.currentText()
@@ -80,9 +87,7 @@ class _LaneCommunicationManager:
     def analyze_message(self, message):
         if not self.__run:
             return
-
         if message[4:6] == b"i0":
-            self.stop()
             self.__show_start_layout()
             return
         if message[4:5] in [b"w", b"g", b"h", b"f"]:
@@ -96,7 +101,6 @@ class _LaneCommunicationManager:
                 self.__analyse_optimistic_clearoff(next_layout, message)
             elif "Zbierane na " in self.__mode:
                 self.__analyse_max_throw_clearoff(message)
-
         time.sleep(self.__time_break_after_recv)
         self.__on_send_message(self.__message_head)
 

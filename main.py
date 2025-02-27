@@ -15,6 +15,7 @@ from PyQt5.QtCore import QThread, Qt
 
 from com_manager import ComManager, ComManagerError
 from config_reader import ConfigReader, ConfigReaderError
+from gui.log_table import LogTable
 from lane_controller import LaneController
 from log_management import LogManagement
 
@@ -40,16 +41,13 @@ class WorkerThread(QThread):
             if read_bytes != b"":
                 for msg in read_bytes.split(b"\r"):
                     if msg != b"":
-                        self.__add_log(5, "RECV", msg)
+                        self.__add_log(2, "RECV", msg)
                         self.__after_recv_msg(msg)
                 time_next_send = 0
             if time.time() > time_next_send:
                 number_sent_bytes, sent_msg = self.__com_manager.send()
                 if number_sent_bytes > 0:
-                    if len(sent_msg) != 7:
-                        self.__add_log(5, "SEND", sent_msg)
-                    else:
-                        self.__add_log(3, "SEND", sent_msg)
+                    self.__add_log(2, "SEND", sent_msg)
                     time_next_send = time.time() + self.__max_time_between_next_send
             self.msleep(int(self.__loop_time_interval*1000))
 
@@ -71,6 +69,7 @@ class GUI(QDialog):
         try:
             self.__config = ConfigReader().get_configuration()
             self.__com_manager = ComManager(self.__config["com_port"], self.__config["com_timeout"], self.__config["com_write_timeout"], self.__log_management.add_log)
+            self.__log_table = LogTable(self.__log_management)
             self.__set_layout()
 
             self.__thread = WorkerThread(self.__com_manager, self.__config["loop_com_communication_break"], self.__recv_msg, self.__config["max_time_between_next_send"], self.__log_management.add_log)
@@ -115,9 +114,16 @@ class GUI(QDialog):
             lane_controller = LaneController(i, self.__on_add_message_to_send, self.__config["break_between_recv_msg_and_send_ping_to_lane"])
             self.__list_lane_controller.append(lane_controller)
             self.__layout.addWidget(lane_controller.get_section(), i, 0)
+        self.__layout.addWidget(self.__log_table, 0, 1, self.__config["number_of_lane"], 1)
 
     def __create_menu_bar(self):
         menu_bar = QMenuBar(self)
+
+        view_menu = menu_bar.addMenu("Widok")
+        action = QAction("Pokaż logi", self)
+        action.setCheckable(True)
+        action.triggered.connect(lambda checked: self.__set_visible_log_table(checked))
+        view_menu.addAction(action)
 
         settings_menu = menu_bar.addMenu("Ustawienia")
         options = [
@@ -196,6 +202,10 @@ class GUI(QDialog):
                     self.__settings_menu[option_b].setChecked(False)
         for lane_controller in self.__list_lane_controller:
             lane_controller.set_settings(name, value)
+
+    def __set_visible_log_table(self, show):
+        self.__log_table.set_visibility(show)
+        self.adjustSize()
 
 
 if __name__ == '__main__':

@@ -38,7 +38,7 @@ class LogManagement:
             message = str(message)
         self.__index += 1
         date = self.__get_datetime(True)
-        data = [self.__index, date, code, message]
+        data = [self.__index, date, priority, code, message]
         self.__log_list.append(data)
         new_line = "{}.\t{}\t{}\t{}\t{}".format(self.__index, date, priority, code.ljust(14), message)
         if priority > 3:
