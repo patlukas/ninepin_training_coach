@@ -20,10 +20,11 @@ class ComManagerError(Exception):
 
 
 class ComManager:
-    def __init__(self, port_name: str, timeout: Union[int, float, None], write_timeout: Union[int, float, None]):
+    def __init__(self, port_name: str, timeout: Union[int, float, None], write_timeout: Union[int, float, None], add_log):
         self.__port_name = port_name
         self.__bytes_to_send = b""
         self.__bytes_to_recv = b""
+        self.__add_log = add_log
         self.__com_port = self.__create_port(timeout, write_timeout)
 
     def __create_port(self, timeout: Union[float, None], write_timeout: Union[float, None]) -> serial.Serial:
@@ -51,7 +52,7 @@ class ComManager:
         try:
             data_read.decode('Windows-1250')
         except UnicodeError as e:
-            print("10-003", "Port {} is closed or not was be created, so I can't read data".format(self.__port_name))
+            self.__add_log(10, "COM", "Port {} is closed or not was be created, so I can't read data".format(self.__port_name))
 
         if b"\r" not in self.__bytes_to_recv:
             return b""
@@ -62,7 +63,7 @@ class ComManager:
 
     def send(self) -> (int, bytes):
         if self.__com_port is None:
-            print("10-004", "Port {} is closed or not was be created, so I can't send data".format(self.__port_name))
+            self.__add_log(10, "COM", "Port {} is closed or not was be created, so I can't send data".format(self.__port_name))
 
         if self.__com_port.out_waiting > 0 or self.__bytes_to_send == b"" or b"\r" not in self.__bytes_to_send:
             return 0, b""
@@ -79,10 +80,10 @@ class ComManager:
 
     def add_bytes_to_send(self, new_bytes_to_send: bytes) -> int:
         if type(new_bytes_to_send) != bytes:
-            print("Wrong type of data to send: '{}' have type '{}'".format(new_bytes_to_send, type(new_bytes_to_send).__name__))
+            self.__add_log(10, "COM", "Wrong type of data to send: '{}' have type '{}'".format(new_bytes_to_send, type(new_bytes_to_send).__name__))
         else:
             if new_bytes_to_send[-1:] != b"\r":
-                print("Wrong end of data to send, should have '\r' as last sign: '{}'".format(new_bytes_to_send[-1:]))
+                self.__add_log(10, "COM", "Wrong end of data to send, should have '\r' as last sign: '{}'".format(new_bytes_to_send[-1:]))
             else:
                 if new_bytes_to_send not in self.__bytes_to_send:
                     self.__bytes_to_send += new_bytes_to_send

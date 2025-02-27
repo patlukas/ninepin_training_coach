@@ -92,7 +92,6 @@ class _LaneCommunicationManager:
                 self.__throws_to_current_layout += 1
             else:
                 self.__throws_to_current_layout = 0
-            print("Analize recv msg: ", message, self.__throws_to_current_layout)
             if self.__mode == "Optymistyczne zbierane":
                 self.__analyse_optimistic_clearoff(next_layout, message)
             elif "Zbierane na " in self.__mode:

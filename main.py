@@ -16,21 +16,23 @@ from PyQt5.QtCore import QThread, Qt
 from com_manager import ComManager, ComManagerError
 from config_reader import ConfigReader, ConfigReaderError
 from lane_controller import LaneController
+from log_management import LogManagement
 
 APP_VERSION = "1.0.2"
 
 
 class WorkerThread(QThread):
-    def __init__(self, com_manager, loop_interval, after_recv_msg, max_time_between_next_send):
+    def __init__(self, com_manager, loop_interval, after_recv_msg, max_time_between_next_send, add_log):
         super().__init__()
         self.__after_recv_msg = after_recv_msg
         self.__com_manager = com_manager
         self.__running = False
         self.__loop_time_interval = loop_interval
         self.__max_time_between_next_send = max_time_between_next_send
+        self.__add_log = add_log
 
     def run(self):
-        print("RUN")
+        self.__add_log(5, "RUN", "")
         self.__running = True
         time_next_send = 0
         while self.__running:
@@ -38,13 +40,16 @@ class WorkerThread(QThread):
             if read_bytes != b"":
                 for msg in read_bytes.split(b"\r"):
                     if msg != b"":
+                        self.__add_log(5, "RECV", msg)
                         self.__after_recv_msg(msg)
                 time_next_send = 0
             if time.time() > time_next_send:
                 number_sent_bytes, sent_msg = self.__com_manager.send()
                 if number_sent_bytes > 0:
                     if len(sent_msg) != 7:
-                        print("SENT: ", sent_msg)
+                        self.__add_log(5, "SEND", sent_msg)
+                    else:
+                        self.__add_log(3, "SEND", sent_msg)
                     time_next_send = time.time() + self.__max_time_between_next_send
             self.msleep(int(self.__loop_time_interval*1000))
 
@@ -55,6 +60,7 @@ class WorkerThread(QThread):
 class GUI(QDialog):
     def __init__(self):
         super().__init__()
+        self.__log_management = LogManagement()
         self.__settings_menu = {}
         self.__list_lane_controller = []
 
@@ -64,10 +70,10 @@ class GUI(QDialog):
         self.setLayout(self.__layout)
         try:
             self.__config = ConfigReader().get_configuration()
-            self.__com_manager = ComManager(self.__config["com_port"], self.__config["com_timeout"], self.__config["com_write_timeout"])
+            self.__com_manager = ComManager(self.__config["com_port"], self.__config["com_timeout"], self.__config["com_write_timeout"], self.__log_management.add_log)
             self.__set_layout()
 
-            self.__thread = WorkerThread(self.__com_manager, self.__config["loop_com_communication_break"], self.__recv_msg, self.__config["max_time_between_next_send"])
+            self.__thread = WorkerThread(self.__com_manager, self.__config["loop_com_communication_break"], self.__recv_msg, self.__config["max_time_between_next_send"], self.__log_management.add_log)
             self.__thread.start()
         except ComManagerError as e:
             self.__set_error_layout("Problem z utworzneiem portu szeregowego", e.code, e.message)
