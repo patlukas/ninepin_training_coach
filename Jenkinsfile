@@ -134,8 +134,6 @@ pipeline {
                         def releaseInfo = readJSON text: releaseResponse
                         def releaseId = releaseInfo.id
                         if (fileExists(env.ZIP_NAME)) {
-                            def fileContent = readFile(env.ZIP_NAME)
-
                             def uploadUrl = "https://uploads.github.com/repos/${GITHUB_USER}/${REPO_NAME}/releases/${releaseId}/assets?name=${env.ZIP_NAME}"
                             bat """
                                 curl -k -X POST -H "Authorization: token %GITHUB_TOKEN%" -H "Content-Type: application/octet-stream" ^
