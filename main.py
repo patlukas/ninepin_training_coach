@@ -19,6 +19,7 @@ from gui.log_table import LogTable
 from lane_controller import LaneController
 from log_management import LogManagement
 
+APP_NAME = "NTC"
 APP_VERSION = "1.0.2"
 
 
