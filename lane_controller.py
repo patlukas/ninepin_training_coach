@@ -5,15 +5,17 @@ from PyQt5.QtCore import QTimer
 
 
 class _LaneControllerSection(QGroupBox):
-    def __init__(self, name: str, list_modes: list, on_start, on_stop):
+    def __init__(self, name: str, list_modes: list, on_trial, on_start, on_stop):
         super().__init__(name)
 
+        self.__on_trial = on_trial
         self.__on_start = on_start
         self.__on_stop = on_stop
 
         self.__layout = QGridLayout()
         self.setLayout(self.__layout)
 
+        self.__btn_trial = QPushButton("Próbne")
         self.__btn_start = QPushButton("Start")
         self.__btn_stop = QPushButton("Stop")
         self.__options_combobox = QComboBox()
@@ -21,20 +23,28 @@ class _LaneControllerSection(QGroupBox):
 
         self.__options_combobox.addItems(list_modes)
 
+        self.__btn_trial.clicked.connect(self.__click_trial)
         self.__btn_start.clicked.connect(self.__click_start)
         self.__btn_stop.clicked.connect(self.__click_stop)
 
         self.__layout.addWidget(self.__options_combobox, 0, 0)
         self.__layout.addWidget(self.__options_label, 1, 0)
-        self.__layout.addWidget(self.__btn_start, 0, 1)
-        self.__layout.addWidget(self.__btn_stop, 1, 1)
+        self.__layout.addWidget(self.__btn_trial, 0, 1)
+        self.__layout.addWidget(self.__btn_start, 0, 2)
+        self.__layout.addWidget(self.__btn_stop, 1, 1, 1, 2)
         self.__toggle_view(True)
 
     def __toggle_view(self, show_start):
         self.__options_combobox.setVisible(show_start)
+        self.__btn_trial.setVisible(show_start)
         self.__btn_start.setVisible(show_start)
         self.__options_label.setVisible(not show_start)
         self.__btn_stop.setVisible(not show_start)
+
+    def __click_trial(self):
+        self.__options_label.setText("Próbne")
+        self.__on_trial()
+        self.__toggle_view(False)
 
     def __click_start(self):
         mode = self.__options_combobox.currentText()
@@ -65,7 +75,18 @@ class _LaneCommunicationManager:
         self.__pick_up = False
         self.__time_speed = False
         self.__time_very_speed = False
+        self.__special_trial_1 = False
+        self.__special_trial_2 = False
         self.__time_break_after_recv = time_break_after_recv
+
+    def trial(self):
+        self.__on_send_message(self.__message_head + b"E1")
+        self.__on_send_message(self.__message_head + b"P00E0320")
+        if self.__special_trial_1 or self.__special_trial_2:
+            self.__on_send_message(self.__message_head + b"T41")
+        if self.__special_trial_2:
+            self.__on_send_message(self.__message_head + b"T14")
+        self.__run = True
 
     def start(self, mode):
         self.__throws_to_current_layout = 0
@@ -211,6 +232,10 @@ class _LaneCommunicationManager:
             self.__time_speed = value
         elif name == "time_very_speed":
             self.__time_very_speed = value
+        elif name == "special_trial_1":
+            self.__special_trial_1 = value
+        elif name == "special_trial_2":
+            self.__special_trial_2 = value
 
 
 class LaneController:
@@ -223,7 +248,13 @@ class LaneController:
             "Zbierane na 5",
             "Optymistyczne zbierane"
         ]
-        self.__section = _LaneControllerSection("Tor {}".format(lane_number+1), self.__modes, self.__communication_manager.start, self.__communication_manager.stop)
+        self.__section = _LaneControllerSection(
+            "Tor {}".format(lane_number+1),
+            self.__modes,
+            self.__communication_manager.trial,
+            self.__communication_manager.start,
+            self.__communication_manager.stop
+        )
 
     def get_section(self):
         return self.__section
