@@ -137,6 +137,9 @@ class GUI(QDialog):
             None,
             ["time_speed", "Szybszy czas"],
             ["time_very_speed", "Dużo szybszy czas"],
+            None,
+            ["special_trial_1", "Podnieś po ustawieniu próbnych"],
+            ["special_trial_2", "Podnieś i zatrzymaj po ustawieniu próbnych"],
         ]
         for option in options:
             if option is None:
@@ -195,7 +198,8 @@ class GUI(QDialog):
     def __set_settings(self, name, value):
         related_options = [
             ["change_all_knocked_down", "change_no_knocked_down"], ["change_no_knocked_down", "change_all_knocked_down"],
-            ["time_speed", "time_very_speed"], ["time_very_speed", "time_speed"]
+            ["time_speed", "time_very_speed"], ["time_very_speed", "time_speed"],
+            ["special_trial_1", "special_trial_2"], ["special_trial_2", "special_trial_1"]
         ]
         for option_a, option_b in related_options:
             if name == option_a and value and option_b in self.__settings_menu:
