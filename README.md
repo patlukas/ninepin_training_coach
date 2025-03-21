@@ -10,13 +10,13 @@
 
 ## Wymagania systemowe
 
-- System operacyjny: **Windows XP**
-- Python: **3.4**
+- System operacyjny: **Windows XP** lub nowszy
+- Python: **3.4.3**
 - Biblioteki: Brak zewnętrznych zależności
 
 ## Instalacja i uruchomienie
 
-1. Pobierz i zainstaluj **Python 3.4** na Windows XP (jeśli jeszcze nie jest zainstalowany).
+1. Pobierz i zainstaluj **Python 3.4.3** na Windows XP (jeśli jeszcze nie jest zainstalowany).
 2. Pobierz pliki projektu.
 3. Uruchom program w wierszu poleceń:
    ```sh
