@@ -1,4 +1,6 @@
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/patlukas/ninepin_training_coach?label=Latest%20Release)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/patlukas/KregleLive_3_Client?label=Latest%20Release)
+![GitHub file count](https://img.shields.io/github/directory-file-count/patlukas/KregleLive_3_Client)
+![GitHub issues](https://img.shields.io/github/issues/patlukas/KregleLive_3_Client)
 
 # Ninepin Training Coach
 
@@ -35,5 +37,18 @@ Program oferuje następujące tryby i modyfikacje gry:
 | 6     | Dużo szybszy czas                               |
 | 7     | Podnieś po ustawieniu próbnych                  |
 | 8     | Podnieś i zatrzymaj po ustawieniu próbnych      |
+
+
+## 📌 Version History
+
+| Version          | Release Date      | Commits | Changes                                      |
+|------------------|-------------------|---------|----------------------------------------------|
+| **v1.1.4.0**     | 🚧 In Development | 28+     |                                              |
+| **v1.0.3.0**     | 2025-03-11        | 24      | Added option to control trial attempts       |
+| **v1.0.2.1**     | 2025-02-28        | 22      | Added jenkins                                |
+| **v1.0.2**       | 2025-02-27        | 18      | Added logs table                             |
+| **v1.0.1**       | 2025-02-26        | 9       | Added more freedom to configure              |
+| **v1.0.0**       | 2025-02-24        | 4       | 🎉 Initial stable release                    |
+| **First commit** | 2025-02-23        | 1       |                                              |
 
 ![](https://github.ct8.pl/readme/patlukas/ninepin_training_coach)
