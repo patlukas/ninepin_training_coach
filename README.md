@@ -1,6 +1,6 @@
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/patlukas/KregleLive_3_Client?label=Latest%20Release)
-![GitHub file count](https://img.shields.io/github/directory-file-count/patlukas/KregleLive_3_Client)
-![GitHub issues](https://img.shields.io/github/issues/patlukas/KregleLive_3_Client)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/patlukas/ninepin_training_coach?label=Latest%20Release)
+![GitHub file count](https://img.shields.io/github/directory-file-count/patlukas/ninepin_training_coach)
+![GitHub issues](https://img.shields.io/github/issues/patlukas/ninepin_training_coach)
 
 # Ninepin Training Coach
 
