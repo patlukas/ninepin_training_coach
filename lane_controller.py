@@ -109,7 +109,9 @@ class _LaneCommunicationManager:
         if message[4:5] in [b"w", b"g", b"h", b"f"]:
 
             next_layout = message[17:20]
-            if next_layout != b"000":
+            fallen_pins = message[26:29]
+            # fallen_pins == b"000" is a special case where a player doesn't hit any pins in a full roll
+            if next_layout != b"000" or fallen_pins == b"000":
                 self.__throws_to_current_layout += 1
             else:
                 self.__throws_to_current_layout = 0
