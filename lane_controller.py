@@ -130,16 +130,15 @@ class _LaneCommunicationManager:
             x = 3
         else:
             return
-        self.__on_send_message(
-            self.__message_head +
-            b"Z" +
-            self.__add_to_hex(message[5:8], x) +
-            message[8:14] +
-            self.__add_to_hex(message[14:17], x) +
-            self.__get_next_layout(message[17:20], self.__change_next_layout) +
-            message[20:23] +
-            self.__get_time(message[23:26]) +
-            self.__get_knocked_down(message[26:29], self.__change_all_knocked_down, self.__change_no_knocked_down) +
+        self.__send_message_to_end_layout(
+            self.__add_to_hex(message[5:8], x),
+            message[8:11],
+            message[11:14],
+            self.__add_to_hex(message[14:17], x),
+            self.__get_next_layout(message[17:20], self.__change_next_layout),
+            message[20:23],
+            self.__get_time(message[23:26]),
+            self.__get_knocked_down(message[26:29], self.__change_all_knocked_down, self.__change_no_knocked_down),
             message[29:-2]
         )
         if self.__pick_up:
@@ -149,19 +148,36 @@ class _LaneCommunicationManager:
         max_throw = int(self.__mode.replace("Zbierane na ", ""))
         if self.__throws_to_current_layout < max_throw:
             return
-        self.__on_send_message(
-            self.__message_head +
-            b"Z" +
-            message[5:17] +
-            self.__get_next_layout(message[17:20], self.__change_next_layout) +
-            message[20:23] +
-            self.__get_time(message[23:26]) +
-            self.__get_knocked_down(message[26:29], self.__change_all_knocked_down, self.__change_no_knocked_down) +
+        self.__send_message_to_end_layout(
+            message[5:8], message[8:11], message[11:14], message[14:17],
+            self.__get_next_layout(message[17:20], self.__change_next_layout),
+            message[20:23],
+            self.__get_time(message[23:26]),
+            self.__get_knocked_down(message[26:29], self.__change_all_knocked_down, self.__change_no_knocked_down),
             message[29:-2]
         )
         self.__throws_to_current_layout = 0
         if self.__pick_up:
             self.__on_send_message(self.__message_head + b"T41")
+
+    def __send_message_to_end_layout(self, number_of_throw, last_throw_result, lane_sum, total_sum, next_layout,
+                                     number_of_x, time_to_end, fallen_pins, options):
+        self.__on_send_message(self.__message_head + b"T16")
+        self.__on_send_message(self.__message_head + b"T22")
+        self.__on_send_message(self.__message_head + b"T41")
+        self.__on_send_message(
+            self.__message_head +
+            b"Z" +
+            number_of_throw +
+            last_throw_result +
+            lane_sum +
+            total_sum +
+            next_layout +
+            number_of_x +
+            time_to_end +
+            fallen_pins +
+            options
+        )
 
     @staticmethod
     def __get_next_layout(current_value, return_empty):
