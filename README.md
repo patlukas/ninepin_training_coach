@@ -43,8 +43,8 @@ Program oferuje następujące tryby i modyfikacje gry:
 
 | Version          | Release Date      | Commits | Changes                                      |
 |------------------|-------------------|---------|----------------------------------------------|
-| **v1.1.5.0**     | 🚧 Soon           |         |                                              |
-| **v1.1.4.0**     | 2025-03-21        | 35      | Change the method of setting the full layout |
+| **v1.0.5.0**     | 🚧 Soon           |         |                                              |
+| **v1.0.4.0**     | 2025-03-21        | 35      | Change the method of setting the full layout |
 | **v1.0.3.0**     | 2025-03-11        | 24      | Added option to control trial attempts       |
 | **v1.0.2.1**     | 2025-02-28        | 22      | Added jenkins                                |
 | **v1.0.2**       | 2025-02-27        | 18      | Added logs table                             |
