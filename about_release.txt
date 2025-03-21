@@ -1,1 +1,2 @@
 - change the method of setting the full layout
+- correct handling of the situation when no pin is hit in a full layout
