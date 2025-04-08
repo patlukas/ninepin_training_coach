@@ -1,1 +1,2 @@
 - Add options to add beaten pins to result
+- Add full layout setting modes

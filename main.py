@@ -142,6 +142,11 @@ class GUI(QDialog):
             ["special_trial_2", "Podnieś i zatrzymaj po ustawieniu próbnych"],
             None,
             ["add_removed_pins", "Dodawaj liczbe usuwanych kręgli do wyniku", True],
+            None,
+            ["mode_1", "Tryb 1 (default)", True],
+            ["mode_2", "Tryb 2"],
+            ["mode_3", "Tryb 3"],
+            ["mode_4", "Tryb 4"]
         ]
         for option in options:
             if option is None:
@@ -206,7 +211,13 @@ class GUI(QDialog):
         related_options = [
             ["change_all_knocked_down", "change_no_knocked_down"], ["change_no_knocked_down", "change_all_knocked_down"],
             ["time_speed", "time_very_speed"], ["time_very_speed", "time_speed"],
-            ["special_trial_1", "special_trial_2"], ["special_trial_2", "special_trial_1"]
+            ["special_trial_1", "special_trial_2"], ["special_trial_2", "special_trial_1"],
+            ["mode_1", "mode_2"], ["mode_2", "mode_1"],
+            ["mode_1", "mode_3"], ["mode_3", "mode_1"],
+            ["mode_1", "mode_4"], ["mode_4", "mode_1"],
+            ["mode_2", "mode_3"], ["mode_3", "mode_2"],
+            ["mode_2", "mode_4"], ["mode_4", "mode_2"],
+            ["mode_3", "mode_4"], ["mode_4", "mode_3"]
         ]
         for option_a, option_b in related_options:
             if name == option_a and value and option_b in self.__settings_menu:

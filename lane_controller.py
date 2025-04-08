@@ -78,6 +78,10 @@ class _LaneCommunicationManager:
         self.__special_trial_1 = False
         self.__special_trial_2 = False
         self.__add_removed_pins = False
+        self.__mode_1 = True
+        self.__mode_2 = False
+        self.__mode_3 = False
+        self.__mode_4 = False
         self.__time_break_after_recv = time_break_after_recv
 
     def trial(self):
@@ -168,9 +172,6 @@ class _LaneCommunicationManager:
 
     def __send_message_to_end_layout(self, number_of_throw, last_throw_result, lane_sum, total_sum, next_layout,
                                      number_of_x, time_to_end, fallen_pins, options):
-        self.__on_send_message(self.__message_head + b"T16")
-        self.__on_send_message(self.__message_head + b"T22")
-        self.__on_send_message(self.__message_head + b"T41")
         if self.__add_removed_pins:
             pins = self.__count_beaten_pins(next_layout)
             total_sum = self.__add_to_hex(total_sum, pins)
@@ -180,7 +181,7 @@ class _LaneCommunicationManager:
         time_to_end = self.__get_time(time_to_end)
         fallen_pins = self.__get_knocked_down(fallen_pins, self.__change_all_knocked_down, self.__change_no_knocked_down)
 
-        self.__on_send_message(
+        z = lambda: self.__on_send_message(
             self.__message_head +
             b"Z" +
             number_of_throw +
@@ -193,6 +194,19 @@ class _LaneCommunicationManager:
             fallen_pins +
             options
         )
+        mode = [b"T16", b"T22", b"T41", "Z"]
+        if self.__mode_2:
+            mode = [b"T40", b"T16", b"T22", b"T41", "Z"]
+        if self.__mode_3:
+            mode = [b"T40", b"T16", b"T22", "Z", b"T41"]
+        if self.__mode_4:
+            mode = [b"T40", "Z", b"T16", b"T22", b"T41"]
+
+        for x in mode:
+            if x == "Z":
+                z()
+            else:
+                self.__on_send_message(self.__message_head + x)
 
     @staticmethod
     def __count_beaten_pins(layout):
@@ -274,6 +288,16 @@ class _LaneCommunicationManager:
             self.__special_trial_1 = value
         elif name == "special_trial_2":
             self.__special_trial_2 = value
+        elif name == "add_removed_pins":
+            self.__add_removed_pins = value
+        elif name == "mode_1":
+            self.__mode_1 = value
+        elif name == "mode_2":
+            self.__mode_2 = value
+        elif name == "mode_3":
+            self.__mode_3 = value
+        elif name == "mode_4":
+            self.__mode_4 = value
 
 
 class LaneController:
