@@ -20,7 +20,7 @@ from lane_controller import LaneController
 from log_management import LogManagement
 
 APP_NAME = "NTC"
-APP_VERSION = "1.0.4"
+APP_VERSION = "1.0.5"
 
 
 class WorkerThread(QThread):
@@ -128,12 +128,10 @@ class GUI(QDialog):
 
         settings_menu = menu_bar.addMenu("Ustawienia")
         options = [
-            ["change_next_layout", "Przy zmienie ustaw next layout jako 000"],
+            ["change_next_layout", "Przy zmienie ustaw next layout jako 000", True],
             None,
             ["change_all_knocked_down", "Przy zmienie ustaw że zbito wszystkie kręgle"],
             ["change_no_knocked_down", "Przy zmienie ustaw że nie zbito żadego kręgle"],
-            None,
-            ["pick_up", "Podnoś po zmianie"],
             None,
             ["time_speed", "Szybszy czas"],
             ["time_very_speed", "Dużo szybszy czas"],

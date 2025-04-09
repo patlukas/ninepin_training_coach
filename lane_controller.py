@@ -72,7 +72,6 @@ class _LaneCommunicationManager:
         self.__change_all_knocked_down = False
         self.__change_no_knocked_down = False
         self.__change_next_layout = False
-        self.__pick_up = False
         self.__time_speed = False
         self.__time_very_speed = False
         self.__special_trial_1 = False
@@ -148,8 +147,6 @@ class _LaneCommunicationManager:
             message[26:29],
             message[29:-2]
         )
-        if self.__pick_up:
-            self.__on_send_message(self.__message_head + b"T41")
 
     def __analyse_max_throw_clearoff(self, message):
         max_throw = int(self.__mode.replace("Zbierane na ", ""))
@@ -167,8 +164,6 @@ class _LaneCommunicationManager:
             message[29:-2]
         )
         self.__throws_to_current_layout = 0
-        if self.__pick_up:
-            self.__on_send_message(self.__message_head + b"T41")
 
     def __send_message_to_end_layout(self, number_of_throw, last_throw_result, lane_sum, total_sum, next_layout,
                                      number_of_x, time_to_end, fallen_pins, options):
@@ -276,8 +271,6 @@ class _LaneCommunicationManager:
             self.__change_all_knocked_down = value
         elif name == "change_no_knocked_down":
             self.__change_no_knocked_down = value
-        elif name == "pick_up":
-            self.__pick_up = value
         elif name == "change_next_layout":
             self.__change_next_layout = value
         elif name == "time_speed":
