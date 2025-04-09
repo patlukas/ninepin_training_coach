@@ -96,15 +96,19 @@ pipeline {
         }
         stage('Create Tag') {
             steps {
-                script {
-                    env.TAG_NAME = "v" + env.APP_VERSION
-                    def commitHash = bat(script: "@git rev-parse HEAD", returnStdout: true).trim()
+            withCredentials([
+                    gitUsernamePassword(credentialsId: 'github-token', gitToolName: 'Default')
+                ]) {
+                    script {
+                        env.TAG_NAME = "v" + env.APP_VERSION
+                        def commitHash = bat(script: "@git rev-parse HEAD", returnStdout: true).trim()
 
-                    bat """
-                        git tag ${env.TAG_NAME} ${commitHash}
-                        git push origin ${env.TAG_NAME}
-                    """
-                    echo "New tag: ${env.TAG_NAME}"
+                        bat """
+                            git tag ${env.TAG_NAME} ${commitHash}
+                            git push origin ${env.TAG_NAME}
+                        """
+                        echo "New tag: ${env.TAG_NAME}"
+                    }
                 }
             }
         }
