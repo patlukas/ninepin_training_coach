@@ -20,7 +20,7 @@ from lane_controller import LaneController
 from log_management import LogManagement
 
 APP_NAME = "NTC"
-APP_VERSION = "1.0.4"
+APP_VERSION = "1.0.5"
 
 
 class WorkerThread(QThread):
@@ -110,11 +110,11 @@ class GUI(QDialog):
         self.__layout.addWidget(msg_label, 2, 0)
 
     def __set_layout(self) -> None:
-        self.__layout.setMenuBar(self.__create_menu_bar())
         for i in range(self.__config["number_of_lane"]):
             lane_controller = LaneController(i, self.__on_add_message_to_send, self.__config["break_between_recv_msg_and_send_ping_to_lane"])
             self.__list_lane_controller.append(lane_controller)
             self.__layout.addWidget(lane_controller.get_section(), i, 0)
+        self.__layout.setMenuBar(self.__create_menu_bar())
         self.__layout.addWidget(self.__log_table, 0, 1, self.__config["number_of_lane"], 1)
 
     def __create_menu_bar(self):
@@ -128,29 +128,39 @@ class GUI(QDialog):
 
         settings_menu = menu_bar.addMenu("Ustawienia")
         options = [
-            ["change_next_layout", "Przy zmienie ustaw next layout jako 000"],
+            ["change_next_layout", "Przy zmienie ustaw next layout jako 000", True],
             None,
             ["change_all_knocked_down", "Przy zmienie ustaw że zbito wszystkie kręgle"],
             ["change_no_knocked_down", "Przy zmienie ustaw że nie zbito żadego kręgle"],
-            None,
-            ["pick_up", "Podnoś po zmianie"],
             None,
             ["time_speed", "Szybszy czas"],
             ["time_very_speed", "Dużo szybszy czas"],
             None,
             ["special_trial_1", "Podnieś po ustawieniu próbnych"],
             ["special_trial_2", "Podnieś i zatrzymaj po ustawieniu próbnych"],
+            None,
+            ["add_removed_pins", "Dodawaj liczbe usuwanych kręgli do wyniku", True],
+            None,
+            ["mode_1", "Tryb 1 (default)", True],
+            ["mode_2", "Tryb 2"],
+            ["mode_3", "Tryb 3"],
+            ["mode_4", "Tryb 4"]
         ]
         for option in options:
             if option is None:
                 settings_menu.addSeparator()
                 continue
-            key, name = option
+            key = option[0]
+            name = option[1]
+            default = False if len(option) < 3 else option[2]
             action = QAction(name, self)
             action.setCheckable(True)
+            action.setChecked(default)
             action.triggered.connect(lambda checked, k=key: self.__set_settings(k, checked))
             settings_menu.addAction(action)
             self.__settings_menu[key] = action
+            if default:
+                self.__set_settings(key, True)
 
         help_menu = menu_bar.addMenu("Pomoc")
         about_action = QAction("O aplikacji", self)
@@ -199,7 +209,13 @@ class GUI(QDialog):
         related_options = [
             ["change_all_knocked_down", "change_no_knocked_down"], ["change_no_knocked_down", "change_all_knocked_down"],
             ["time_speed", "time_very_speed"], ["time_very_speed", "time_speed"],
-            ["special_trial_1", "special_trial_2"], ["special_trial_2", "special_trial_1"]
+            ["special_trial_1", "special_trial_2"], ["special_trial_2", "special_trial_1"],
+            ["mode_1", "mode_2"], ["mode_2", "mode_1"],
+            ["mode_1", "mode_3"], ["mode_3", "mode_1"],
+            ["mode_1", "mode_4"], ["mode_4", "mode_1"],
+            ["mode_2", "mode_3"], ["mode_3", "mode_2"],
+            ["mode_2", "mode_4"], ["mode_4", "mode_2"],
+            ["mode_3", "mode_4"], ["mode_4", "mode_3"]
         ]
         for option_a, option_b in related_options:
             if name == option_a and value and option_b in self.__settings_menu:

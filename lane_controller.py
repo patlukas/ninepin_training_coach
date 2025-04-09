@@ -63,7 +63,7 @@ class _LaneControllerSection(QGroupBox):
 class _LaneCommunicationManager:
     def __init__(self, lane_number, on_send_message, show_start_layout, time_break_after_recv):
         self.__lane_number = lane_number
-        self.__message_head = b"3" + str(self.__lane_number).encode('utf-8') + b"38"
+        self.__message_head = b"3" + str(self.__lane_number).encode('Windows-1250') + b"38"
         self.__on_send_message = on_send_message
         self.__throws_to_current_layout = 0
         self.__show_start_layout = show_start_layout
@@ -72,11 +72,15 @@ class _LaneCommunicationManager:
         self.__change_all_knocked_down = False
         self.__change_no_knocked_down = False
         self.__change_next_layout = False
-        self.__pick_up = False
         self.__time_speed = False
         self.__time_very_speed = False
         self.__special_trial_1 = False
         self.__special_trial_2 = False
+        self.__add_removed_pins = False
+        self.__mode_1 = True
+        self.__mode_2 = False
+        self.__mode_3 = False
+        self.__mode_4 = False
         self.__time_break_after_recv = time_break_after_recv
 
     def trial(self):
@@ -137,37 +141,42 @@ class _LaneCommunicationManager:
             message[8:11],
             message[11:14],
             self.__add_to_hex(message[14:17], x),
-            self.__get_next_layout(message[17:20], self.__change_next_layout),
+            message[17:20],
             message[20:23],
-            self.__get_time(message[23:26]),
-            self.__get_knocked_down(message[26:29], self.__change_all_knocked_down, self.__change_no_knocked_down),
+            message[23:26],
+            message[26:29],
             message[29:-2]
         )
-        if self.__pick_up:
-            self.__on_send_message(self.__message_head + b"T41")
 
     def __analyse_max_throw_clearoff(self, message):
         max_throw = int(self.__mode.replace("Zbierane na ", ""))
         if self.__throws_to_current_layout < max_throw:
             return
         self.__send_message_to_end_layout(
-            message[5:8], message[8:11], message[11:14], message[14:17],
-            self.__get_next_layout(message[17:20], self.__change_next_layout),
+            message[5:8],
+            message[8:11],
+            message[11:14],
+            message[14:17],
+            message[17:20],
             message[20:23],
-            self.__get_time(message[23:26]),
-            self.__get_knocked_down(message[26:29], self.__change_all_knocked_down, self.__change_no_knocked_down),
+            message[23:26],
+            message[26:29],
             message[29:-2]
         )
         self.__throws_to_current_layout = 0
-        if self.__pick_up:
-            self.__on_send_message(self.__message_head + b"T41")
 
     def __send_message_to_end_layout(self, number_of_throw, last_throw_result, lane_sum, total_sum, next_layout,
                                      number_of_x, time_to_end, fallen_pins, options):
-        self.__on_send_message(self.__message_head + b"T16")
-        self.__on_send_message(self.__message_head + b"T22")
-        self.__on_send_message(self.__message_head + b"T41")
-        self.__on_send_message(
+        if self.__add_removed_pins:
+            pins = self.__count_beaten_pins(next_layout)
+            total_sum = self.__add_to_hex(total_sum, pins)
+            lane_sum = self.__add_to_hex(lane_sum, pins)
+
+        next_layout = self.__get_next_layout(next_layout, self.__change_next_layout)
+        time_to_end = self.__get_time(time_to_end)
+        fallen_pins = self.__get_knocked_down(fallen_pins, self.__change_all_knocked_down, self.__change_no_knocked_down)
+
+        z = lambda: self.__on_send_message(
             self.__message_head +
             b"Z" +
             number_of_throw +
@@ -180,6 +189,26 @@ class _LaneCommunicationManager:
             fallen_pins +
             options
         )
+        mode = [b"T16", b"T22", b"T41", "Z"]
+        if self.__mode_2:
+            mode = [b"T40", b"T16", b"T22", b"T41", "Z"]
+        if self.__mode_3:
+            mode = [b"T40", b"T16", b"T22", "Z", b"T41"]
+        if self.__mode_4:
+            mode = [b"T40", "Z", b"T16", b"T22", b"T41"]
+
+        for x in mode:
+            if x == "Z":
+                z()
+            else:
+                self.__on_send_message(self.__message_head + x)
+
+    @staticmethod
+    def __count_beaten_pins(layout):
+        hex_str = layout.decode('Windows-1250')
+        value = int(hex_str, 16)
+        ones_count = bin(value).count('1')
+        return ones_count
 
     @staticmethod
     def __get_next_layout(current_value, return_empty):
@@ -204,37 +233,37 @@ class _LaneCommunicationManager:
 
     @staticmethod
     def __add_to_hex(hex_bytes, x):
-        hex_str = hex_bytes.decode('utf-8')
+        hex_str = hex_bytes.decode('Windows-1250')
         hex_value = int(hex_str, 16)
         new_hex_value = hex_value + x
 
         new_hex_str = hex(new_hex_value)[2:].upper().zfill(3)
-        new_hex_bytes = new_hex_str.encode('utf-8')
+        new_hex_bytes = new_hex_str.encode('Windows-1250')
 
         return new_hex_bytes
 
     @staticmethod
     def __sub_to_hex(hex_bytes, x):
-        hex_str = hex_bytes.decode('utf-8')
+        hex_str = hex_bytes.decode('Windows-1250')
         hex_value = int(hex_str, 16)
         if x >= hex_value:
             return b"000"
         new_hex_value = hex_value - x
 
         new_hex_str = hex(new_hex_value)[2:].upper().zfill(3)
-        new_hex_bytes = new_hex_str.encode('utf-8')
+        new_hex_bytes = new_hex_str.encode('Windows-1250')
 
         return new_hex_bytes
 
     @staticmethod
     def __invert_bits(hex_bytes):
-        hex_str = hex_bytes.decode('utf-8')
+        hex_str = hex_bytes.decode('Windows-1250')
         int_value = int(hex_str, 16)
         bit_length = 9
         mask = (1 << bit_length) - 1
         inverted_value = int_value ^ mask
         inverted_hex = format(inverted_value, '03X')
-        inverted_bytes = inverted_hex.encode('utf-8')
+        inverted_bytes = inverted_hex.encode('Windows-1250')
         return inverted_bytes
 
     def set_settings(self, name, value):
@@ -242,8 +271,6 @@ class _LaneCommunicationManager:
             self.__change_all_knocked_down = value
         elif name == "change_no_knocked_down":
             self.__change_no_knocked_down = value
-        elif name == "pick_up":
-            self.__pick_up = value
         elif name == "change_next_layout":
             self.__change_next_layout = value
         elif name == "time_speed":
@@ -254,6 +281,16 @@ class _LaneCommunicationManager:
             self.__special_trial_1 = value
         elif name == "special_trial_2":
             self.__special_trial_2 = value
+        elif name == "add_removed_pins":
+            self.__add_removed_pins = value
+        elif name == "mode_1":
+            self.__mode_1 = value
+        elif name == "mode_2":
+            self.__mode_2 = value
+        elif name == "mode_3":
+            self.__mode_3 = value
+        elif name == "mode_4":
+            self.__mode_4 = value
 
 
 class LaneController:
