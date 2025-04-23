@@ -62,7 +62,7 @@ Program oferuje następujące tryby i modyfikacje gry:
 | Version          | Release Date | Commits | Changes                                      |
 |------------------|--------------|---------|----------------------------------------------|
 | **v1.0.7.0**     | 🚧 Soon      |         |                                              |
-| **v1.0.6.0**     | 2025-04-23   |         | Change modes                                 |
+| **v1.0.6.0**     | 2025-04-23   | 46      | Change modes                                 |
 | **v1.0.5.1**     | 2025-04-11   | 43      | 32-bit OS compatible exe file                |
 | **v1.0.5.0**     | 2025-04-09   | 42      | Add modes & improved result counting         |
 | **v1.0.4.0**     | 2025-03-21   | 35      | Change the method of setting the full layout |
