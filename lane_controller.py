@@ -5,8 +5,11 @@ from PyQt5.QtCore import QTimer
 
 
 class _LaneControllerSection(QGroupBox):
-    def __init__(self, name: str, list_modes: list, on_trial, on_start, on_stop):
+    def __init__(self, name: str, list_modes: list, on_trial, on_start, on_stop, add_log):
         super().__init__(name)
+
+        self.__name = name
+        self.__add_log = add_log
 
         self.__on_trial = on_trial
         self.__on_start = on_start
@@ -42,17 +45,20 @@ class _LaneControllerSection(QGroupBox):
         self.__btn_stop.setVisible(not show_start)
 
     def __click_trial(self):
+        self.__add_log(5, "START TRIAL", self.__name)
         self.__options_label.setText("Próbne")
         self.__on_trial()
         self.__toggle_view(False)
 
     def __click_start(self):
         mode = self.__options_combobox.currentText()
+        self.__add_log(5, "START GAME", self.__name + " | " + mode)
         self.__options_label.setText(mode)
         self.__on_start(mode)
         self.__toggle_view(False)
 
     def __click_stop(self):
+        self.__add_log(5, "STOP", self.__name)
         self.__on_stop()
         self.__toggle_view(True)
 
@@ -312,7 +318,7 @@ class _LaneCommunicationManager:
 
 
 class LaneController:
-    def __init__(self, lane_number, on_send_message, time_break_after_recv):
+    def __init__(self, lane_number, on_send_message, time_break_after_recv, add_log):
         self.__communication_manager = _LaneCommunicationManager(lane_number, on_send_message, self.__show_start_layout, time_break_after_recv)
         self.__modes = [
             "Zbierane na 1",
@@ -327,7 +333,8 @@ class LaneController:
             self.__modes,
             self.__communication_manager.trial,
             self.__communication_manager.start,
-            self.__communication_manager.stop
+            self.__communication_manager.stop,
+            add_log
         )
 
     def get_section(self):

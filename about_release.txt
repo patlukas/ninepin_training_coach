@@ -1,1 +1,2 @@
 - Change modes to set full layout
+- Add more logs (start/stop trial and game, change settings)
