@@ -81,6 +81,8 @@ class _LaneCommunicationManager:
         self.__mode_2 = False
         self.__mode_3 = False
         self.__mode_4 = False
+        self.__mode_5 = False
+        self.__mode_6 = False
         self.__time_break_after_recv = time_break_after_recv
 
     def trial(self):
@@ -189,13 +191,25 @@ class _LaneCommunicationManager:
             fallen_pins +
             options
         )
-        mode = [b"T16", b"T22", b"T41", "Z"]
+
+        b_time = b"T"
+        b_layout = b"T"
+        b_clear = b"T"
+        b_enter = b"T"
+        b_stop = b"T"
+        b_pick_up = b"T"
+
+        mode = [b_layout, b_clear, b_enter, "Z"]
         if self.__mode_2:
-            mode = [b"T40", b"T16", b"T22", b"T41", "Z"]
+            mode = ["Z", b_layout, b_clear, b_enter]
         if self.__mode_3:
-            mode = [b"T40", b"T16", b"T22", "Z", b"T41"]
+            mode = [b_time, b_layout, b_clear, b_enter, "Z"]
         if self.__mode_4:
-            mode = [b"T40", "Z", b"T16", b"T22", b"T41"]
+            mode = [b_time, "Z", b_layout, b_clear, b_enter]
+        if self.__mode_5:
+            mode = [b_stop, b_layout, b_clear, b_enter, "Z", b_pick_up]
+        if self.__mode_6:
+            mode = [b_stop, b_layout, b_clear, b_enter, b_pick_up, "Z"]
 
         for x in mode:
             if x == "Z":
@@ -291,12 +305,17 @@ class _LaneCommunicationManager:
             self.__mode_3 = value
         elif name == "mode_4":
             self.__mode_4 = value
+        elif name == "mode_5":
+            self.__mode_5 = value
+        elif name == "mode_6":
+            self.__mode_6 = value
 
 
 class LaneController:
     def __init__(self, lane_number, on_send_message, time_break_after_recv):
         self.__communication_manager = _LaneCommunicationManager(lane_number, on_send_message, self.__show_start_layout, time_break_after_recv)
         self.__modes = [
+            "Zbierane na 1",
             "Zbierane na 2",
             "Zbierane na 3",
             "Zbierane na 4",

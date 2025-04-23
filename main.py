@@ -144,7 +144,9 @@ class GUI(QDialog):
             ["mode_1", "Tryb 1 (default)", True],
             ["mode_2", "Tryb 2"],
             ["mode_3", "Tryb 3"],
-            ["mode_4", "Tryb 4"]
+            ["mode_4", "Tryb 4"],
+            ["mode_5", "Tryb 5"],
+            ["mode_6", "Tryb 6"]
         ]
         for option in options:
             if option is None:
@@ -213,15 +215,26 @@ class GUI(QDialog):
             ["mode_1", "mode_2"], ["mode_2", "mode_1"],
             ["mode_1", "mode_3"], ["mode_3", "mode_1"],
             ["mode_1", "mode_4"], ["mode_4", "mode_1"],
+            ["mode_1", "mode_5"], ["mode_5", "mode_1"],
+            ["mode_1", "mode_6"], ["mode_6", "mode_1"],
             ["mode_2", "mode_3"], ["mode_3", "mode_2"],
             ["mode_2", "mode_4"], ["mode_4", "mode_2"],
-            ["mode_3", "mode_4"], ["mode_4", "mode_3"]
+            ["mode_2", "mode_5"], ["mode_5", "mode_2"],
+            ["mode_2", "mode_6"], ["mode_6", "mode_2"],
+            ["mode_3", "mode_4"], ["mode_4", "mode_3"],
+            ["mode_3", "mode_5"], ["mode_5", "mode_3"],
+            ["mode_3", "mode_6"], ["mode_6", "mode_3"],
+            ["mode_4", "mode_5"], ["mode_5", "mode_4"],
+            ["mode_4", "mode_6"], ["mode_6", "mode_4"],
+            ["mode_5", "mode_6"], ["mode_6", "mode_5"]
         ]
         for option_a, option_b in related_options:
             if name == option_a and value and option_b in self.__settings_menu:
                 if self.__settings_menu[option_b].isChecked():
                     self.__set_settings(option_b, False)
                     self.__settings_menu[option_b].setChecked(False)
+        status = "enabled" if value else "disabled"
+        self.__log_management.add_log(5, "SETTINGS", "\"" + name + "\" is " + status)
         for lane_controller in self.__list_lane_controller:
             lane_controller.set_settings(name, value)
 
