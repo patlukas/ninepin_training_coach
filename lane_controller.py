@@ -5,8 +5,11 @@ from PyQt5.QtCore import QTimer
 
 
 class _LaneControllerSection(QGroupBox):
-    def __init__(self, name: str, list_modes: list, on_trial, on_start, on_stop):
+    def __init__(self, name: str, list_modes: list, on_trial, on_start, on_stop, add_log):
         super().__init__(name)
+
+        self.__name = name
+        self.__add_log = add_log
 
         self.__on_trial = on_trial
         self.__on_start = on_start
@@ -42,17 +45,20 @@ class _LaneControllerSection(QGroupBox):
         self.__btn_stop.setVisible(not show_start)
 
     def __click_trial(self):
+        self.__add_log(5, "START TRIAL", self.__name)
         self.__options_label.setText("Próbne")
         self.__on_trial()
         self.__toggle_view(False)
 
     def __click_start(self):
         mode = self.__options_combobox.currentText()
+        self.__add_log(5, "START GAME", self.__name + " | " + mode)
         self.__options_label.setText(mode)
         self.__on_start(mode)
         self.__toggle_view(False)
 
     def __click_stop(self):
+        self.__add_log(5, "STOP", self.__name)
         self.__on_stop()
         self.__toggle_view(True)
 
@@ -81,6 +87,8 @@ class _LaneCommunicationManager:
         self.__mode_2 = False
         self.__mode_3 = False
         self.__mode_4 = False
+        self.__mode_5 = False
+        self.__mode_6 = False
         self.__time_break_after_recv = time_break_after_recv
 
     def trial(self):
@@ -189,13 +197,25 @@ class _LaneCommunicationManager:
             fallen_pins +
             options
         )
-        mode = [b"T16", b"T22", b"T41", "Z"]
+
+        b_time = b"T"
+        b_layout = b"T"
+        b_clear = b"T"
+        b_enter = b"T"
+        b_stop = b"T"
+        b_pick_up = b"T"
+
+        mode = [b_layout, b_clear, b_enter, "Z"]
         if self.__mode_2:
-            mode = [b"T40", b"T16", b"T22", b"T41", "Z"]
+            mode = ["Z", b_layout, b_clear, b_enter]
         if self.__mode_3:
-            mode = [b"T40", b"T16", b"T22", "Z", b"T41"]
+            mode = [b_time, b_layout, b_clear, b_enter, "Z"]
         if self.__mode_4:
-            mode = [b"T40", "Z", b"T16", b"T22", b"T41"]
+            mode = [b_time, "Z", b_layout, b_clear, b_enter]
+        if self.__mode_5:
+            mode = [b_stop, b_layout, b_clear, b_enter, "Z", b_pick_up]
+        if self.__mode_6:
+            mode = [b_stop, b_layout, b_clear, b_enter, b_pick_up, "Z"]
 
         for x in mode:
             if x == "Z":
@@ -291,12 +311,17 @@ class _LaneCommunicationManager:
             self.__mode_3 = value
         elif name == "mode_4":
             self.__mode_4 = value
+        elif name == "mode_5":
+            self.__mode_5 = value
+        elif name == "mode_6":
+            self.__mode_6 = value
 
 
 class LaneController:
-    def __init__(self, lane_number, on_send_message, time_break_after_recv):
+    def __init__(self, lane_number, on_send_message, time_break_after_recv, add_log):
         self.__communication_manager = _LaneCommunicationManager(lane_number, on_send_message, self.__show_start_layout, time_break_after_recv)
         self.__modes = [
+            "Zbierane na 1",
             "Zbierane na 2",
             "Zbierane na 3",
             "Zbierane na 4",
@@ -308,7 +333,8 @@ class LaneController:
             self.__modes,
             self.__communication_manager.trial,
             self.__communication_manager.start,
-            self.__communication_manager.stop
+            self.__communication_manager.stop,
+            add_log
         )
 
     def get_section(self):

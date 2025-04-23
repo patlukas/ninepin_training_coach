@@ -20,7 +20,7 @@ from lane_controller import LaneController
 from log_management import LogManagement
 
 APP_NAME = "NTC"
-APP_VERSION = "1.0.5"
+APP_VERSION = "1.0.6"
 
 
 class WorkerThread(QThread):
@@ -111,7 +111,7 @@ class GUI(QDialog):
 
     def __set_layout(self) -> None:
         for i in range(self.__config["number_of_lane"]):
-            lane_controller = LaneController(i, self.__on_add_message_to_send, self.__config["break_between_recv_msg_and_send_ping_to_lane"])
+            lane_controller = LaneController(i, self.__on_add_message_to_send, self.__config["break_between_recv_msg_and_send_ping_to_lane"], self.__log_management.add_log)
             self.__list_lane_controller.append(lane_controller)
             self.__layout.addWidget(lane_controller.get_section(), i, 0)
         self.__layout.setMenuBar(self.__create_menu_bar())
@@ -144,7 +144,9 @@ class GUI(QDialog):
             ["mode_1", "Tryb 1 (default)", True],
             ["mode_2", "Tryb 2"],
             ["mode_3", "Tryb 3"],
-            ["mode_4", "Tryb 4"]
+            ["mode_4", "Tryb 4"],
+            ["mode_5", "Tryb 5"],
+            ["mode_6", "Tryb 6"]
         ]
         for option in options:
             if option is None:
@@ -206,24 +208,38 @@ class GUI(QDialog):
             self.__list_lane_controller[lane_index].on_recv_message(msg)
 
     def __set_settings(self, name, value):
-        related_options = [
-            ["change_all_knocked_down", "change_no_knocked_down"], ["change_no_knocked_down", "change_all_knocked_down"],
-            ["time_speed", "time_very_speed"], ["time_very_speed", "time_speed"],
-            ["special_trial_1", "special_trial_2"], ["special_trial_2", "special_trial_1"],
-            ["mode_1", "mode_2"], ["mode_2", "mode_1"],
-            ["mode_1", "mode_3"], ["mode_3", "mode_1"],
-            ["mode_1", "mode_4"], ["mode_4", "mode_1"],
-            ["mode_2", "mode_3"], ["mode_3", "mode_2"],
-            ["mode_2", "mode_4"], ["mode_4", "mode_2"],
-            ["mode_3", "mode_4"], ["mode_4", "mode_3"]
+        list_related_options = [
+            [["change_all_knocked_down", "change_no_knocked_down"], None],
+            [["time_speed", "time_very_speed"], None],
+            [["special_trial_1", "special_trial_2"], None],
+            [["mode_1", "mode_2", "mode_3", "mode_4", "mode_5", "mode_6"], "mode_1"]
         ]
-        for option_a, option_b in related_options:
-            if name == option_a and value and option_b in self.__settings_menu:
-                if self.__settings_menu[option_b].isChecked():
-                    self.__set_settings(option_b, False)
-                    self.__settings_menu[option_b].setChecked(False)
+
+        list_option_to_enable = []
+
+        for related_options, default_option in list_related_options:
+            all_option_is_false = not value
+            if name not in related_options:
+                continue
+            for option in related_options:
+                if option != name and option in self.__settings_menu:
+                    if self.__settings_menu[option].isChecked():
+                        if value:
+                            self.__set_settings(option, False)
+                            self.__settings_menu[option].setChecked(False)
+                        else:
+                            all_option_is_false = False
+            if all_option_is_false and default_option is not None:
+                list_option_to_enable.append(default_option)
+
+        status = "enabled" if value else "disabled"
+        self.__log_management.add_log(5, "SETTINGS", "\"" + name + "\" is " + status)
         for lane_controller in self.__list_lane_controller:
             lane_controller.set_settings(name, value)
+
+        for option in list_option_to_enable:
+            self.__set_settings(option, True)
+            self.__settings_menu[option].setChecked(True)
 
     def __set_visible_log_table(self, show):
         self.__log_table.set_visibility(show)

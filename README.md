@@ -38,12 +38,31 @@ Program oferuje następujące tryby i modyfikacje gry:
 | 7     | Podnieś po ustawieniu próbnych                  |
 | 8     | Podnieś i zatrzymaj po ustawieniu próbnych      |
 
+## Tryby usawiania pełnego układu
+
+* Korekta układu - czyli kombinacja przycisków: "Korekta układu" -> "Clear" -> "Enter"
+* Czas stop - czyli kliknięcie przycisku do zatrzymywania czasu
+* Podnieś - czyli kliknięcie przycisku do podnoszenia
+* Stop - czyli kliknięcie przycisku do zatrzymywania
+* Edycja wyniku - czyli przesłanie komunikatu, który odpowiednio zwiększa wynik i edytuje wyświetlany layout
+
+| Opcja | Opis                                                | Ilość komunikatów |
+|-------|-----------------------------------------------------|-------------------|
+| 1     | Korekta układu -> Edycja wyniku                     | 4                 |
+| 2     | Edycja wyniku -> Korekta układu                     | 4                 |
+| 3     | Czas stop -> Korekta układu -> Edycja wyniku        | 5                 |
+| 4     | Czas stop -> Edycja wyniku -> Korekta układu        | 5                 |
+| 5     | Stop -> Korekta układu -> Edycja wyniku -> Podnieś  | 6                 |
+| 6     | Stop -> Korekta układu -> Podnieś -> Edycja wyniku  | 6                 |
+
+
 
 ## 📌 Version History
 
 | Version          | Release Date | Commits | Changes                                      |
 |------------------|--------------|---------|----------------------------------------------|
-| **v1.0.6.0**     | 🚧 Soon      |         |                                              |
+| **v1.0.7.0**     | 🚧 Soon      |         |                                              |
+| **v1.0.6.0**     | 2025-04-23   | 46      | Change modes                                 |
 | **v1.0.5.1**     | 2025-04-11   | 43      | 32-bit OS compatible exe file                |
 | **v1.0.5.0**     | 2025-04-09   | 42      | Add modes & improved result counting         |
 | **v1.0.4.0**     | 2025-03-21   | 35      | Change the method of setting the full layout |
