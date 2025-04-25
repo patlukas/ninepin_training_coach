@@ -40,38 +40,41 @@ Program oferuje następujące tryby i modyfikacje gry:
 
 ## Tryby usawiania pełnego układu
 
-* Korekta układu - czyli kombinacja przycisków: "Korekta układu" -> "Clear" -> "Enter"
+* Korekta układu - czyli kombinacja przycisków: "B_Korekta układu" -> "Clear" -> "Enter"
 * Czas stop - czyli kliknięcie przycisku do zatrzymywania czasu
 * Podnieś - czyli kliknięcie przycisku do podnoszenia
 * Stop - czyli kliknięcie przycisku do zatrzymywania
 * Edycja wyniku - czyli przesłanie komunikatu, który odpowiednio zwiększa wynik i edytuje wyświetlany layout
 
-| Opcja | Opis                                                | Ilość komunikatów |
-|-------|-----------------------------------------------------|-------------------|
-| 1     | Korekta układu -> Edycja wyniku                     | 4                 |
-| 2     | Edycja wyniku -> Korekta układu                     | 4                 |
-| 3     | Czas stop -> Korekta układu -> Edycja wyniku        | 5                 |
-| 4     | Czas stop -> Edycja wyniku -> Korekta układu        | 5                 |
-| 5     | Stop -> Korekta układu -> Edycja wyniku -> Podnieś  | 6                 |
-| 6     | Stop -> Korekta układu -> Podnieś -> Edycja wyniku  | 6                 |
+| Opcja | Opis                                               | Ilość komunikatów |
+|-------|----------------------------------------------------|-------------------|
+| 1     | Korekta układu -> Edycja wyniku                    | 4                 |
+| 2     | Edycja wyniku -> Korekta układu                    | 4                 |
+| 3     | Czas stop -> Korekta układu -> Edycja wyniku       | 5                 |
+| 4     | Czas stop -> Edycja wyniku -> Korekta układu       | 5                 |
+| 5     | Stop -> Korekta układu -> Edycja wyniku -> Podnieś | 6                 |
+| 6     | Stop -> Korekta układu -> Podnieś -> Edycja wyniku | 6                 |
+| 7     | B_Korekta układu -> Clear -> Edycja wyniku         | 3                 |
+| 8     | Edycja wyniku -> B_Korekta układu -> Clear         | 3                 |
 
 
 
 ## 📌 Version History
 
-| Version          | Release Date      | Commits | Changes                                      |
-|------------------|-------------------|---------|----------------------------------------------|
-| **v1.0.8.0**     | 🚧 In the future  |         |                                              |
-| **v1.0.7.0**     | 🚧 In development |         |                                              |
-| **v1.0.6.0**     | 2025-04-23        | 50      | Change modes                                 |
-| **v1.0.5.1**     | 2025-04-11        | 43      | 32-bit OS compatible exe file                |
-| **v1.0.5.0**     | 2025-04-09        | 42      | Add modes & improved result counting         |
-| **v1.0.4.0**     | 2025-03-21        | 35      | Change the method of setting the full layout |
-| **v1.0.3.0**     | 2025-03-11        | 24      | Added option to control trial attempts       |
-| **v1.0.2.1**     | 2025-02-28        | 22      | Added jenkins                                |
-| **v1.0.2**       | 2025-02-27        | 18      | Added logs table                             |
-| **v1.0.1**       | 2025-02-26        | 9       | Added more freedom to configure              |
-| **v1.0.0**       | 2025-02-24        | 4       | 🎉 Initial stable release                    |
-| **First commit** | 2025-02-23        | 1       |                                              |
+| Version          | Release Date      | Commits | Changes                                          |
+|------------------|-------------------|---------|--------------------------------------------------|
+| **v1.0.8.0**     | 🚧 In the future  |         |                                                  |
+| **v1.0.7.0**     | 🚧 In development |         |                                                  |
+| **v1.0.6.1**     | 2025-04-25        | 55      | New modes added, fixed critical bug from 1.0.6.0 |
+| **v1.0.6.0**     | 2025-04-23        | 51      | ❌ Broken version - Change modes                  |
+| **v1.0.5.1**     | 2025-04-11        | 43      | 32-bit OS compatible exe file                    |
+| **v1.0.5.0**     | 2025-04-09        | 42      | Add modes & improved result counting             |
+| **v1.0.4.0**     | 2025-03-21        | 35      | Change the method of setting the full layout     |
+| **v1.0.3.0**     | 2025-03-11        | 24      | Added option to control trial attempts           |
+| **v1.0.2.1**     | 2025-02-28        | 22      | Added jenkins                                    |
+| **v1.0.2**       | 2025-02-27        | 18      | Added logs table                                 |
+| **v1.0.1**       | 2025-02-26        | 9       | Added more freedom to configure                  |
+| **v1.0.0**       | 2025-02-24        | 4       | 🎉 Initial stable release                        |
+| **First commit** | 2025-02-23        | 1       |                                                  |
 
 ![](https://github.ct8.pl/readme/patlukas/ninepin_training_coach)

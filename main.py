@@ -141,12 +141,12 @@ class GUI(QDialog):
             None,
             ["add_removed_pins", "Dodawaj liczbe usuwanych kręgli do wyniku", True],
             None,
-            ["mode_1", "Tryb 1 (default)", True],
-            ["mode_2", "Tryb 2"],
-            ["mode_3", "Tryb 3"],
-            ["mode_4", "Tryb 4"],
-            ["mode_5", "Tryb 5"],
-            ["mode_6", "Tryb 6"]
+            ["mode=1", "Tryb 1 (default)", True],
+            ["mode=2", "Tryb 2"],
+            ["mode=3", "Tryb 3"],
+            ["mode=4", "Tryb 4"],
+            ["mode=5", "Tryb 5"],
+            ["mode=6", "Tryb 6"]
         ]
         for option in options:
             if option is None:
@@ -212,7 +212,7 @@ class GUI(QDialog):
             [["change_all_knocked_down", "change_no_knocked_down"], None],
             [["time_speed", "time_very_speed"], None],
             [["special_trial_1", "special_trial_2"], None],
-            [["mode_1", "mode_2", "mode_3", "mode_4", "mode_5", "mode_6"], "mode_1"]
+            [["mode=1", "mode=2", "mode=3", "mode=4", "mode=5", "mode=6"], "mode=1"]
         ]
 
         list_option_to_enable = []
