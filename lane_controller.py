@@ -198,12 +198,12 @@ class _LaneCommunicationManager:
             options
         )
 
-        b_time = b"T"
-        b_layout = b"T"
-        b_clear = b"T"
-        b_enter = b"T"
-        b_stop = b"T"
-        b_pick_up = b"T"
+        b_time = b"T14"
+        b_layout = b"T16"
+        b_clear = b"T22"
+        b_enter = b"T24"
+        b_stop = b"T40"
+        b_pick_up = b"T41"
 
         mode = [b_layout, b_clear, b_enter, "Z"]
         if self.__mode_2:
