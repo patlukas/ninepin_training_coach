@@ -83,12 +83,7 @@ class _LaneCommunicationManager:
         self.__special_trial_1 = False
         self.__special_trial_2 = False
         self.__add_removed_pins = False
-        self.__mode_1 = True
-        self.__mode_2 = False
-        self.__mode_3 = False
-        self.__mode_4 = False
-        self.__mode_5 = False
-        self.__mode_6 = False
+        self.__full_layout_mode = 1
         self.__time_break_after_recv = time_break_after_recv
 
     def trial(self):
@@ -205,17 +200,19 @@ class _LaneCommunicationManager:
         b_stop = b"T40"
         b_pick_up = b"T41"
 
-        mode = [b_layout, b_clear, b_enter, "Z"]
-        if self.__mode_2:
-            mode = ["Z", b_layout, b_clear, b_enter]
-        if self.__mode_3:
-            mode = [b_time, b_layout, b_clear, b_enter, "Z"]
-        if self.__mode_4:
-            mode = [b_time, "Z", b_layout, b_clear, b_enter]
-        if self.__mode_5:
-            mode = [b_stop, b_layout, b_clear, b_enter, "Z", b_pick_up]
-        if self.__mode_6:
-            mode = [b_stop, b_layout, b_clear, b_enter, b_pick_up, "Z"]
+        list_full_layout_modes = {
+            1: [b_layout, b_clear, b_enter, "Z"],
+            2: ["Z", b_layout, b_clear, b_enter],
+            3: [b_time, b_layout, b_clear, b_enter, "Z"],
+            4: [b_time, "Z", b_layout, b_clear, b_enter],
+            5: [b_stop, b_layout, b_clear, b_enter, "Z", b_pick_up],
+            6: [b_stop, b_layout, b_clear, b_enter, b_pick_up, "Z"]
+        }
+
+        if self.__full_layout_mode in list_full_layout_modes.keys():
+            mode = list_full_layout_modes[self.__full_layout_mode]
+        else:
+            mode = list_full_layout_modes[1]
 
         for x in mode:
             if x == "Z":
@@ -303,18 +300,8 @@ class _LaneCommunicationManager:
             self.__special_trial_2 = value
         elif name == "add_removed_pins":
             self.__add_removed_pins = value
-        elif name == "mode_1":
-            self.__mode_1 = value
-        elif name == "mode_2":
-            self.__mode_2 = value
-        elif name == "mode_3":
-            self.__mode_3 = value
-        elif name == "mode_4":
-            self.__mode_4 = value
-        elif name == "mode_5":
-            self.__mode_5 = value
-        elif name == "mode_6":
-            self.__mode_6 = value
+        elif name.split("=")[0] == "mode":
+            self.__full_layout_mode = int(name.split("=")[1])
 
 
 class LaneController:
