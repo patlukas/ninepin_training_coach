@@ -1,2 +1,2 @@
-- Change modes to set full layout
-- Add more logs (start/stop trial and game, change settings)
+- New modes to set full layout (7,8)
+- Fix bug form 1.0.6.0 (#27)

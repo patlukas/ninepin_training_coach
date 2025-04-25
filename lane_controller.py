@@ -206,7 +206,9 @@ class _LaneCommunicationManager:
             3: [b_time, b_layout, b_clear, b_enter, "Z"],
             4: [b_time, "Z", b_layout, b_clear, b_enter],
             5: [b_stop, b_layout, b_clear, b_enter, "Z", b_pick_up],
-            6: [b_stop, b_layout, b_clear, b_enter, b_pick_up, "Z"]
+            6: [b_stop, b_layout, b_clear, b_enter, b_pick_up, "Z"],
+            7: ["Z", b_layout, b_clear],
+            8: [b_layout, b_clear, "Z"]
         }
 
         if self.__full_layout_mode in list_full_layout_modes.keys():
