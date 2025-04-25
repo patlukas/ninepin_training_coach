@@ -20,7 +20,7 @@ from lane_controller import LaneController
 from log_management import LogManagement
 
 APP_NAME = "NTC"
-APP_VERSION = "1.0.7"
+APP_VERSION = "1.0.8"
 
 
 class WorkerThread(QThread):
@@ -146,7 +146,9 @@ class GUI(QDialog):
             ["mode=3", "Tryb 3"],
             ["mode=4", "Tryb 4"],
             ["mode=5", "Tryb 5"],
-            ["mode=6", "Tryb 6"]
+            ["mode=6", "Tryb 6"],
+            ["mode=7", "Tryb 7"],
+            ["mode=8", "Tryb 8"],
         ]
         for option in options:
             if option is None:
@@ -212,7 +214,7 @@ class GUI(QDialog):
             [["change_all_knocked_down", "change_no_knocked_down"], None],
             [["time_speed", "time_very_speed"], None],
             [["special_trial_1", "special_trial_2"], None],
-            [["mode=1", "mode=2", "mode=3", "mode=4", "mode=5", "mode=6"], "mode=1"]
+            [["mode=1", "mode=2", "mode=3", "mode=4", "mode=5", "mode=6", "mode=7", "mode=8"], "mode=1"]
         ]
 
         list_option_to_enable = []
