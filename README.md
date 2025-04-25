@@ -63,9 +63,9 @@ Program oferuje następujące tryby i modyfikacje gry:
 
 | Version          | Release Date      | Commits | Changes                                          |
 |------------------|-------------------|---------|--------------------------------------------------|
-| **v1.0.8.0**     | 🚧 In the future  |         |                                                  |
-| **v1.0.7.0**     | 🚧 In development |         |                                                  |
-| **v1.0.6.1**     | 2025-04-25        | 55      | New modes added, fixed critical bug from 1.0.6.0 |
+| **v1.0.9.0**     | 🚧 In the future  |         |                                                  |
+| **v1.0.8.0**     | 🚧 In development |         |                                                  |
+| **v1.0.7.0**     | 2025-04-25        | 56      | New modes added, fixed critical bug from 1.0.6.0 |
 | **v1.0.6.0**     | 2025-04-23        | 51      | ❌ Broken version - Change modes                  |
 | **v1.0.5.1**     | 2025-04-11        | 43      | 32-bit OS compatible exe file                    |
 | **v1.0.5.0**     | 2025-04-09        | 42      | Add modes & improved result counting             |
