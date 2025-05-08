@@ -142,8 +142,8 @@ class _LaneCommunicationManager:
         self.__send_message_to_end_layout(
             self.__add_to_hex(message[5:8], x),
             message[8:11],
-            message[11:14],
-            self.__add_to_hex(message[14:17], x),
+            self.__add_to_hex(message[11:14], x),
+            message[14:17],
             message[17:20],
             message[20:23],
             message[23:26],
