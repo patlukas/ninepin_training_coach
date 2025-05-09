@@ -17,6 +17,7 @@ pipeline {
                 script {
                     env.APP_VERSION = (readFile("main.py") =~ /APP_VERSION\s*=\s*"(.*)"/)[0][1]
                     env.APP_NAME = (readFile("main.py") =~ /APP_NAME\s*=\s*"(.*)"/)[0][1]
+                    env.EXE_NAME_PREFIX = (readFile("main.py") =~ /EXE_NAME\s*=\s*"(.*)"/)[0][1]
                     echo "From 'main.py'\tAPP_NAME: ${env.APP_NAME}\tAPP_VERSION: ${env.APP_VERSION}"
                 }
             }
@@ -35,7 +36,7 @@ pipeline {
                             echo "Last release: ${env.LATEST_RELEASE}"
                         } else {
                             env.LATEST_RELEASE = "v0.0.0"
-                            error "Nie udało się pobrać informacji o release!"
+                            error "Nie udaÅ‚o siÄ™ pobraÄ‡ informacji o release!"
                         }
                     }
                 }
@@ -65,7 +66,7 @@ pipeline {
                 script {
                     env.FILE_NAME = env.APP_NAME + "_" + env.APP_VERSION.replace(".", "_")
                     env.ZIP_NAME = "${env.FILE_NAME}.zip"
-                    env.EXE_NAME = "${env.FILE_NAME}.exe"
+                    env.EXE_NAME = "${env.EXE_NAME_PREFIX}_${env.APP_VERSION.replace(".", "_")}.exe"
                     echo "Zip path: ${env.ZIP_NAME}\tExe path: ${env.EXE_NAME}"
                 }
             }
@@ -73,7 +74,7 @@ pipeline {
         stage('Build EXE') {
             steps {
                 bat '''
-                "%PYTHON34%\\Scripts\\pyinstaller.exe" --distpath . --onefile --noconsole --name %EXE_NAME% main.py
+                "%PYTHON34%\\Scripts\\pyinstaller.exe" --distpath . --onefile --icon=icon/icon.ico --noconsole --name "%EXE_NAME%" main.py
                 '''
             }
         }
@@ -119,6 +120,7 @@ pipeline {
                         def body = "New release"
                         if (fileExists('about_release.txt')) {
                             body = readFile('about_release.txt')
+                            body = body.replaceAll('"', "'")
                         }
 
                         def releaseData = [

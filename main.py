@@ -20,7 +20,8 @@ from lane_controller import LaneController
 from log_management import LogManagement
 
 APP_NAME = "NTC"
-APP_VERSION = "1.0.7"
+EXE_NAME = "TK"
+APP_VERSION = "1.0.9"
 
 
 class WorkerThread(QThread):
@@ -125,21 +126,32 @@ class GUI(QDialog):
         action.setCheckable(True)
         action.triggered.connect(lambda checked: self.__set_visible_log_table(checked))
         view_menu.addAction(action)
+        action = QAction("Pokaż przycis do uruchomienia próbnych", self)
+        action.setCheckable(True)
+        action.triggered.connect(lambda checked: self.__set_visible_trial_button(checked))
+        view_menu.addAction(action)
 
         settings_menu = menu_bar.addMenu("Ustawienia")
         options = [
-            ["change_next_layout", "Przy zmienie ustaw next layout jako 000", True],
+            ["change_next_layout=no", "Przy zmianie: następny układ: nie zmieniaj"],
+            ["change_next_layout=yes", "Przy zmienie: następny układ: ustaw jako 000 (default)", True],
             None,
-            ["change_all_knocked_down", "Przy zmienie ustaw że zbito wszystkie kręgle"],
-            ["change_no_knocked_down", "Przy zmienie ustaw że nie zbito żadego kręgle"],
+            ["change_knocked_down=no", "Przy zmienie: zbite: nie zmieniaj (default)", True],
+            ["change_knocked_down=all", "Przy zmienie: zbite: ustaw że zbito wszystkie kręgle"],
+            ["change_knocked_down=null", "Przy zmienie: zbite: ustaw że nie zbito żadego kręgle"],
             None,
-            ["time_speed", "Szybszy czas"],
-            ["time_very_speed", "Dużo szybszy czas"],
+            ["add_removed_pins=no", "Przy zmianie: dodaj liczbę usuwanych kręgli: Nie (default)", True],
+            ["add_removed_pins=yes", "Przy zmianie: dodaj liczbę usuwanych kręgli: Tak"],
             None,
-            ["special_trial_1", "Podnieś po ustawieniu próbnych"],
-            ["special_trial_2", "Podnieś i zatrzymaj po ustawieniu próbnych"],
+            ["time_speed=normal", "Brak edycji czasu (default)", True],
+            ["time_speed=fast", "Szybszy czas [0.1]"],
+            ["time_speed=very_fast", "Dużo szybszy czas [1.0]"],
+            ["time_speed=extreme", "Ekstremalnie szybki czas [5.0]"],
             None,
-            ["add_removed_pins", "Dodawaj liczbe usuwanych kręgli do wyniku"],
+            ["trial=0", "Próbne: Bez zmian (default)", True],
+            ["trial=1", "Próbne: Podnieś"],
+            ["trial=2", "Próbne: Podnieś i zatrzymaj"],
+            None,
             None,
             ["mode=1", "Tryb 1 (default)", True],
             ["mode=2", "Tryb 2"],
@@ -210,9 +222,11 @@ class GUI(QDialog):
 
     def __set_settings(self, name, value):
         list_related_options = [
-            [["change_all_knocked_down", "change_no_knocked_down"], None],
-            [["time_speed", "time_very_speed"], None],
-            [["special_trial_1", "special_trial_2"], None],
+            [["change_next_layout=no", "change_next_layout=yes"], "change_next_layout=yes"],
+            [["change_knocked_down=no", "change_knocked_down=all", "change_knocked_down=null"], "change_knocked_down=no"],
+            [["add_removed_pins=no", "add_removed_pins=yes"], "add_removed_pins=no"],
+            [["time_speed=normal", "time_speed=fast", "time_speed=very_fast", "time_speed=extreme"], "time_speed=normal"],
+            [["trial=0", "trial=1", "trial=2"], "trial=0"],
             [["mode=1", "mode=2", "mode=3", "mode=4", "mode=5", "mode=6", "mode=7"], "mode=1"]
         ]
 
@@ -245,6 +259,10 @@ class GUI(QDialog):
     def __set_visible_log_table(self, show):
         self.__log_table.set_visibility(show)
         self.adjustSize()
+
+    def __set_visible_trial_button(self, show):
+        for lane_controller in self.__list_lane_controller:
+            lane_controller.set_visible_trial_button(show)
 
 
 if __name__ == '__main__':
