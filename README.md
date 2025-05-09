@@ -70,22 +70,23 @@ Program oferuje następujące tryby i modyfikacje gry:
 
 ## 📌 Version History
 
-| Version          | Release Date      | Commits | Changes                                                 |
-|------------------|-------------------|---------|---------------------------------------------------------|
-| **v1.0.10.0**    | 🚧 In the future  |         |                                                         |
-| **v1.0.9.1**     | 2025-05-09        | 70      | Fix Jenkins                                             |
-| **v1.0.9.0**     | 2025-05-09        | 68      | New modes added, fix "Optymistyczne zbierane", add icon |
-| **v1.0.8.0**     | 2025-04-25        | 59      | New modes added                                         |
-| **v1.0.7.0**     | 2025-04-25        | 56      | New modes added, fixed critical bug from 1.0.6.0        |
-| **v1.0.6.0**     | 2025-04-23        | 51      | ❌ Broken version - Change modes                         |
-| **v1.0.5.1**     | 2025-04-11        | 43      | 32-bit OS compatible exe file                           |
-| **v1.0.5.0**     | 2025-04-09        | 42      | Add modes & improved result counting                    |
-| **v1.0.4.0**     | 2025-03-21        | 35      | Change the method of setting the full layout            |
-| **v1.0.3.0**     | 2025-03-11        | 24      | Added option to control trial attempts                  |
-| **v1.0.2.1**     | 2025-02-28        | 22      | Added jenkins                                           |
-| **v1.0.2**       | 2025-02-27        | 18      | Added logs table                                        |
-| **v1.0.1**       | 2025-02-26        | 9       | Added more freedom to configure                         |
-| **v1.0.0**       | 2025-02-24        | 4       | 🎉 Initial stable release                               |
-| **First commit** | 2025-02-23        | 1       |                                                         |
+| Version          | Release Date     | Commits | Changes                                                                    |
+|------------------|------------------|---------|----------------------------------------------------------------------------|
+| **v1.0.10.0**    | 🚧 In the future |         |                                                                            |
+| **v1.0.9.2**     | 2025-05-09       | 73      | Fix critical bug                                                           |
+| **v1.0.9.1**     | 2025-05-09       | 72      | ❌ Broken version - Fix Jenkins                                             |
+| **v1.0.9.0**     | 2025-05-09       | 68      | ❌ Broken version - New modes added, fix "Optymistyczne zbierane", add icon |
+| **v1.0.8.0**     | 2025-04-25       | 59      | New modes added                                                            |
+| **v1.0.7.0**     | 2025-04-25       | 56      | New modes added, fixed critical bug from 1.0.6.0                           |
+| **v1.0.6.0**     | 2025-04-23       | 51      | ❌ Broken version - Change modes                                            |
+| **v1.0.5.1**     | 2025-04-11       | 43      | 32-bit OS compatible exe file                                              |
+| **v1.0.5.0**     | 2025-04-09       | 42      | Add modes & improved result counting                                       |
+| **v1.0.4.0**     | 2025-03-21       | 35      | Change the method of setting the full layout                               |
+| **v1.0.3.0**     | 2025-03-11       | 24      | Added option to control trial attempts                                     |
+| **v1.0.2.1**     | 2025-02-28       | 22      | Added jenkins                                                              |
+| **v1.0.2**       | 2025-02-27       | 18      | Added logs table                                                           |
+| **v1.0.1**       | 2025-02-26       | 9       | Added more freedom to configure                                            |
+| **v1.0.0**       | 2025-02-24       | 4       | 🎉 Initial stable release                                                  |
+| **First commit** | 2025-02-23       | 1       |                                                                            |
 
 ![](https://github.ct8.pl/readme/patlukas/ninepin_training_coach)

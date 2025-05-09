@@ -1,5 +1,1 @@
-- Fix "Optymistyczne zbierane" (#32)
-- New modes to set full layout (#31)
-- Improve readability of options
-- Add possible to hide trial's button (#20)
-- Add icon (#2)
+- Fix critical bug

@@ -21,7 +21,7 @@ from log_management import LogManagement
 
 APP_NAME = "NTC"
 EXE_NAME = "TK"
-APP_VERSION = "1.0.9"
+APP_VERSION = "1.0.10"
 
 
 class WorkerThread(QThread):
@@ -147,8 +147,6 @@ class GUI(QDialog):
             ["trial=0", "Próbne: Bez zmian (default)", True],
             ["trial=1", "Próbne: Podnieś"],
             ["trial=2", "Próbne: Podnieś i zatrzymaj"],
-            None,
-            ["add_removed_pins", "Dodawaj liczbe usuwanych kręgli do wyniku", True],
             None,
             ["mode=1", "Tryb 1 (default)", True],
             ["mode=2", "Tryb 2"],
