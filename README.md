@@ -73,7 +73,7 @@ Program oferuje następujące tryby i modyfikacje gry:
 | Version          | Release Date      | Commits | Changes                                           |
 |------------------|-------------------|-------|---------------------------------------------------|
 | **v1.0.10.0**    | 🚧 In the future  |       |                                                   |
-| **v1.0.9.0**     | 2025-05-09        | 67      | New modes added, fix "Optymistyczne zbierane", add icon    |
+| **v1.0.9.0**     | 2025-05-09        | 68      | New modes added, fix "Optymistyczne zbierane", add icon    |
 | **v1.0.8.0**     | 2025-04-25        | 59    | New modes added                                   |
 | **v1.0.7.0**     | 2025-04-25        | 56    | New modes added, fixed critical bug from 1.0.6.0  |
 | **v1.0.6.0**     | 2025-04-23        | 51    | ❌ Broken version - Change modes                   |
