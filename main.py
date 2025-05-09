@@ -125,6 +125,10 @@ class GUI(QDialog):
         action.setCheckable(True)
         action.triggered.connect(lambda checked: self.__set_visible_log_table(checked))
         view_menu.addAction(action)
+        action = QAction("Pokaż przycis do uruchomienia próbnych", self)
+        action.setCheckable(True)
+        action.triggered.connect(lambda checked: self.__set_visible_trial_button(checked))
+        view_menu.addAction(action)
 
         settings_menu = menu_bar.addMenu("Ustawienia")
         options = [
@@ -254,6 +258,10 @@ class GUI(QDialog):
     def __set_visible_log_table(self, show):
         self.__log_table.set_visibility(show)
         self.adjustSize()
+
+    def __set_visible_trial_button(self, show):
+        for lane_controller in self.__list_lane_controller:
+            lane_controller.set_visible_trial_button(show)
 
 
 if __name__ == '__main__':

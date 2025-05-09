@@ -8,6 +8,9 @@ class _LaneControllerSection(QGroupBox):
     def __init__(self, name: str, list_modes: list, on_trial, on_start, on_stop, add_log):
         super().__init__(name)
 
+        self.__show_trial = False
+        self.__program_is_not_running = True
+
         self.__name = name
         self.__add_log = add_log
 
@@ -35,11 +38,13 @@ class _LaneControllerSection(QGroupBox):
         self.__layout.addWidget(self.__btn_trial, 0, 1)
         self.__layout.addWidget(self.__btn_start, 0, 2)
         self.__layout.addWidget(self.__btn_stop, 1, 1, 1, 2)
+
         self.__toggle_view(True)
 
     def __toggle_view(self, show_start):
+        self.__program_is_not_running = show_start
         self.__options_combobox.setVisible(show_start)
-        self.__btn_trial.setVisible(show_start)
+        self.__btn_trial.setVisible(show_start and self.__show_trial)
         self.__btn_start.setVisible(show_start)
         self.__options_label.setVisible(not show_start)
         self.__btn_stop.setVisible(not show_start)
@@ -64,6 +69,10 @@ class _LaneControllerSection(QGroupBox):
 
     def show_start_layout(self):
         QTimer.singleShot(0, self.__click_stop)
+
+    def set_visible_trial_button(self, show):
+        self.__show_trial = show
+        self.__btn_trial.setVisible(show and self.__program_is_not_running)
 
 
 class _LaneCommunicationManager:
@@ -334,3 +343,6 @@ class LaneController:
 
     def set_settings(self, name, value):
         self.__communication_manager.set_settings(name, value)
+
+    def set_visible_trial_button(self, show):
+        self.__section.set_visible_trial_button(show)
