@@ -36,7 +36,7 @@ pipeline {
                             echo "Last release: ${env.LATEST_RELEASE}"
                         } else {
                             env.LATEST_RELEASE = "v0.0.0"
-                            error "Nie udaÅ‚o siÄ™ pobraÄ‡ informacji o release!"
+                            error "Nie udało się pobrać informacji o release!"
                         }
                     }
                 }
@@ -120,7 +120,6 @@ pipeline {
                         def body = "New release"
                         if (fileExists('about_release.txt')) {
                             body = readFile('about_release.txt')
-                            body = body.replaceAll('"', "'")
                         }
 
                         def releaseData = [

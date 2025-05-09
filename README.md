@@ -88,5 +88,4 @@ Program oferuje następujące tryby i modyfikacje gry:
 | **v1.0.0**       | 2025-02-24        | 4       | 🎉 Initial stable release                               |
 | **First commit** | 2025-02-23        | 1       |                                                         |
 
-
 ![](https://github.ct8.pl/readme/patlukas/ninepin_training_coach)

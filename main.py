@@ -126,10 +126,6 @@ class GUI(QDialog):
         action.setCheckable(True)
         action.triggered.connect(lambda checked: self.__set_visible_log_table(checked))
         view_menu.addAction(action)
-        action = QAction("Pokaż przycis do uruchomienia próbnych", self)
-        action.setCheckable(True)
-        action.triggered.connect(lambda checked: self.__set_visible_trial_button(checked))
-        view_menu.addAction(action)
 
         settings_menu = menu_bar.addMenu("Ustawienia")
         options = [
@@ -152,6 +148,7 @@ class GUI(QDialog):
             ["trial=1", "Próbne: Podnieś"],
             ["trial=2", "Próbne: Podnieś i zatrzymaj"],
             None,
+            ["add_removed_pins", "Dodawaj liczbe usuwanych kręgli do wyniku", True],
             None,
             ["mode=1", "Tryb 1 (default)", True],
             ["mode=2", "Tryb 2"],
