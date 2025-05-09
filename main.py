@@ -160,6 +160,7 @@ class GUI(QDialog):
             ["mode=5", "Tryb 5"],
             ["mode=6", "Tryb 6"],
             ["mode=7", "Tryb 7"]
+
         ]
         for option in options:
             if option is None:
