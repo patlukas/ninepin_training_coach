@@ -20,7 +20,8 @@ from lane_controller import LaneController
 from log_management import LogManagement
 
 APP_NAME = "NTC"
-APP_VERSION = "1.0.7"
+EXE_NAME = "Trener Kręglarski"
+APP_VERSION = "1.0.9"
 
 
 class WorkerThread(QThread):
