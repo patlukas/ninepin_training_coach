@@ -46,16 +46,15 @@ Program oferuje następujące tryby i modyfikacje gry:
 * Stop - czyli kliknięcie przycisku do zatrzymywania
 * Edycja wyniku - czyli przesłanie komunikatu, który odpowiednio zwiększa wynik i edytuje wyświetlany layout
 
-| Opcja | Opis                                               | Ilość komunikatów |
-|-------|----------------------------------------------------|-------------------|
-| 1     | Korekta układu -> Edycja wyniku                    | 4                 |
-| 2     | Edycja wyniku -> Korekta układu                    | 4                 |
-| 3     | Czas stop -> Korekta układu -> Edycja wyniku       | 5                 |
-| 4     | Czas stop -> Edycja wyniku -> Korekta układu       | 5                 |
-| 5     | Stop -> Korekta układu -> Edycja wyniku -> Podnieś | 6                 |
-| 6     | Stop -> Korekta układu -> Podnieś -> Edycja wyniku | 6                 |
-| 7     | B_Korekta układu -> Clear -> Edycja wyniku         | 3                 |
-| 8     | Edycja wyniku -> B_Korekta układu -> Clear         | 3                 |
+| Opcja | Opis                                                             | Ilość komunikatów |
+|-------|------------------------------------------------------------------|-------------------|
+| 1     | Stop -> Korekta układu -> Edycja wyniku -> Podnieś               | 6                 |
+| 2     | Stop -> Korekta układu -> Podnieś -> Edycja wyniku               | 6                 |
+| 3     | Edycja wyniku -> Stop -> Korekta układu -> Podnieś               | 6                 |
+| 4     | Stop -> Edycja wyniku -> Korekta układu -> Podnieś               | 6                 |
+| 5     | Stop -> Czas stop -> Korekta układu -> Edycja wyniku -> Podnieś  | 7                 |
+| 6     | Stop -> Czas stop -> Korekta układu -> Podnieś -> Edycja wyniku  | 7                 |
+| 7     | Stop -> Edycja wyniku  -> B_Korekta układu -> Enter -> Podnieś   | 5                 |
 
 
 

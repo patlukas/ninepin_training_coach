@@ -201,14 +201,13 @@ class _LaneCommunicationManager:
         b_pick_up = b"T41"
 
         list_full_layout_modes = {
-            1: [b_layout, b_clear, b_enter, "Z"],
-            2: ["Z", b_layout, b_clear, b_enter],
-            3: [b_time, b_layout, b_clear, b_enter, "Z"],
-            4: [b_time, "Z", b_layout, b_clear, b_enter],
-            5: [b_stop, b_layout, b_clear, b_enter, "Z", b_pick_up],
-            6: [b_stop, b_layout, b_clear, b_enter, b_pick_up, "Z"],
-            7: ["Z", b_layout, b_clear],
-            8: [b_layout, b_clear, "Z"]
+            1: [b_stop, b_layout, b_clear, b_enter, "Z", b_pick_up],
+            2: [b_stop, b_layout, b_clear, b_enter, b_pick_up, "Z"],
+            3: ["Z", b_stop, b_layout, b_clear, b_enter, b_pick_up],
+            4: [b_stop, "Z", b_layout, b_clear, b_enter, b_pick_up],
+            5: [b_stop, b_time, b_layout, b_clear, b_enter, "Z", b_pick_up],
+            6: [b_stop, b_time, b_layout, b_clear, b_enter, b_pick_up, "Z"],
+            7: [b_stop, "Z",  b_layout, b_enter, b_pick_up],
         }
 
         if self.__full_layout_mode in list_full_layout_modes.keys():
