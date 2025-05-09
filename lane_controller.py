@@ -75,23 +75,20 @@ class _LaneCommunicationManager:
         self.__show_start_layout = show_start_layout
         self.__run = False
         self.__mode = ""
-        self.__change_all_knocked_down = False
-        self.__change_no_knocked_down = False
-        self.__change_next_layout = False
-        self.__time_speed = False
-        self.__time_very_speed = False
-        self.__special_trial_1 = False
-        self.__special_trial_2 = False
-        self.__add_removed_pins = False
+        self.__change_knocked_down = "no"
+        self.__change_next_layout = "no"
+        self.__time_speed = "normal"
+        self.__trial = "0"
+        self.__add_removed_pins = "no"
         self.__full_layout_mode = 1
         self.__time_break_after_recv = time_break_after_recv
 
     def trial(self):
         self.__on_send_message(self.__message_head + b"E1")
         self.__on_send_message(self.__message_head + b"P00E0320")
-        if self.__special_trial_1 or self.__special_trial_2:
+        if self.__trial == "1" or self.__trial == "2":
             self.__on_send_message(self.__message_head + b"T41")
-        if self.__special_trial_2:
+        if self.__trial == "2":
             self.__on_send_message(self.__message_head + b"T14")
         self.__run = True
 
@@ -170,14 +167,14 @@ class _LaneCommunicationManager:
 
     def __send_message_to_end_layout(self, number_of_throw, last_throw_result, lane_sum, total_sum, next_layout,
                                      number_of_x, time_to_end, fallen_pins, options):
-        if self.__add_removed_pins:
+        if self.__add_removed_pins == "yes":
             pins = self.__count_beaten_pins(next_layout)
             total_sum = self.__add_to_hex(total_sum, pins)
             lane_sum = self.__add_to_hex(lane_sum, pins)
 
-        next_layout = self.__get_next_layout(next_layout, self.__change_next_layout)
+        next_layout = self.__get_next_layout(next_layout, self.__change_next_layout == "yes")
         time_to_end = self.__get_time(time_to_end)
-        fallen_pins = self.__get_knocked_down(fallen_pins, self.__change_all_knocked_down, self.__change_no_knocked_down)
+        fallen_pins = self.__get_knocked_down(fallen_pins, self.__change_knocked_down)
 
         z = lambda: self.__on_send_message(
             self.__message_head +
@@ -236,18 +233,24 @@ class _LaneCommunicationManager:
         return current_value
 
     @staticmethod
-    def __get_knocked_down(current_value, return_all, return_no):
-        if return_all:
+    def __get_knocked_down(current_value, return_option):
+        """
+        :param return_option: no - return current value, all - return full layout, null - return empty layout
+        """
+        if return_option == "all":
             return b"1FF"
-        if return_no:
+        if return_option == "null":
             return b"000"
         return current_value
 
     def __get_time(self, current_value):
-        if self.__time_speed:
-            return self.__sub_to_hex(current_value, 1)
-        if self.__time_very_speed:
-            return self.__sub_to_hex(current_value, 10)
+        values = {
+            "fast": 1,
+            "very_fast": 10,
+            "extreme": 50
+        }
+        if self.__time_speed in values:
+            return self.__sub_to_hex(current_value, values[self.__time_speed])
         return current_value
 
     @staticmethod
@@ -286,24 +289,18 @@ class _LaneCommunicationManager:
         return inverted_bytes
 
     def set_settings(self, name, value):
-        if name == "change_all_knocked_down":
-            self.__change_all_knocked_down = value
-        elif name == "change_no_knocked_down":
-            self.__change_no_knocked_down = value
-        elif name == "change_next_layout":
-            self.__change_next_layout = value
-        elif name == "time_speed":
-            self.__time_speed = value
-        elif name == "time_very_speed":
-            self.__time_very_speed = value
-        elif name == "special_trial_1":
-            self.__special_trial_1 = value
-        elif name == "special_trial_2":
-            self.__special_trial_2 = value
-        elif name == "add_removed_pins":
-            self.__add_removed_pins = value
-        elif name.split("=")[0] == "mode":
+        if name.split("=")[0] == "mode":
             self.__full_layout_mode = int(name.split("=")[1])
+        elif name.split("=")[0] == "change_next_layout":
+            self.__change_next_layout = name.split("=")[1]
+        elif name.split("=")[0] == "change_knocked_down":
+            self.__change_knocked_down = name.split("=")[1]
+        elif name.split("=")[0] == "time_speed":
+            self.__time_speed = name.split("=")[1]
+        elif name.split("=")[0] == "trial":
+            self.__trial = name.split("=")[1]
+        if name.split("=")[0] == "add_removed_pins":
+            self.__add_removed_pins = name.split("=")[1]
 
 
 class LaneController:

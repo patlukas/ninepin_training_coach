@@ -27,16 +27,26 @@
 
 Program oferuje następujące tryby i modyfikacje gry:
 
-| Opcja | Opis                                            |
-| ----- | ----------------------------------------------- |
-| 1     | Przy zmianie ustaw następny układ jako 000      |
-| 2     | Przy zmianie ustaw, że zbito wszystkie kręgle   |
-| 3     | Przy zmianie ustaw, że nie zbito żadnego kręgla |
-| 4     | Podnoś po zmianie                               |
-| 5     | Przyspieszony czas                              |
-| 6     | Dużo szybszy czas                               |
-| 7     | Podnieś po ustawieniu próbnych                  |
-| 8     | Podnieś i zatrzymaj po ustawieniu próbnych      |
+| Opcja | Opis                                                  | Domyślne |
+|-------|-------------------------------------------------------|----------|
+| 1.a   | Przy zmianie: następny układ: nie zmieniaj            |          |
+| 1.b   | Przy zmienie: następny układ: ustaw jako 000          | Tak      |
+|       |                                                       |          |
+| 2.a   | Przy zmienie: zbite: nie zmieniaj                     | Tak      |
+| 2.b   | Przy zmienie: zbite: ustaw że zbito wszystkie kręgle  |          |
+| 2.c   | Przy zmienie: zbite: ustaw że nie zbito żadego kręgle |          |
+|       |                                                       |          |
+| 3.a   | Przy zmianie: dodaj liczbę usuwanych kręgli: Nie      | Tak      |
+| 3.b   | Przy zmianie: dodaj liczbę usuwanych kręgli: Tak      |          |
+|       |                                                       |          |
+| 4.a   | Normalny czas                                         | Tak      |
+| 4.b   | Przyspieszony czas [0.1]                              |          |
+| 4.c   | Dużo szybszy czas [1.0]                               |          |
+| 4.d   | Ekstremalnie szybki czas [5.0]                        |          |
+|       |                                                       |          |
+| 5.a   | Próbne: Bez zmian                                     | Tak      |
+| 5.b   | Próbne: Podnieś                                       |          |
+| 5.c   | Próbne: Podnieś i zatrzymaj                           |          |
 
 ## Tryby usawiania pełnego układu
 
@@ -46,36 +56,35 @@ Program oferuje następujące tryby i modyfikacje gry:
 * Stop - czyli kliknięcie przycisku do zatrzymywania
 * Edycja wyniku - czyli przesłanie komunikatu, który odpowiednio zwiększa wynik i edytuje wyświetlany layout
 
-| Opcja | Opis                                               | Ilość komunikatów |
-|-------|----------------------------------------------------|-------------------|
-| 1     | Korekta układu -> Edycja wyniku                    | 4                 |
-| 2     | Edycja wyniku -> Korekta układu                    | 4                 |
-| 3     | Czas stop -> Korekta układu -> Edycja wyniku       | 5                 |
-| 4     | Czas stop -> Edycja wyniku -> Korekta układu       | 5                 |
-| 5     | Stop -> Korekta układu -> Edycja wyniku -> Podnieś | 6                 |
-| 6     | Stop -> Korekta układu -> Podnieś -> Edycja wyniku | 6                 |
-| 7     | B_Korekta układu -> Clear -> Edycja wyniku         | 3                 |
-| 8     | Edycja wyniku -> B_Korekta układu -> Clear         | 3                 |
+| Opcja | Opis                                                             | Ilość komunikatów |
+|-------|------------------------------------------------------------------|-------------------|
+| 1     | Stop -> Korekta układu -> Edycja wyniku -> Podnieś               | 6                 |
+| 2     | Stop -> Korekta układu -> Podnieś -> Edycja wyniku               | 6                 |
+| 3     | Edycja wyniku -> Stop -> Korekta układu -> Podnieś               | 6                 |
+| 4     | Stop -> Edycja wyniku -> Korekta układu -> Podnieś               | 6                 |
+| 5     | Stop -> Czas stop -> Korekta układu -> Edycja wyniku -> Podnieś  | 7                 |
+| 6     | Stop -> Czas stop -> Korekta układu -> Podnieś -> Edycja wyniku  | 7                 |
+| 7     | Stop -> Edycja wyniku  -> B_Korekta układu -> Enter -> Podnieś   | 5                 |
 
 
 
 ## 📌 Version History
 
-| Version          | Release Date      | Commits | Changes                                      |
-|------------------|-------------------|---------|----------------------------------------------|
-| **v1.0.10.0**    | 🚧 In the future  |         |                                              |
-| **v1.0.9.0**     | 🚧 In development |         |                                              |
-| **v1.0.8.0**     | 2025-04-25        | 59      | New modes added                              |
-| **v1.0.7.0**     | 2025-04-25        | 57      | Fixed critical bug from 1.0.6.0              |
-| **v1.0.6.0**     | 2025-04-23        | 51      | ❌ Broken version - Change modes              |
-| **v1.0.5.1**     | 2025-04-11        | 43      | 32-bit OS compatible exe file                |
-| **v1.0.5.0**     | 2025-04-09        | 42      | Add modes & improved result counting         |
-| **v1.0.4.0**     | 2025-03-21        | 35      | Change the method of setting the full layout |
-| **v1.0.3.0**     | 2025-03-11        | 24      | Added option to control trial attempts       |
-| **v1.0.2.1**     | 2025-02-28        | 22      | Added jenkins                                |
-| **v1.0.2**       | 2025-02-27        | 18      | Added logs table                             |
-| **v1.0.1**       | 2025-02-26        | 9       | Added more freedom to configure              |
-| **v1.0.0**       | 2025-02-24        | 4       | 🎉 Initial stable release                    |
-| **First commit** | 2025-02-23        | 1       |                                              |
+| Version          | Release Date      | Commits | Changes                                           |
+|------------------|-------------------|-------|---------------------------------------------------|
+| **v1.0.10.0**    | 🚧 In the future  |       |                                                   |
+| **v1.0.9.0**     | 2025-05-09        |       | New modes added, fix "Optymistyczne zbierane"     |
+| **v1.0.8.0**     | 2025-04-25        | 59    | New modes added                                   |
+| **v1.0.7.0**     | 2025-04-25        | 56    | New modes added, fixed critical bug from 1.0.6.0  |
+| **v1.0.6.0**     | 2025-04-23        | 51    | ❌ Broken version - Change modes                   |
+| **v1.0.5.1**     | 2025-04-11        | 43    | 32-bit OS compatible exe file                     |
+| **v1.0.5.0**     | 2025-04-09        | 42    | Add modes & improved result counting              |
+| **v1.0.4.0**     | 2025-03-21        | 35    | Change the method of setting the full layout      |
+| **v1.0.3.0**     | 2025-03-11        | 24    | Added option to control trial attempts            |
+| **v1.0.2.1**     | 2025-02-28        | 22    | Added jenkins                                     |
+| **v1.0.2**       | 2025-02-27        | 18    | Added logs table                                  |
+| **v1.0.1**       | 2025-02-26        | 9     | Added more freedom to configure                   |
+| **v1.0.0**       | 2025-02-24        | 4     | 🎉 Initial stable release                         |
+| **First commit** | 2025-02-23        | 1     |                                                   |
 
 ![](https://github.ct8.pl/readme/patlukas/ninepin_training_coach)

@@ -1,1 +1,3 @@
 - Fix "Optymistyczne zbierane" (#32)
+- New modes to set full layout (#31)
+- Improve readability of options
