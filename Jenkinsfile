@@ -36,7 +36,7 @@ pipeline {
                             echo "Last release: ${env.LATEST_RELEASE}"
                         } else {
                             env.LATEST_RELEASE = "v0.0.0"
-                            error "Nie udało się pobrać informacji o release!"
+                            error "Nie udaÅ‚o siÄ™ pobraÄ‡ informacji o release!"
                         }
                     }
                 }
@@ -66,7 +66,7 @@ pipeline {
                 script {
                     env.FILE_NAME = env.APP_NAME + "_" + env.APP_VERSION.replace(".", "_")
                     env.ZIP_NAME = "${env.FILE_NAME}.zip"
-                    env.EXE_NAME = "${env.EXE_NAME_PREFIX}_${env.APP_VERSION.replace(".", "_")}.exe"
+                    env.EXE_NAME = "${env.EXE_NAME_PREFIX}.exe"
                     echo "Zip path: ${env.ZIP_NAME}\tExe path: ${env.EXE_NAME}"
                 }
             }
@@ -120,6 +120,7 @@ pipeline {
                         def body = "New release"
                         if (fileExists('about_release.txt')) {
                             body = readFile('about_release.txt')
+                            body = body.replaceAll('"', "'")
                         }
 
                         def releaseData = [
