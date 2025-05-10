@@ -4,7 +4,7 @@ pipeline {
         BRANCH = 'master'
         GITHUB_USER = "patlukas"
         REPO_NAME = "ninepin_training_coach"
-        FILES = '["config.json"]'
+        FILES = '["config.json", "icon/*"]'
     }
     stages {
         stage('Checkout') {
