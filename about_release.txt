@@ -1,1 +1,2 @@
-- Fix critical bug
+- Add dir with icon
+- Add option to show button to stat trial

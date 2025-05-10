@@ -122,10 +122,15 @@ class GUI(QDialog):
         menu_bar = QMenuBar(self)
 
         view_menu = menu_bar.addMenu("Widok")
-        action = QAction("Pokaż logi", self)
-        action.setCheckable(True)
-        action.triggered.connect(lambda checked: self.__set_visible_log_table(checked))
-        view_menu.addAction(action)
+        options = [
+            ["Pokaż logi", True, lambda checked: self.__set_visible_log_table(checked)],
+            ["Pokaż przycisk uruchamiana próbnych", True, lambda checked: self.__set_visible_trial_button(checked)],
+        ]
+        for name, checkable, func in options:
+            action = QAction(name, self)
+            action.setCheckable(checkable)
+            action.triggered.connect(func)
+            view_menu.addAction(action)
 
         settings_menu = menu_bar.addMenu("Ustawienia")
         options = [
