@@ -140,6 +140,7 @@ class GUI(QDialog):
             ["change_knocked_down=no", "Przy zmienie: zbite: nie zmieniaj (default)", True],
             ["change_knocked_down=all", "Przy zmienie: zbite: ustaw że zbito wszystkie kręgle"],
             ["change_knocked_down=null", "Przy zmienie: zbite: ustaw że nie zbito żadego kręgle"],
+            ["change_knocked_down=001", "Przy zmienie: zbite: ustaw że zbito układ 001"],
             None,
             ["add_removed_pins=no", "Przy zmianie: dodaj liczbę usuwanych kręgli: Nie (default)", True],
             ["add_removed_pins=yes", "Przy zmianie: dodaj liczbę usuwanych kręgli: Tak"],
@@ -233,7 +234,7 @@ class GUI(QDialog):
     def __set_settings(self, name, value):
         list_related_options = [
             [["change_next_layout=no", "change_next_layout=yes"], "change_next_layout=yes"],
-            [["change_knocked_down=no", "change_knocked_down=all", "change_knocked_down=null"], "change_knocked_down=no"],
+            [["change_knocked_down=no", "change_knocked_down=all", "change_knocked_down=null", "change_knocked_down=001"], "change_knocked_down=no"],
             [["add_removed_pins=no", "add_removed_pins=yes"], "add_removed_pins=no"],
             [["time_speed=normal", "time_speed=fast", "time_speed=very_fast", "time_speed=extreme"], "time_speed=normal"],
             [["trial=0", "trial=1", "trial=2"], "trial=0"],

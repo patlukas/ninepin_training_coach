@@ -249,6 +249,8 @@ class _LaneCommunicationManager:
             return b"1FF"
         if return_option == "null":
             return b"000"
+        if return_option == "001":
+            return b"001"
         return current_value
 
     def __get_time(self, current_value):
