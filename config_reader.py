@@ -50,7 +50,6 @@ class ConfigReader:
             "com_timeout",
             "com_write_timeout",
             "loop_com_communication_break",
-            "break_between_recv_msg_and_send_ping_to_lane",
             "max_time_between_next_send"
         ]
         return list_settings

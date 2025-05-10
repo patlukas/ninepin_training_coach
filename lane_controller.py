@@ -76,7 +76,7 @@ class _LaneControllerSection(QGroupBox):
 
 
 class _LaneCommunicationManager:
-    def __init__(self, lane_number, on_send_message, show_start_layout, time_break_after_recv):
+    def __init__(self, lane_number, on_send_message, show_start_layout):
         self.__lane_number = lane_number
         self.__message_head = b"3" + str(self.__lane_number).encode('Windows-1250') + b"38"
         self.__on_send_message = on_send_message
@@ -90,7 +90,7 @@ class _LaneCommunicationManager:
         self.__trial = "0"
         self.__add_removed_pins = "no"
         self.__full_layout_mode = 1
-        self.__time_break_after_recv = time_break_after_recv
+        self.__time_break_after_recv = 0.3
 
     def trial(self):
         self.__on_send_message(self.__message_head + b"E1")
@@ -307,13 +307,15 @@ class _LaneCommunicationManager:
             self.__time_speed = name.split("=")[1]
         elif name.split("=")[0] == "trial":
             self.__trial = name.split("=")[1]
-        if name.split("=")[0] == "add_removed_pins":
+        elif name.split("=")[0] == "add_removed_pins":
             self.__add_removed_pins = name.split("=")[1]
+        elif name.split("=")[0] == "time_wait":
+            self.__time_break_after_recv = float(name.split("=")[1])
 
 
 class LaneController:
-    def __init__(self, lane_number, on_send_message, time_break_after_recv, add_log):
-        self.__communication_manager = _LaneCommunicationManager(lane_number, on_send_message, self.__show_start_layout, time_break_after_recv)
+    def __init__(self, lane_number, on_send_message, add_log):
+        self.__communication_manager = _LaneCommunicationManager(lane_number, on_send_message, self.__show_start_layout)
         self.__modes = [
             "Zbierane na 1",
             "Zbierane na 2",

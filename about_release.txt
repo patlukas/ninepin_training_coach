@@ -1,2 +1,1 @@
-- Add dir with icon
-- Add option to show button to stat trial
+- Add option to set time between messages (#18)

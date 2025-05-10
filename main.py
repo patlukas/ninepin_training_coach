@@ -21,7 +21,7 @@ from log_management import LogManagement
 
 APP_NAME = "NTC"
 EXE_NAME = "TK"
-APP_VERSION = "1.0.9"
+APP_VERSION = "1.0.10"
 
 
 class WorkerThread(QThread):
@@ -112,7 +112,7 @@ class GUI(QDialog):
 
     def __set_layout(self) -> None:
         for i in range(self.__config["number_of_lane"]):
-            lane_controller = LaneController(i, self.__on_add_message_to_send, self.__config["break_between_recv_msg_and_send_ping_to_lane"], self.__log_management.add_log)
+            lane_controller = LaneController(i, self.__on_add_message_to_send, self.__log_management.add_log)
             self.__list_lane_controller.append(lane_controller)
             self.__layout.addWidget(lane_controller.get_section(), i, 0)
         self.__layout.setMenuBar(self.__create_menu_bar())
@@ -152,6 +152,16 @@ class GUI(QDialog):
             ["trial=0", "Próbne: Bez zmian (default)", True],
             ["trial=1", "Próbne: Podnieś"],
             ["trial=2", "Próbne: Podnieś i zatrzymaj"],
+            None,
+            ["time_wait=0.05", "Czas przerwy między wiadomościami: 0.05"],
+            ["time_wait=0.1", "Czas przerwy między wiadomościami: 0.1"],
+            ["time_wait=0.2", "Czas przerwy między wiadomościami: 0.2"],
+            ["time_wait=0.3", "Czas przerwy między wiadomościami: 0.3 (default)", True],
+            ["time_wait=0.5", "Czas przerwy między wiadomościami: 0.5"],
+            ["time_wait=0.75", "Czas przerwy między wiadomościami: 0.75"],
+            ["time_wait=1.5", "Czas przerwy między wiadomościami: 1.5"],
+            ["time_wait=3.0", "Czas przerwy między wiadomościami: 3.0"],
+            ["time_wait=5.0", "Czas przerwy między wiadomościami: 5.0"],
             None,
             ["mode=1", "Tryb 1 (default)", True],
             ["mode=2", "Tryb 2"],
@@ -227,6 +237,7 @@ class GUI(QDialog):
             [["add_removed_pins=no", "add_removed_pins=yes"], "add_removed_pins=no"],
             [["time_speed=normal", "time_speed=fast", "time_speed=very_fast", "time_speed=extreme"], "time_speed=normal"],
             [["trial=0", "trial=1", "trial=2"], "trial=0"],
+            [["time_wait=0.05", "time_wait=0.1", "time_wait=0.2", "time_wait=0.3", "time_wait=0.5", "time_wait=0.75", "time_wait=1.5", "time_wait=3.0", "time_wait=5.0"], "time_wait=0.3"],
             [["mode=1", "mode=2", "mode=3", "mode=4", "mode=5", "mode=6", "mode=7"], "mode=1"]
         ]
 
