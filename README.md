@@ -35,6 +35,7 @@ Program oferuje następujące tryby i modyfikacje gry:
 | 2.a   | Przy zmienie: zbite: nie zmieniaj                     | Tak      |
 | 2.b   | Przy zmienie: zbite: ustaw że zbito wszystkie kręgle  |          |
 | 2.c   | Przy zmienie: zbite: ustaw że nie zbito żadego kręgle |          |
+| 2.d   | Przy zmienie: zbite: ustaw że zbito układ 001         |          |
 |       |                                                       |          |
 | 3.a   | Przy zmianie: dodaj liczbę usuwanych kręgli: Nie      | Tak      |
 | 3.b   | Przy zmianie: dodaj liczbę usuwanych kręgli: Tak      |          |
@@ -47,6 +48,16 @@ Program oferuje następujące tryby i modyfikacje gry:
 | 5.a   | Próbne: Bez zmian                                     | Tak      |
 | 5.b   | Próbne: Podnieś                                       |          |
 | 5.c   | Próbne: Podnieś i zatrzymaj                           |          |
+|       |                                                       |          |
+| 6.a   | Czas przerwy między wiadomościami: 0.05               |          |
+| 6.b   | Czas przerwy między wiadomościami: 0.1                |          |
+| 6.c   | Czas przerwy między wiadomościami: 0.2                |          |
+| 6.d   | Czas przerwy między wiadomościami: 0.3 (default)      | Tak      |
+| 6.e   | Czas przerwy między wiadomościami: 0.5                |          |
+| 6.f   | Czas przerwy między wiadomościami: 0.75               |          |
+| 6.g   | Czas przerwy między wiadomościami: 1.5                |          |
+| 6.h   | Czas przerwy między wiadomościami: 3.0                |          |
+| 6.i   | Czas przerwy między wiadomościami: 5.0                |          |
 
 ## Tryby usawiania pełnego układu
 

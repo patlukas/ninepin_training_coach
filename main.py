@@ -233,18 +233,20 @@ class GUI(QDialog):
 
     def __set_settings(self, name, value):
         list_related_options = [
-            [["change_next_layout=no", "change_next_layout=yes"], "change_next_layout=yes"],
-            [["change_knocked_down=no", "change_knocked_down=all", "change_knocked_down=null", "change_knocked_down=001"], "change_knocked_down=no"],
-            [["add_removed_pins=no", "add_removed_pins=yes"], "add_removed_pins=no"],
-            [["time_speed=normal", "time_speed=fast", "time_speed=very_fast", "time_speed=extreme"], "time_speed=normal"],
-            [["trial=0", "trial=1", "trial=2"], "trial=0"],
-            [["time_wait=0.05", "time_wait=0.1", "time_wait=0.2", "time_wait=0.3", "time_wait=0.5", "time_wait=0.75", "time_wait=1.5", "time_wait=3.0", "time_wait=5.0"], "time_wait=0.3"],
-            [["mode=1", "mode=2", "mode=3", "mode=4", "mode=5", "mode=6", "mode=7"], "mode=1"]
+            ["change_next_layout=", ["no", "yes"], "yes"],
+            ["change_knocked_down=", ["no", "all", "null", "001"], "no"],
+            ["add_removed_pins=", ["no", "yes"], "no"],
+            ["time_speed=", ["normal", "fast", "very_fast", "extreme"], "normal"],
+            ["trial=", ["0", "1", "2"], "0"],
+            ["time_wait=", ["0.05", "0.1", "0.2", "0.3", "0.5", "0.75", "1.5", "3.0", "5.0"], "0.3"],
+            ["mode", ["1", "2", "3", "4", "5", "6", "7"], "1"]
         ]
 
         list_option_to_enable = []
 
-        for related_options, default_option in list_related_options:
+        for prefix, list_name, default_option_name in list_related_options:
+            default_option = prefix + default_option_name
+            related_options = [prefix + name_body for name_body in list_name]
             all_option_is_false = not value
             if name not in related_options:
                 continue
