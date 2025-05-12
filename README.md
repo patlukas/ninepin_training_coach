@@ -84,6 +84,7 @@ Program oferuje następujące tryby i modyfikacje gry:
 | Version          | Release Date     | Commits | Changes                                                                    |
 |------------------|------------------|---------|----------------------------------------------------------------------------|
 | **v1.0.11.0**    | 🚧 In the future |         |                                                                            |
+| **v1.0.10.1**    | 2025-05-11       | 80      | Add new option to set full layout in settings                            |      
 | **v1.0.10.0**    | 2025-05-10       | 77      | Add option to set time between messages                                    |
 | **v1.0.9.3**     | 2025-05-10       | 76      | Add option to show button to start trial                                   |
 | **v1.0.9.2**     | 2025-05-09       | 74      | Fix critical bug                                                           |
