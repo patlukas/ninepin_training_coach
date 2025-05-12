@@ -1,1 +1,1 @@
-- Add new option to set full layout in settings
+- Reorganized options on the menu bar

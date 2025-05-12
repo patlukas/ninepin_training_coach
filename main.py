@@ -134,47 +134,103 @@ class GUI(QDialog):
 
         settings_menu = menu_bar.addMenu("Ustawienia")
         options = [
-            ["change_next_layout=no", "Przy zmianie: następny układ: nie zmieniaj"],
-            ["change_next_layout=yes", "Przy zmienie: następny układ: ustaw jako 000 (default)", True],
+            [
+                "Przy zmianie: następny układ",
+                [
+                    ["change_next_layout=no", "Nie zmieniaj"],
+                    ["change_next_layout=000", "Ustaw jako 000", True],
+                    ["change_next_layout=001", "Ustaw jako 001"],
+                ],
+                "change_next_layout="
+            ],
+            [
+                "Przy zmienie: zbite",
+                [
+                    ["change_knocked_down=no", "Nie zmieniaj", True],
+                    ["change_knocked_down=all", "Ustaw że zbito wszystkie kręgle"],
+                    ["change_knocked_down=null", "Ustaw że nie zbito żadego kręgle"],
+                    ["change_knocked_down=001", "Ustaw że zbito układ 001"],
+                ],
+                "change_knocked_down="
+            ],
+            [
+                "Przy zmianie: dodaj liczbę usuwanych kręgli",
+                [
+                    ["add_removed_pins=no", "Nie", True],
+                    ["add_removed_pins=yes", "Tak"],
+                ],
+                "add_removed_pins="
+            ],
             None,
-            ["change_knocked_down=no", "Przy zmienie: zbite: nie zmieniaj (default)", True],
-            ["change_knocked_down=all", "Przy zmienie: zbite: ustaw że zbito wszystkie kręgle"],
-            ["change_knocked_down=null", "Przy zmienie: zbite: ustaw że nie zbito żadego kręgle"],
-            ["change_knocked_down=001", "Przy zmienie: zbite: ustaw że zbito układ 001"],
+            [
+                "Przyśpieszony zegar",
+                [
+                    ["time_speed=normal", "Nie", True],
+                    ["time_speed=fast", "Szybszy czas [0.1]"],
+                    ["time_speed=very_fast", "Dużo szybszy czas [1.0]"],
+                    ["time_speed=extreme", "Ekstremalnie szybki czas [5.0]"],
+                ],
+                "time_speed="
+            ],
             None,
-            ["add_removed_pins=no", "Przy zmianie: dodaj liczbę usuwanych kręgli: Nie (default)", True],
-            ["add_removed_pins=yes", "Przy zmianie: dodaj liczbę usuwanych kręgli: Tak"],
+            [
+                "Próbne",
+                [
+                    ["trial=0", "Bez zmian", True],
+                    ["trial=1", "Podnieś"],
+                    ["trial=2", "Podnieś i zatrzymaj"],
+                ],
+                "trial="
+            ],
             None,
-            ["time_speed=normal", "Brak edycji czasu (default)", True],
-            ["time_speed=fast", "Szybszy czas [0.1]"],
-            ["time_speed=very_fast", "Dużo szybszy czas [1.0]"],
-            ["time_speed=extreme", "Ekstremalnie szybki czas [5.0]"],
+            [
+                "Czas przewy miedzy wiadomościami",
+                [
+                    ["time_wait=0.05", "0.05s"],
+                    ["time_wait=0.1", "0.1s"],
+                    ["time_wait=0.2", "0.2s"],
+                    ["time_wait=0.3", "0.3s", True],
+                    ["time_wait=0.5", "0.5s"],
+                    ["time_wait=0.75", "0.75s"],
+                    ["time_wait=1.5", "1.5s"],
+                    ["time_wait=3.0", "3.0s"],
+                    ["time_wait=5.0", "5.0s"],
+                ],
+                "time_wait="
+            ],
             None,
-            ["trial=0", "Próbne: Bez zmian (default)", True],
-            ["trial=1", "Próbne: Podnieś"],
-            ["trial=2", "Próbne: Podnieś i zatrzymaj"],
-            None,
-            ["time_wait=0.05", "Czas przerwy między wiadomościami: 0.05"],
-            ["time_wait=0.1", "Czas przerwy między wiadomościami: 0.1"],
-            ["time_wait=0.2", "Czas przerwy między wiadomościami: 0.2"],
-            ["time_wait=0.3", "Czas przerwy między wiadomościami: 0.3 (default)", True],
-            ["time_wait=0.5", "Czas przerwy między wiadomościami: 0.5"],
-            ["time_wait=0.75", "Czas przerwy między wiadomościami: 0.75"],
-            ["time_wait=1.5", "Czas przerwy między wiadomościami: 1.5"],
-            ["time_wait=3.0", "Czas przerwy między wiadomościami: 3.0"],
-            ["time_wait=5.0", "Czas przerwy między wiadomościami: 5.0"],
-            None,
-            ["mode=1", "Tryb 1 (default)", True],
-            ["mode=2", "Tryb 2"],
-            ["mode=3", "Tryb 3"],
-            ["mode=4", "Tryb 4"],
-            ["mode=5", "Tryb 5"],
-            ["mode=6", "Tryb 6"],
-            ["mode=7", "Tryb 7"]
+            [
+                "Tryb ustawiania pełnego układu",
+                [
+                    ["mode=1", "Tryb 1", True],
+                    ["mode=2", "Tryb 2"],
+                    ["mode=3", "Tryb 3"],
+                    ["mode=4", "Tryb 4"],
+                    ["mode=5", "Tryb 5"],
+                    ["mode=6", "Tryb 6"],
+                    ["mode=7", "Tryb 7"]
+                ],
+                "mode="
+            ]
         ]
+        self.__add_option_to_menubar(settings_menu, options)
+
+        help_menu = menu_bar.addMenu("Pomoc")
+        about_action = QAction("O aplikacji", self)
+        about_action.triggered.connect(self.__show_about)
+        help_menu.addAction(about_action)
+
+        return menu_bar
+
+    def __add_option_to_menubar(self, menubar, options):
         for option in options:
             if option is None:
-                settings_menu.addSeparator()
+                menubar.addSeparator()
+                continue
+            if type(option[1]) == list:
+                menubar_child = menubar.addMenu(option[0] + " | ")
+                self.__settings_menu[option[2]] = menubar_child
+                self.__add_option_to_menubar(menubar_child, option[1])
                 continue
             key = option[0]
             name = option[1]
@@ -183,17 +239,10 @@ class GUI(QDialog):
             action.setCheckable(True)
             action.setChecked(default)
             action.triggered.connect(lambda checked, k=key: self.__set_settings(k, checked))
-            settings_menu.addAction(action)
+            menubar.addAction(action)
             self.__settings_menu[key] = action
             if default:
                 self.__set_settings(key, True)
-
-        help_menu = menu_bar.addMenu("Pomoc")
-        about_action = QAction("O aplikacji", self)
-        about_action.triggered.connect(self.__show_about)
-        help_menu.addAction(about_action)
-
-        return menu_bar
 
     def __show_about(self):
         about_text = (
@@ -231,35 +280,36 @@ class GUI(QDialog):
         if lane_index < len(self.__list_lane_controller):
             self.__list_lane_controller[lane_index].on_recv_message(msg)
 
-    def __set_settings(self, name, value):
+    def __set_settings(self, name, value, nested=False):
         list_related_options = [
-            ["change_next_layout=", ["no", "yes"], "yes"],
-            ["change_knocked_down=", ["no", "all", "null", "001"], "no"],
-            ["add_removed_pins=", ["no", "yes"], "no"],
-            ["time_speed=", ["normal", "fast", "very_fast", "extreme"], "normal"],
-            ["trial=", ["0", "1", "2"], "0"],
-            ["time_wait=", ["0.05", "0.1", "0.2", "0.3", "0.5", "0.75", "1.5", "3.0", "5.0"], "0.3"],
-            ["mode", ["1", "2", "3", "4", "5", "6", "7"], "1"]
+            ["change_next_layout=", ["no", "000", "001"], True],
+            ["change_knocked_down=", ["no", "all", "null", "001"], True],
+            ["add_removed_pins=", ["no", "yes"], True],
+            ["time_speed=", ["normal", "fast", "very_fast", "extreme"], True],
+            ["trial=", ["0", "1", "2"], True],
+            ["time_wait=", ["0.05", "0.1", "0.2", "0.3", "0.5", "0.75", "1.5", "3.0", "5.0"], True],
+            ["mode=", ["1", "2", "3", "4", "5", "6", "7"], True]
         ]
 
         list_option_to_enable = []
 
-        for prefix, list_name, default_option_name in list_related_options:
-            default_option = prefix + default_option_name
+        for prefix, list_name, disable_uncheck in list_related_options:
             related_options = [prefix + name_body for name_body in list_name]
-            all_option_is_false = not value
             if name not in related_options:
                 continue
+            if disable_uncheck and not nested and not value:
+                list_option_to_enable.append(name)
+                break
             for option in related_options:
                 if option != name and option in self.__settings_menu:
                     if self.__settings_menu[option].isChecked():
                         if value:
-                            self.__set_settings(option, False)
+                            self.__set_settings(option, False, True)
                             self.__settings_menu[option].setChecked(False)
-                        else:
-                            all_option_is_false = False
-            if all_option_is_false and default_option is not None:
-                list_option_to_enable.append(default_option)
+            if value and prefix in self.__settings_menu:
+                parent_title = self.__settings_menu[prefix].title()
+                parent_title = "|".join(parent_title.split("|")[:-1]) + "| " + self.__settings_menu[name].text()
+                self.__settings_menu[prefix].setTitle(parent_title)
 
         status = "enabled" if value else "disabled"
         self.__log_management.add_log(5, "SETTINGS", "\"" + name + "\" is " + status)

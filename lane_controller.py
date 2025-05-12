@@ -181,7 +181,7 @@ class _LaneCommunicationManager:
             total_sum = self.__add_to_hex(total_sum, pins)
             lane_sum = self.__add_to_hex(lane_sum, pins)
 
-        next_layout = self.__get_next_layout(next_layout, self.__change_next_layout == "yes")
+        next_layout = self.__get_next_layout(next_layout, self.__change_next_layout)
         time_to_end = self.__get_time(time_to_end)
         fallen_pins = self.__get_knocked_down(fallen_pins, self.__change_knocked_down)
 
@@ -235,9 +235,11 @@ class _LaneCommunicationManager:
         return ones_count
 
     @staticmethod
-    def __get_next_layout(current_value, return_empty):
-        if return_empty:
+    def __get_next_layout(current_value, next_layout):
+        if next_layout == "000":
             return b"000"
+        if next_layout == "001":
+            return b"001"
         return current_value
 
     @staticmethod
