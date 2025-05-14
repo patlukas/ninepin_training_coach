@@ -27,37 +27,44 @@
 
 Program oferuje następujące tryby i modyfikacje gry:
 
-| Opcja | Opis                                                  | Domyślne |
-|-------|-------------------------------------------------------|----------|
-| 1.a   | Przy zmianie: następny układ: nie zmieniaj            |          |
-| 1.b   | Przy zmienie: następny układ: ustaw jako 000          | Tak      |
-|       |                                                       |          |
-| 2.a   | Przy zmienie: zbite: nie zmieniaj                     | Tak      |
-| 2.b   | Przy zmienie: zbite: ustaw że zbito wszystkie kręgle  |          |
-| 2.c   | Przy zmienie: zbite: ustaw że nie zbito żadego kręgle |          |
-| 2.d   | Przy zmienie: zbite: ustaw że zbito układ 001         |          |
-|       |                                                       |          |
-| 3.a   | Przy zmianie: dodaj liczbę usuwanych kręgli: Nie      | Tak      |
-| 3.b   | Przy zmianie: dodaj liczbę usuwanych kręgli: Tak      |          |
-|       |                                                       |          |
-| 4.a   | Normalny czas                                         | Tak      |
-| 4.b   | Przyspieszony czas [0.1]                              |          |
-| 4.c   | Dużo szybszy czas [1.0]                               |          |
-| 4.d   | Ekstremalnie szybki czas [5.0]                        |          |
-|       |                                                       |          |
-| 5.a   | Próbne: Bez zmian                                     | Tak      |
-| 5.b   | Próbne: Podnieś                                       |          |
-| 5.c   | Próbne: Podnieś i zatrzymaj                           |          |
-|       |                                                       |          |
-| 6.a   | Czas przerwy między wiadomościami: 0.05               |          |
-| 6.b   | Czas przerwy między wiadomościami: 0.1                |          |
-| 6.c   | Czas przerwy między wiadomościami: 0.2                |          |
-| 6.d   | Czas przerwy między wiadomościami: 0.3 (default)      | Tak      |
-| 6.e   | Czas przerwy między wiadomościami: 0.5                |          |
-| 6.f   | Czas przerwy między wiadomościami: 0.75               |          |
-| 6.g   | Czas przerwy między wiadomościami: 1.5                |          |
-| 6.h   | Czas przerwy między wiadomościami: 3.0                |          |
-| 6.i   | Czas przerwy między wiadomościami: 5.0                |          |
+| Opcja                                        | Opis                             | Domyślne |
+|----------------------------------------------|----------------------------------|----------|
+| Przy zmianie: następny układ:                |                                  |          |
+|                                              | nie zmieniaj                     |          |
+|                                              | ustaw jako 000                   | Tak      |
+|                                              | ustaw jako 001                   |          |
+|                                              |                                  |          |
+| Przy zmienie: zbite:                         |                                  | Tak      |
+|                                              | nie zmieniaj                     | Tak      |
+|                                              | ustaw że zbito wszystkie kręgle  |          |
+|                                              | ustaw że nie zbito żadego kręgle |          |
+|                                              | ustaw że zbito układ 001         |          |
+|                                              |                                  |          |
+| Przy zmianie: dodaj liczbę usuwanych kręgli: |                                  | Tak      |
+|                                              | Nie                              | Tak      |
+|                                              | Tak                              |          |
+|                                              |                                  |          |
+| Przyśpieszony czas                           |                                  |          |
+|                                              | Nie                              | Tak      |
+|                                              | Szybszy czas [0.1]               |          |
+|                                              | Dużo szybszy czas [1.0]          |          |
+|                                              | Ekstremalnie szybki czas [5.0]   |          |
+|                                              |                                  |          |
+| Próbne:                                      |                                  |          |
+|                                              | Bez zmian                        | Tak      |
+|                                              | Podnieś                          |          |
+|                                              | Podnieś i zatrzymaj              |          |
+|                                              |                                  |          |
+| Czas przerwy między wiadomościami:           |                                  |          |
+|                                              | 0.05s                            |          |
+|                                              | 0.1s                             |          |
+|                                              | 0.2s                             |          |
+|                                              | 0.3s                             | Tak      |
+|                                              | 0.5s                             |          |
+|                                              | 0.75s                            |          |
+|                                              | 1.5s                             |          |
+|                                              | 3.0s                             |          |
+|                                              | 5.0s                             |          |
 
 ## Tryby usawiania pełnego układu
 
@@ -84,7 +91,8 @@ Program oferuje następujące tryby i modyfikacje gry:
 | Version          | Release Date     | Commits | Changes                                                                    |
 |------------------|------------------|---------|----------------------------------------------------------------------------|
 | **v1.0.11.0**    | 🚧 In the future |         |                                                                            |
-| **v1.0.10.1**    | 2025-05-11       | 80      | Add new option to set full layout in settings                            |      
+| **v1.0.10.2**    | 2025-05-14       | 83      | Reorganized options on the menu bar                                        |      
+| **v1.0.10.1**    | 2025-05-11       | 80      | Add new option to set full layout in settings                              |      
 | **v1.0.10.0**    | 2025-05-10       | 77      | Add option to set time between messages                                    |
 | **v1.0.9.3**     | 2025-05-10       | 76      | Add option to show button to start trial                                   |
 | **v1.0.9.2**     | 2025-05-09       | 74      | Fix critical bug                                                           |
