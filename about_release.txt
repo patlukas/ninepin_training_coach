@@ -1,2 +1,1 @@
-- Reorganized options on the menu bar
 - Add more modes
