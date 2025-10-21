@@ -95,6 +95,10 @@ Program oferuje następujące tryby i modyfikacje gry:
 | 16    | Stop ->  Edycja wyniku -> Korekta układu v2 -> Enter            | 6                 |
 | 17    | Stop -> Korekta układu -> Podnieś -> Edycja wyniku              | 6                 |
 | 18    | Stop -> Edycja wyniku -> Podnieś -> Korekta układ               | 6                 |
+| 19    | Stop -> Edycja wyniku -> Korekta układu -> 1x Ping -> Podnieś   | 7                 |
+| 20    | Stop -> Edycja wyniku -> Korekta układu -> 2x Ping -> Podnieś   | 8                 |
+| 21    | Stop -> Edycja wyniku -> Korekta układu -> 5x Ping -> Podnieś   | 11                |
+| 22    | Stop -> Edycja wyniku -> Korekta układu -> 10x Ping -> Podnieś  | 16                |
 
 
 
@@ -103,9 +107,10 @@ Program oferuje następujące tryby i modyfikacje gry:
 
 | Version          | Release Date      | Commits | Changes                                                                    |
 |------------------|-------------------|---------|----------------------------------------------------------------------------|
-| **v1.0.13.0**    | 🚧 In the future  |         |                                                                            |
-| **v1.0.12.0**    | 🚧 In development |         |                                                                            |
-| **v1.0.11.0**    | 2025-10-16        | 85      | New modes added                                                             |      
+| **v1.0.14.0**    | 🚧 In the future  |         |                                                                            |
+| **v1.0.13.0**    | 🚧 In development |         |                                                                            |
+| **v1.0.12.0**    | 2025-10-21        | 88      | New modes added                                                             |
+| **v1.0.11.0**    | 2025-10-16        | 86      | New modes added                                                             |      
 | **v1.0.10.2**    | 2025-05-14        | 83      | Reorganized options on the menu bar                                        |      
 | **v1.0.10.1**    | 2025-05-11        | 80      | Add new option to set full layout in settings                              |      
 | **v1.0.10.0**    | 2025-05-10        | 77      | Add option to set time between messages                                    |
