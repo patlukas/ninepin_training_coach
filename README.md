@@ -109,8 +109,9 @@ Program oferuje następujące tryby i modyfikacje gry:
 |------------------|-------------------|---------|----------------------------------------------------------------------------|
 | **v1.0.14.0**    | 🚧 In the future  |         |                                                                            |
 | **v1.0.13.0**    | 🚧 In development |         |                                                                            |
-| **v1.0.12.0**    | 2025-10-21        | 88      | New modes added                                                             |
-| **v1.0.11.0**    | 2025-10-16        | 86      | New modes added                                                             |      
+| **v1.0.12.1**    | 2025-10-21        | 90      | Add modes form v1.0.12 to menu bar                                         |
+| **v1.0.12.0**    | 2025-10-21        | 88      | New modes added - same like v1.0.11.0                                      |
+| **v1.0.11.0**    | 2025-10-16        | 86      | New modes added                                                            |      
 | **v1.0.10.2**    | 2025-05-14        | 83      | Reorganized options on the menu bar                                        |      
 | **v1.0.10.1**    | 2025-05-11        | 80      | Add new option to set full layout in settings                              |      
 | **v1.0.10.0**    | 2025-05-10        | 77      | Add option to set time between messages                                    |

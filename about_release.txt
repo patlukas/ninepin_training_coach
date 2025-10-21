@@ -1,1 +1,1 @@
-- Add more modes
+- Add modes form v1.0.12 to menu bar
