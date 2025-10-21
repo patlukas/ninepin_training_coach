@@ -224,7 +224,12 @@ class _LaneCommunicationManager:
             15: [b_stop, "Z", b"", b"", b_layout, b_clear, b_pick_up],
             16: [b_stop, "Z", b_layout, b_clear, b_pick_up, b_enter],
             17: [b_stop, b_layout, b_clear, b_enter, b_pick_up, "Z"],
-            18: [b_stop, "Z", b_layout, b_clear, b_pick_up, b_enter]
+            18: [b_stop, "Z", b_layout, b_clear, b_pick_up, b_enter],
+            19: [b_stop, "Z", b_layout, b_clear, b_enter, b"", b_pick_up],
+            20: [b_stop, "Z", b_layout, b_clear, b_enter, b"", b"", b_pick_up],
+            21: [b_stop, "Z", b_layout, b_clear, b_enter, b"", b"", b"", b"", b"", b_pick_up],
+            22: [b_stop, "Z", b_layout, b_clear, b_enter, b"", b"", b"", b"", b"", b"", b"", b"", b"", b"", b_pick_up],
+
         }
 
         if self.__full_layout_mode in list_full_layout_modes.keys():
