@@ -219,7 +219,11 @@ class GUI(QDialog):
                     ["mode=15", "Tryb 15"],
                     ["mode=16", "Tryb 16"],
                     ["mode=17", "Tryb 17"],
-                    ["mode=18", "Tryb 18"]
+                    ["mode=18", "Tryb 18"],
+                    ["mode=19", "Tryb 19"],
+                    ["mode=20", "Tryb 20"],
+                    ["mode=21", "Tryb 21"],
+                    ["mode=22", "Tryb 22"]
                 ],
                 "mode="
             ]
