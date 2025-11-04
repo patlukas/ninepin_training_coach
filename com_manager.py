@@ -149,6 +149,16 @@ class ComManager:
                                             "found or can not be configured| {}".format(self.__port_name, e))
 
     def read(self) -> bytes:
+        """
+        Recv from Lane:
+            1. dodanie odebrnaych danych do __waiting_bytes_to_recv (?)
+            2.  odczyt w pętli cąłych wiadomości (które kończą się na \r)
+                sprawdzeie czy wiadomość nie jest specjalna (B)
+                TAK:
+                    Dodanie wiadomości przygotowanych przez (B) do listy z wiadomościami do wysłąnia DO LANE !!!
+                dodanie wiadomości do __bytes_to_recv
+        :return:
+        """
         if self.__com_port is None:
             return b""
 
@@ -229,7 +239,7 @@ class ComManager:
                 self.__add_log(10, "COM", "Wrong end of data to send, should have '\r' as last sign: '{}'".format(new_bytes_to_send[-1:]))
             else:
                 self.__waiting_bytes_to_send += new_bytes_to_send
-                self. ()
+                self.__analyze_bytes_to_send()
         return len(self.__bytes_to_send)
 
     def __analyze_bytes_to_send(self):
@@ -237,7 +247,7 @@ class ComManager:
         # TODO change error msg, add more logs
         while b"\r" in self.__waiting_bytes_to_send:
             index_first_special_sign = self.__waiting_bytes_to_send.index(b"\r") + 1
-            msg = self.__bytes_to_send[:index_first_special_sign]
+            msg = self.__waiting_bytes_to_send[:index_first_special_sign]
             self.__waiting_bytes_to_send = self.__waiting_bytes_to_send[index_first_special_sign:]
             list_front_msg, list_end_msg = self.__analyze_special_msg_to_send(msg)
             if len(list_front_msg) + len(list_end_msg) == 0:
