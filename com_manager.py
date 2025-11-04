@@ -109,13 +109,13 @@ class ComManager:
                     
         
         
-        Recv from Lane:
-            1. dodanie odebrnaych danych do __waiting_bytes_to_recv (?)
-            2.  odczyt w pętli cąłych wiadomości (które kończą się na \r)
-                sprawdzeie czy wiadomość nie jest specjalna (B)
-                TAK:
-                    Dodanie wiadomości przygotowanych przez (B) do listy z wiadomościami do wysłąnia DO LANE !!!
-                dodanie wiadomości do __bytes_to_recv
+        # Recv from Lane:
+        #     1. dodanie odebrnaych danych do __waiting_bytes_to_recv (?)
+        #     2.  odczyt w pętli cąłych wiadomości (które kończą się na \r)
+        #         sprawdzeie czy wiadomość nie jest specjalna (B)
+        #         TAK:
+        #             Dodanie wiadomości przygotowanych przez (B) do listy z wiadomościami do wysłąnia DO LANE !!!
+        #         dodanie wiadomości do __bytes_to_recv
                 
         (B) Specjalne wiadomości od LANE:
             - trzeci rzut do ukłądu i tor obserwowanyp pod tym względem
@@ -150,16 +150,6 @@ class ComManager:
                                             "found or can not be configured| {}".format(self.__port_name, e))
 
     def read(self) -> bytes:
-        """
-        Recv from Lane:
-            1. dodanie odebrnaych danych do __waiting_bytes_to_recv (?)
-            2.  odczyt w pętli cąłych wiadomości (które kończą się na \r)
-                sprawdzeie czy wiadomość nie jest specjalna (B)
-                TAK:
-                    Dodanie wiadomości przygotowanych przez (B) do listy z wiadomościami do wysłąnia DO LANE !!!
-                dodanie wiadomości do __bytes_to_recv
-        :return:
-        """
         if self.__com_port is None:
             return b""
 
@@ -188,10 +178,11 @@ class ComManager:
             for i in range(count_lane):
                 lane_index = (self.__send_lane_pointer + i) % count_lane
                 list_msg = self.__list_to_send[lane_index]["messages"]
-                priority = list_msg[0]["priority"]
 
                 if len(list_msg) == 0:
                     continue
+
+                priority = list_msg[0]["priority"]
 
                 time_wait = list_msg[0]["time_wait"]
                 if time_wait == -1:
@@ -231,7 +222,6 @@ class ComManager:
             else:
                 self.__waiting_bytes_to_send += new_bytes_to_send
                 self.__analyze_bytes_to_send()
-        return len(self.__bytes_to_send)
 
     def __analyze_bytes_to_send(self):
         # TODO: jest to ping i jest ping w kolejce: pomiń msg
@@ -295,7 +285,7 @@ class ComManager:
                 return list_front_msg, list_end_msg
         return [], []
 
-    def add_func_to_analyze_msg_to_recv(self, func):
+    def add_func_to_analyze_recv_msg(self, func):
         # TODO: Add log
         self.__list_func_for_analyze_msg_to_recv.append(lambda msg: func(msg))
 

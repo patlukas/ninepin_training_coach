@@ -76,10 +76,11 @@ class _LaneControllerSection(QGroupBox):
 
 
 class _LaneCommunicationManager:
-    def __init__(self, lane_number, on_send_message, show_start_layout):
+    def __init__(self, lane_number, on_send_message, show_start_layout, on_get_message):
         self.__lane_number = lane_number
         self.__message_head = b"3" + str(self.__lane_number).encode('Windows-1250') + b"38"
         self.__on_send_message = on_send_message
+        self.__on_get_message = on_get_message
         self.__throws_to_current_layout = 0
         self.__show_start_layout = show_start_layout
         self.__run = False
@@ -135,6 +136,34 @@ class _LaneCommunicationManager:
         time.sleep(self.__time_break_after_recv)
         self.__on_send_message(self.__message_head, 2)
 
+    def on_analyze_recv_message(self, message):
+
+        if not self.__run:
+            return [], []
+        if message[4:6] == b"i0":
+            self.__show_start_layout()
+            return [], []
+
+        ping = self.__on_get_message(self.__message_head)
+
+        front_msg, end_msg = [], []
+        if message[4:5] in [b"w", b"g", b"h", b"f"]:
+            next_layout = message[17:20]
+            fallen_pins = message[26:29]
+            # fallen_pins == b"000" is a special case where a player doesn't hit any pins in a full roll
+
+            if next_layout != b"000" or fallen_pins == b"000":
+                self.__throws_to_current_layout += 1
+            else:
+                self.__throws_to_current_layout = 0
+            print(self.__throws_to_current_layout, next_layout, fallen_pins)
+            if self.__mode == "Optymistyczne zbierane":
+                front_msg, end_msg = self.__analyse_optimistic_clearoff(next_layout, message)
+            elif "Zbierane na " in self.__mode:
+                front_msg, end_msg = self.__analyse_max_throw_clearoff(message)
+        end_msg.append(ping)
+        return front_msg, end_msg
+
     def __analyse_optimistic_clearoff(self, next_layout, message):
         next_layout_invert = self.__invert_bits(next_layout)
         if next_layout_invert in [b"001", b"002", b"004", b"008", b"010", b"020", b"040", b"080", b"100"]:
@@ -144,8 +173,8 @@ class _LaneCommunicationManager:
         elif next_layout_invert == b"038":
             x = 3
         else:
-            return
-        self.__send_message_to_end_layout(
+            return [], []
+        return self.__send_message_to_end_layout(
             self.__add_to_hex(message[5:8], x),
             message[8:11],
             self.__add_to_hex(message[11:14], x),
@@ -160,8 +189,9 @@ class _LaneCommunicationManager:
     def __analyse_max_throw_clearoff(self, message):
         max_throw = int(self.__mode.replace("Zbierane na ", ""))
         if self.__throws_to_current_layout < max_throw:
-            return
-        self.__send_message_to_end_layout(
+            return [], []
+        self.__throws_to_current_layout = 0
+        return self.__send_message_to_end_layout(
             message[5:8],
             message[8:11],
             message[11:14],
@@ -172,64 +202,73 @@ class _LaneCommunicationManager:
             message[26:29],
             message[29:-2]
         )
-        self.__throws_to_current_layout = 0
 
     def __send_message_to_end_layout(self, number_of_throw, last_throw_result, lane_sum, total_sum, next_layout,
                                      number_of_x, time_to_end, fallen_pins, options):
-        if self.__add_removed_pins == "yes":
-            pins = self.__count_beaten_pins(next_layout)
-            total_sum = self.__add_to_hex(total_sum, pins)
-            lane_sum = self.__add_to_hex(lane_sum, pins)
+        # Z1: used before correct layout
+        # Z2: used after correct layout
 
-        next_layout = self.__get_next_layout(next_layout, self.__change_next_layout)
+        pins = self.__count_beaten_pins(next_layout)
+        total_sum_1 = self.__add_to_hex(total_sum, pins)
+        lane_sum_1 = self.__add_to_hex(lane_sum, pins)
+
+        next_layout_2 = self.__get_next_layout(next_layout, self.__change_next_layout)
         time_to_end = self.__get_time(time_to_end)
         fallen_pins = self.__get_knocked_down(fallen_pins, self.__change_knocked_down)
 
-        z = lambda: self.__on_send_message(
+        z_1 = lambda priority, time_wait: self.__on_get_message(
+            self.__message_head +
+            b"Z" +
+            number_of_throw +
+            last_throw_result +
+            lane_sum_1 +
+            total_sum_1 +
+            next_layout +
+            number_of_x +
+            time_to_end +
+            fallen_pins +
+            options,
+            priority,
+            time_wait
+        )
+
+        z_2 = lambda priority, time_wait: self.__on_get_message(
             self.__message_head +
             b"Z" +
             number_of_throw +
             last_throw_result +
             lane_sum +
             total_sum +
-            next_layout +
+            next_layout_2 +
             number_of_x +
             time_to_end +
             fallen_pins +
-            options
+            options,
+            priority,
+            time_wait
         )
 
-        b_time = b"T14"
-        b_layout = b"T16"
-        b_clear = b"T22"
-        b_enter = b"T24"
-        b_stop = b"T40"
-        b_pick_up = b"T41"
+        b_click = lambda msg, priority=3, time_wait=-1: self.__on_get_message(self.__message_head + msg, priority, time_wait)
+
+        b_stop_9 = b_click(b"T40", 9)
+        b_layout_5 = b_click(b"T16", 5)
+        b_clear_6 = b_click(b"T22", 6)
+        b_enter_6 = b_click(b"T24", 6)
+        z_1_5_1500 = z_1(5, 1500)
+        b_pick_up_7 = b_click(b"T41", 7)
+        b_pick_up_7_1000 = b_click(b"T41", 7, 1000)
+        b_pick_up_7_200 = b_click(b"T41", 7, 200)
+        b_layout_5_200 = b_click(b"T16", 5, 200)
+        b_clear_6_200 = b_click(b"T22", 6, 200)
+        z_1_5_1000 = z_1(5, 1000)
+        z_2_5 = z_2(5, -1)
 
         list_full_layout_modes = {
-            1: [b_stop, b_layout, b_clear, b_enter, "Z", b_pick_up],
-            2: [b_stop, b_layout, b_clear, b_enter, b_pick_up, "Z"],
-            3: ["Z", b_stop, b_layout, b_clear, b_enter, b_pick_up],
-            4: [b_stop, "Z", b_layout, b_clear, b_enter, b_pick_up],
-            5: [b_stop, b_time, b_layout, b_clear, b_enter, "Z", b_pick_up],
-            6: [b_stop, b_time, b_layout, b_clear, b_enter, b_pick_up, "Z"],
-            7: [b_stop, "Z",  b_layout, b_enter, b_pick_up],
-            8: ["Z"],
-            9: [b_stop, "Z", b_pick_up],
-            10: [b_stop, b_layout, b_clear, b_pick_up, "Z"],
-            11: [b_stop, b_layout, b_clear, b_pick_up, b"", "Z"],
-            12: [b_stop, b_layout, b_clear, b_pick_up, b"", b"", "Z"],
-            13: [b_stop, "Z", b_layout, b_clear, b_pick_up],
-            14: [b_stop, "Z", b"", b_layout, b_clear, b_pick_up],
-            15: [b_stop, "Z", b"", b"", b_layout, b_clear, b_pick_up],
-            16: [b_stop, "Z", b_layout, b_clear, b_pick_up, b_enter],
-            17: [b_stop, b_layout, b_clear, b_enter, b_pick_up, "Z"],
-            18: [b_stop, "Z", b_layout, b_clear, b_pick_up, b_enter],
-            19: [b_stop, "Z", b_layout, b_clear, b_enter, b"", b_pick_up],
-            20: [b_stop, "Z", b_layout, b_clear, b_enter, b"", b"", b_pick_up],
-            21: [b_stop, "Z", b_layout, b_clear, b_enter, b"", b"", b"", b"", b"", b_pick_up],
-            22: [b_stop, "Z", b_layout, b_clear, b_enter, b"", b"", b"", b"", b"", b"", b"", b"", b"", b"", b_pick_up],
-
+            1: [b_stop_9, b_layout_5, b_clear_6, b_enter_6, z_1_5_1500, b_pick_up_7],
+            2: [b_stop_9, b_layout_5, b_clear_6, b_enter_6, z_1_5_1000, b_pick_up_7],
+            3: [b_stop_9, b_layout_5_200, b_clear_6_200, b_enter_6, z_1_5_1000, b_pick_up_7_200],
+            4: [z_2_5, b_stop_9, b_layout_5, b_clear_6, b_enter_6, b_pick_up_7_1000],
+            5: [z_2_5, b_stop_9, b_layout_5_200, b_clear_6_200, b_enter_6, b_pick_up_7_1000]
         }
 
         if self.__full_layout_mode in list_full_layout_modes.keys():
@@ -237,11 +276,7 @@ class _LaneCommunicationManager:
         else:
             mode = list_full_layout_modes[1]
 
-        for x in mode:
-            if x == "Z":
-                z()
-            else:
-                self.__on_send_message(self.__message_head + x)
+        return mode, []
 
     @staticmethod
     def __count_beaten_pins(layout):
@@ -334,8 +369,8 @@ class _LaneCommunicationManager:
 
 
 class LaneController:
-    def __init__(self, lane_number, on_send_message, add_log):
-        self.__communication_manager = _LaneCommunicationManager(lane_number, on_send_message, self.__show_start_layout)
+    def __init__(self, lane_number, on_send_message, add_log, on_get_message):
+        self.__communication_manager = _LaneCommunicationManager(lane_number, on_send_message, self.__show_start_layout, on_get_message)
         self.__modes = [
             "Zbierane na 1",
             "Zbierane na 2",
@@ -361,6 +396,9 @@ class LaneController:
 
     def on_recv_message(self, message: bytes):
         self.__communication_manager.analyze_message(message)
+
+    def on_analyze_recv_message(self, message: bytes):
+        return self.__communication_manager.on_analyze_recv_message(message)
 
     def set_settings(self, name, value):
         self.__communication_manager.set_settings(name, value)
