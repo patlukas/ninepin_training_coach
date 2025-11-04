@@ -21,7 +21,7 @@ from log_management import LogManagement
 
 APP_NAME = "NTC"
 EXE_NAME = "TK"
-APP_VERSION = "1.0.12"
+APP_VERSION = "1.1.0"
 
 
 class WorkerThread(QThread):
@@ -41,10 +41,10 @@ class WorkerThread(QThread):
         while self.__running:
             read_bytes = self.__com_manager.read()
             if read_bytes != b"":
-                for msg in read_bytes.split(b"\r"):
-                    if msg != b"":
-                        self.__add_log(2, "RECV", msg)
-                        self.__after_recv_msg(msg)
+                # for msg in read_bytes.split(b"\r"):
+                #     if msg != b"":
+                #         self.__add_log(2, "RECV", msg)
+                #         self.__after_recv_msg(msg)
                 time_next_send = 0
             if time.time() > time_next_send:
                 number_sent_bytes, sent_msg = self.__com_manager.send()
@@ -73,6 +73,9 @@ class GUI(QDialog):
             self.__com_manager = ComManager(self.__config["com_port"], self.__config["com_timeout"], self.__config["com_write_timeout"], self.__log_management.add_log)
             self.__log_table = LogTable(self.__log_management)
             self.__set_layout()
+
+            self.__com_manager.add_func_to_analyze_recv_msg(self.__analyze_recv_msg)
+
 
             self.__thread = WorkerThread(self.__com_manager, self.__config["loop_com_communication_break"], self.__recv_msg, self.__config["max_time_between_next_send"], self.__log_management.add_log)
             self.__thread.start()
@@ -112,7 +115,7 @@ class GUI(QDialog):
 
     def __set_layout(self) -> None:
         for i in range(self.__config["number_of_lane"]):
-            lane_controller = LaneController(i, self.__on_add_message_to_send, self.__log_management.add_log)
+            lane_controller = LaneController(i, self.__on_add_message_to_send, self.__log_management.add_log, self.__on_get_message_to_send)
             self.__list_lane_controller.append(lane_controller)
             self.__layout.addWidget(lane_controller.get_section(), i, 0)
         self.__layout.setMenuBar(self.__create_menu_bar())
@@ -134,34 +137,6 @@ class GUI(QDialog):
 
         settings_menu = menu_bar.addMenu("Ustawienia")
         options = [
-            [
-                "Przy zmianie: następny układ",
-                [
-                    ["change_next_layout=no", "Nie zmieniaj"],
-                    ["change_next_layout=000", "Ustaw jako 000", True],
-                    ["change_next_layout=001", "Ustaw jako 001"],
-                ],
-                "change_next_layout="
-            ],
-            [
-                "Przy zmienie: zbite",
-                [
-                    ["change_knocked_down=no", "Nie zmieniaj", True],
-                    ["change_knocked_down=all", "Ustaw że zbito wszystkie kręgle"],
-                    ["change_knocked_down=null", "Ustaw że nie zbito żadego kręgle"],
-                    ["change_knocked_down=001", "Ustaw że zbito układ 001"],
-                ],
-                "change_knocked_down="
-            ],
-            [
-                "Przy zmianie: dodaj liczbę usuwanych kręgli",
-                [
-                    ["add_removed_pins=no", "Nie", True],
-                    ["add_removed_pins=yes", "Tak"],
-                ],
-                "add_removed_pins="
-            ],
-            None,
             [
                 "Przyśpieszony zegar",
                 [
@@ -206,24 +181,7 @@ class GUI(QDialog):
                     ["mode=2", "Tryb 2"],
                     ["mode=3", "Tryb 3"],
                     ["mode=4", "Tryb 4"],
-                    ["mode=5", "Tryb 5"],
-                    ["mode=6", "Tryb 6"],
-                    ["mode=7", "Tryb 7"],
-                    ["mode=8", "Tryb 8"],
-                    ["mode=9", "Tryb 9"],
-                    ["mode=10", "Tryb 10"],
-                    ["mode=11", "Tryb 11"],
-                    ["mode=12", "Tryb 12"],
-                    ["mode=13", "Tryb 13"],
-                    ["mode=14", "Tryb 14"],
-                    ["mode=15", "Tryb 15"],
-                    ["mode=16", "Tryb 16"],
-                    ["mode=17", "Tryb 17"],
-                    ["mode=18", "Tryb 18"],
-                    ["mode=19", "Tryb 19"],
-                    ["mode=20", "Tryb 20"],
-                    ["mode=21", "Tryb 21"],
-                    ["mode=22", "Tryb 22"]
+                    ["mode=5", "Tryb 5"]
                 ],
                 "mode="
             ]
@@ -282,6 +240,11 @@ class GUI(QDialog):
         self.__log_management.add_log(priority, "ADD MSG", message)
         self.__com_manager.add_bytes_to_send(message + self.__calculate_control_sum(message) + b"\r")
 
+    def __on_get_message_to_send(self, message, priority=5, time_wait=-1):
+        self.__log_management.add_log(5, "GET MSG", message)
+        msg = message + self.__calculate_control_sum(message) + b"\r"
+        return {"message": msg, "time_wait": time_wait, "priority": priority}
+
     @staticmethod
     def __calculate_control_sum(message):
         sum_ascii = 0
@@ -291,9 +254,17 @@ class GUI(QDialog):
         return checksum
 
     def __recv_msg(self, msg):
+        # TODO: TODEL
+        # lane_index = int(msg[3:4])
+        # if lane_index < len(self.__list_lane_controller):
+        #     self.__list_lane_controller[lane_index].on_recv_message(msg)
+        pass
+
+    def __analyze_recv_msg(self, msg):
         lane_index = int(msg[3:4])
         if lane_index < len(self.__list_lane_controller):
-            self.__list_lane_controller[lane_index].on_recv_message(msg)
+            return self.__list_lane_controller[lane_index].on_analyze_recv_message(msg)
+        return [], []
 
     def __set_settings(self, name, value, nested=False):
         list_related_options = [
