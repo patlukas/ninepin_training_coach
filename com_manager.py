@@ -1,4 +1,5 @@
 import serial
+import time
 from typing import Union
 
 
@@ -39,6 +40,7 @@ class ComManager:
         self.__add_log = add_log
         self.__com_port = self.__create_port(timeout, write_timeout)
 
+        self.__default_time_wait_between_msg_on_lane = 700
         self.__list_func_for_analyze_msg_to_send = []
 
         """
@@ -79,30 +81,30 @@ class ComManager:
                     Zatrzymaj: priorytet 3, time_wait: -1
             
             
-        Send to Lane:
-            Wskaźnik na X (0,5) jeżeli wiadomość będzie wysłana z X to (X+1)%6
-            Sprawdzanie na kóry tor wysłąć wiadmomość aczynając od X. Kryteria aby rozpatrywać wiadomość:
-            time_now > time_last_send + time_wait. 
-            coś w stylu:
-                p = -1
-                p_priority: -1
-                for i in range(6):
-                    j = (lane_pointer+i)%6
-                    if len(list_to_send[j]["messages"]) == 0:
-                       continue
-                    if time_now <= list_to_send[j]["time_last_send"] + list_to_send[j]["messages"][0]["time_wait"]
-                        continue
-                    if list_to_send[j]["messages"][0]["priority"] > p_priority:
-                       p = j
-                       p_priority = list_to_send[j]["messages"][0]["priority"]
-                
-                if p == -1:
-                    nie nie wysyłą
-                wysyła wiadomość z "p"
-                usuwa pierwszą wiadomosć z "p"
-                list_to_send[p]["time_last_send"] = time_now
-                if p == lane_pointer:
-                    lane_pointer = (lane_pointer + 1) % 6
+        # Send to Lane:
+        #     Wskaźnik na X (0,5) jeżeli wiadomość będzie wysłana z X to (X+1)%6
+        #     Sprawdzanie na kóry tor wysłąć wiadmomość aczynając od X. Kryteria aby rozpatrywać wiadomość:
+        #     time_now > time_last_send + time_wait. 
+        #     coś w stylu:
+        #         p = -1
+        #         p_priority: -1
+        #         for i in range(6):
+        #             j = (lane_pointer+i)%6
+        #             if len(list_to_send[j]["messages"]) == 0:
+        #                continue
+        #             if time_now <= list_to_send[j]["time_last_send"] + list_to_send[j]["messages"][0]["time_wait"]
+        #                 continue
+        #             if list_to_send[j]["messages"][0]["priority"] > p_priority:
+        #                p = j
+        #                p_priority = list_to_send[j]["messages"][0]["priority"]
+        #         
+        #         if p == -1:
+        #             nie nie wysyłą
+        #         wysyła wiadomość z "p"
+        #         usuwa pierwszą wiadomosć z "p"
+        #         list_to_send[p]["time_last_send"] = time_now
+        #         if p == lane_pointer:
+        #             lane_pointer = (lane_pointer + 1) % 6
                     
         
         
@@ -173,14 +175,47 @@ class ComManager:
         if self.__com_port is None:
             self.__add_log(10, "COM", "Port {} is closed or not was be created, so I can't send data".format(self.__port_name))
 
-        if self.__com_port.out_waiting > 0 or self.__bytes_to_send == b"" or b"\r" not in self.__bytes_to_send:
+        if self.__com_port.out_waiting > 0:
             return 0, b""
 
+        count_lane = len(self.__list_to_send)
+
         try:
-            index_first_special_sign = self.__bytes_to_send.index(b"\r") + 1
-            number_sent_bytes = self.__com_port.write(self.__bytes_to_send[:index_first_special_sign])
-            sent_bytes = self.__bytes_to_send[:number_sent_bytes]
-            self.__bytes_to_send = self.__bytes_to_send[number_sent_bytes:]
+            time_now = time.time() * 1000
+            msg_lane_index = -1
+            msg_lane_priority = -1
+            for i in range(count_lane):
+                lane_index = (self.__send_lane_pointer + i) % count_lane
+                list_msg = self.__list_to_send[lane_index]["messages"]
+                priority = list_msg[0]["priority"]
+
+                if len(list_msg) == 0:
+                    continue
+
+                time_wait = list_msg[0]["time_wait"]
+                if time_wait == -1:
+                    time_wait = self.__default_time_wait_between_msg_on_lane
+
+                if time_now < self.__list_to_send[lane_index]["time_last_send"] + time_wait:
+                    continue
+
+                if priority > msg_lane_priority:
+                    msg_lane_index = lane_index
+                    msg_lane_priority = priority
+
+            if msg_lane_index == -1:
+                return 0, b""
+
+            sent_bytes = self.__list_to_send[msg_lane_index]["messages"][0]["message"]
+            number_sent_bytes = self.__com_port.write(sent_bytes)
+            self.__list_to_send[msg_lane_index]["messages"].pop(0)
+            self.__list_to_send[msg_lane_index]["time_last_send"] = time_now
+
+            if len(sent_bytes) != number_sent_bytes:
+                self.__add_log(10, "NEW_3", "Not send all bytes: '{}' {} {}".format(sent_bytes, len(sent_bytes), number_sent_bytes))
+
+            if msg_lane_index == self.__send_lane_pointer:
+                self.__send_lane_pointer = (self.__send_lane_pointer + 1) % count_lane
 
             return len(sent_bytes), sent_bytes
         except serial.SerialTimeoutException as e:
@@ -194,7 +229,7 @@ class ComManager:
                 self.__add_log(10, "COM", "Wrong end of data to send, should have '\r' as last sign: '{}'".format(new_bytes_to_send[-1:]))
             else:
                 self.__waiting_bytes_to_send += new_bytes_to_send
-                self.__analyze_bytes_to_send()
+                self. ()
         return len(self.__bytes_to_send)
 
     def __analyze_bytes_to_send(self):
