@@ -42,6 +42,7 @@ class ComManager:
 
         self.__default_time_wait_between_msg_on_lane = 700
         self.__list_func_for_analyze_msg_to_send = []
+        self.__list_func_for_analyze_msg_to_recv = []
 
         """
         # lane_pointer: X
@@ -167,19 +168,9 @@ class ComManager:
             return b""
 
         data_read = self.__com_port.read(in_waiting)
-        self.__bytes_to_recv += data_read
+        self.__waiting_bytes_to_recv += data_read
 
-        try:
-            data_read.decode('Windows-1250')
-        except UnicodeError as e:
-            self.__add_log(10, "COM", "Port {} is closed or not was be created, so I can't read data".format(self.__port_name))
-
-        if b"\r" not in self.__bytes_to_recv:
-            return b""
-
-        index = self.__bytes_to_recv.rindex(b"\r") + 1
-        data_received, self.__bytes_to_recv = self.__bytes_to_recv[:index], self.__bytes_to_recv[index:]
-        return data_received
+        return self.__analyze_bytes_to_recv()
 
     def send(self) -> (int, bytes):
         if self.__com_port is None:
@@ -273,6 +264,40 @@ class ComManager:
     def add_func_to_analyze_msg_to_send(self, func):
         # TODO: Add log
         self.__list_func_for_analyze_msg_to_send.append(lambda msg: func(msg))
+
+    def __analyze_bytes_to_recv(self):
+        # TODO: jest to ping i jest ping w kolejce: pomiń msg
+        # TODO change error msg, add more logs
+        recv_msg = b""
+        while b"\r" in self.__waiting_bytes_to_recv:
+            index_first_special_sign = self.__waiting_bytes_to_recv.index(b"\r") + 1
+            msg = self.__waiting_bytes_to_recv[:index_first_special_sign]
+            self.__waiting_bytes_to_recv = self.__waiting_bytes_to_recv[index_first_special_sign:]
+            list_front_msg_to_send, list_end_msg_to_send = self.__analyze_special_msg_to_recv(msg)
+            self.__list_to_recv.append(msg)
+            recv_msg += msg
+            try:
+                lane_index = int(chr(msg[3]))
+                if lane_index >= len(self.__list_to_send):
+                    self.__add_log(10, "NEW_4", "Error: Wrong lane_index {}".format(lane_index))
+                    return recv_msg
+                self.__list_to_send[lane_index]["messages"] = list_front_msg_to_send + self.__list_to_send[lane_index]["messages"] + list_end_msg_to_send
+            except ValueError as e:
+                self.__add_log(10, "NEW_5", "Error: {}".format(e))
+                return recv_msg
+        return recv_msg
+
+    def __analyze_special_msg_to_recv(self, msg):
+        # TODO: Add more logs
+        for func in self.__list_func_for_analyze_msg_to_recv:
+            list_front_msg, list_end_msg = func(msg)
+            if len(list_front_msg) + len(list_end_msg) != 0:
+                return list_front_msg, list_end_msg
+        return [], []
+
+    def add_func_to_analyze_msg_to_recv(self, func):
+        # TODO: Add log
+        self.__list_func_for_analyze_msg_to_recv.append(lambda msg: func(msg))
 
     def close(self) -> None:
         if self.__com_port is None:
