@@ -107,8 +107,8 @@ Program oferuje następujące tryby i modyfikacje gry:
 
 | Version          | Release Date      | Commits | Changes                                                                    |
 |------------------|-------------------|---------|----------------------------------------------------------------------------|
-| **v1.0.14.0**    | 🚧 In the future  |         |                                                                            |
-| **v1.0.13.0**    | 🚧 In development |         |                                                                            |
+| **v1.1.1.0**     | 🚧 In the future  |         |                                                                            |
+| **v1.1.0.0**     | 🚧 In development |         |                                                                            |
 | **v1.0.12.1**    | 2025-10-21        | 90      | Add modes form v1.0.12 to menu bar                                         |
 | **v1.0.12.0**    | 2025-10-21        | 88      | New modes added - same like v1.0.11.0                                      |
 | **v1.0.11.0**    | 2025-10-16        | 86      | New modes added                                                            |      
