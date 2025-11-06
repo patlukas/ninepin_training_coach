@@ -254,21 +254,21 @@ class _LaneCommunicationManager:
         b_layout_5 = b_click(b"T16", 5)
         b_clear_6 = b_click(b"T22", 6)
         b_enter_6 = b_click(b"T24", 6)
-        z_1_5_1500 = z_1(5, 1500)
+        z_2_5_1500 = z_2(5, 1500)
         b_pick_up_7 = b_click(b"T41", 7)
         b_pick_up_7_1000 = b_click(b"T41", 7, 1000)
         b_pick_up_7_200 = b_click(b"T41", 7, 200)
         b_layout_5_200 = b_click(b"T16", 5, 200)
         b_clear_6_200 = b_click(b"T22", 6, 200)
-        z_1_5_1000 = z_1(5, 1000)
-        z_2_5 = z_2(5, -1)
+        z_2_5_1000 = z_2(5, 1000)
+        z_1_5 = z_1(5, -1)
 
         list_full_layout_modes = {
-            1: [b_stop_9, b_layout_5, b_clear_6, b_enter_6, z_1_5_1500, b_pick_up_7],
-            2: [b_stop_9, b_layout_5, b_clear_6, b_enter_6, z_1_5_1000, b_pick_up_7],
-            3: [b_stop_9, b_layout_5_200, b_clear_6_200, b_enter_6, z_1_5_1000, b_pick_up_7_200],
-            4: [z_2_5, b_stop_9, b_layout_5, b_clear_6, b_enter_6, b_pick_up_7_1000],
-            5: [z_2_5, b_stop_9, b_layout_5_200, b_clear_6_200, b_enter_6, b_pick_up_7_1000]
+            1: [b_stop_9, b_layout_5, b_clear_6, b_enter_6, z_2_5_1500, b_pick_up_7],
+            2: [b_stop_9, b_layout_5, b_clear_6, b_enter_6, z_2_5_1000, b_pick_up_7],
+            3: [b_stop_9, b_layout_5_200, b_clear_6_200, b_enter_6, z_2_5_1000, b_pick_up_7_200],
+            4: [z_1_5, b_stop_9, b_layout_5, b_clear_6, b_enter_6, b_pick_up_7_1000],
+            5: [z_1_5, b_stop_9, b_layout_5_200, b_clear_6_200, b_enter_6, b_pick_up_7_1000]
         }
 
         if self.__full_layout_mode in list_full_layout_modes.keys():
