@@ -1,1 +1,1 @@
-Add new method to queue message from/to lane
+Correct func to set full layout
