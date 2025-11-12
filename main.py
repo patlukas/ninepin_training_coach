@@ -21,7 +21,7 @@ from log_management import LogManagement
 
 APP_NAME = "NTC"
 EXE_NAME = "TK"
-APP_VERSION = "1.1.0"
+APP_VERSION = "1.2.0"
 
 
 class WorkerThread(QThread):
@@ -303,7 +303,9 @@ class GUI(QDialog):
             ["time_speed=", ["normal", "fast", "very_fast", "extreme"], True],
             ["trial=", ["0", "1", "2"], True],
             ["time_wait=", ["0.05", "0.1", "0.2", "0.3", "0.5", "0.75", "1.5", "3.0", "5.0"], True],
-            ["mode=", ["1", "2", "3", "4", "5", "6", "7", "8", "9"], True]
+            ["mode=", ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+                       "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+                       "21", "22", "23", "24", "25", "26", "27"], True]
         ]
 
         list_option_to_enable = []
