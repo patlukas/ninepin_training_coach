@@ -205,41 +205,24 @@ class _LaneCommunicationManager:
 
     def __send_message_to_end_layout(self, number_of_throw, last_throw_result, lane_sum, total_sum, next_layout,
                                      number_of_x, time_to_end, fallen_pins, options):
-        # Z1: used before correct layout
-        # Z2: used after correct layout
-
-        pins = self.__count_beaten_pins(next_layout)
-        total_sum_1 = self.__add_to_hex(total_sum, pins)
-        lane_sum_1 = self.__add_to_hex(lane_sum, pins)
-
-        next_layout_2 = self.__get_next_layout(next_layout, self.__change_next_layout)
         time_to_end = self.__get_time(time_to_end)
-        fallen_pins = self.__get_knocked_down(fallen_pins, self.__change_knocked_down)
 
-        z_1 = lambda priority, time_wait: self.__on_get_message(
-            self.__message_head +
-            b"Z" +
-            number_of_throw +
-            last_throw_result +
-            lane_sum_1 +
-            total_sum_1 +
-            next_layout +
-            number_of_x +
-            time_to_end +
-            fallen_pins +
-            options,
-            priority,
-            time_wait
-        )
+        b_click = lambda msg, priority=3, time_wait=-1: self.__on_get_message(self.__message_head + msg, priority, time_wait)
 
-        z_2 = lambda priority, time_wait: self.__on_get_message(
+        b_stop = lambda time_wait=-1, priority=9: b_click(b"T40", priority, time_wait)
+        b_layout = lambda time_wait=-1, priority=5: b_click(b"T16", priority, time_wait)
+        b_clear = lambda time_wait=-1, priority=6: b_click(b"T22", priority, time_wait)
+        b_enter = lambda time_wait=-1, priority=6: b_click(b"T24", priority, time_wait)
+        b_pick_up = lambda time_wait=-1, priority=7: b_click(b"T41", priority, time_wait)
+
+        z = lambda time_wait=-1, priority=5: self.__on_get_message(
             self.__message_head +
             b"Z" +
             number_of_throw +
             last_throw_result +
             lane_sum +
             total_sum +
-            next_layout_2 +
+            b"000" +
             number_of_x +
             time_to_end +
             fallen_pins +
@@ -248,27 +231,34 @@ class _LaneCommunicationManager:
             time_wait
         )
 
-        b_click = lambda msg, priority=3, time_wait=-1: self.__on_get_message(self.__message_head + msg, priority, time_wait)
-
-        b_stop_9 = b_click(b"T40", 9)
-        b_layout_5 = b_click(b"T16", 5)
-        b_clear_6 = b_click(b"T22", 6)
-        b_enter_6 = b_click(b"T24", 6)
-        z_2_5_1500 = z_2(5, 1500)
-        b_pick_up_7 = b_click(b"T41", 7)
-        b_pick_up_7_1000 = b_click(b"T41", 7, 1000)
-        b_pick_up_7_200 = b_click(b"T41", 7, 200)
-        b_layout_5_200 = b_click(b"T16", 5, 200)
-        b_clear_6_200 = b_click(b"T22", 6, 200)
-        z_2_5_1000 = z_2(5, 1000)
-        z_1_5 = z_1(5, -1)
-
         list_full_layout_modes = {
-            1: [b_stop_9, b_layout_5, b_clear_6, b_enter_6, z_2_5_1500, b_pick_up_7],
-            2: [b_stop_9, b_layout_5, b_clear_6, b_enter_6, z_2_5_1000, b_pick_up_7],
-            3: [b_stop_9, b_layout_5_200, b_clear_6_200, b_enter_6, z_2_5_1000, b_pick_up_7_200],
-            4: [z_1_5, b_stop_9, b_layout_5, b_clear_6, b_enter_6, b_pick_up_7_1000],
-            5: [z_1_5, b_stop_9, b_layout_5_200, b_clear_6_200, b_enter_6, b_pick_up_7_1000]
+            1: [b_stop(), b_layout(), b_clear(), b_enter(), z(1500), b_pick_up()],  # A,5000
+            2: [b_stop(), b_layout(300), b_clear(300), b_enter(), z(1500), b_pick_up(300)],  # B,3800
+            3: [b_stop(0), b_layout(300), b_clear(300), b_enter(), z(1500), b_pick_up(300)],  # C,3100
+            4: [b_stop(0), b_layout(200), b_clear(200), b_enter(), z(1000), b_pick_up(200)],  # D,2300
+            5: [b_stop(0), b_layout(200), b_clear(200), b_enter(1000), z(1000), b_pick_up(200)],  # E,2600
+            6: [b_stop(0), b_layout(200), b_clear(200), b_enter(1000), z(200), b_pick_up(200)],  # F,1800
+            7: [b_stop(0), b_layout(200), b_clear(200), b_enter(200), z(1000), b_pick_up(200)],  # G,1800
+            8: [b_stop(0), b_layout(200), b_clear(200), b_enter(200), z(200), b_pick_up(1000)],  # H,1800
+            9: [b_stop(0), b_layout(50), b_clear(50), b_enter(1000), z(1000), b_pick_up(50)],  # I,2150
+            10: [b_stop(0), b_layout(50), b_clear(50), b_enter(1000), z(50), b_pick_up(50)],  # J,1200
+            11: [b_stop(0), b_layout(50), b_clear(50), b_enter(50), z(1000), b_pick_up(50)],  # K,1200
+            12: [b_stop(0), b_layout(50), b_clear(50), b_enter(50), z(50), b_pick_up(1000)],  # L,1200
+            13: [b_stop(0), b_layout(0), b_clear(0), b_enter(1000), z(0), b_pick_up(0)],  #
+            14: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(1000), b_pick_up(0)],  #
+            15: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(0), b_pick_up(1000)],  #
+            16: [b_stop(0), b_layout(0), b_clear(0), b_enter(800), z(0), b_pick_up(0)],  #
+            17: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(800), b_pick_up(0)],  #
+            18: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(0), b_pick_up(800)],  #
+            19: [b_stop(0), b_layout(0), b_clear(0), b_enter(700), z(0), b_pick_up(0)],  #
+            20: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(700), b_pick_up(0)],  #
+            21: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(0), b_pick_up(700)],  #
+            22: [b_stop(0), b_layout(0), b_clear(0), b_enter(600), z(0), b_pick_up(0)],  #
+            23: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(600), b_pick_up(0)],  #
+            24: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(0), b_pick_up(600)],  #
+            25: [b_stop(0), b_layout(0), b_clear(0), b_enter(500), z(0), b_pick_up(0)],  #
+            26: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(500), b_pick_up(0)],  #
+            27: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(0), b_pick_up(500)]  #
         }
 
         if self.__full_layout_mode in list_full_layout_modes.keys():

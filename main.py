@@ -124,6 +124,9 @@ class GUI(QDialog):
     def __create_menu_bar(self):
         menu_bar = QMenuBar(self)
 
+        font = QtGui.QFont("Courier New")  # lub "Consolas", "Monospace"
+        font.setStyleHint(QtGui.QFont.Monospace)
+
         view_menu = menu_bar.addMenu("Widok")
         options = [
             ["Pokaż logi", True, lambda checked: self.__set_visible_log_table(checked)],
@@ -136,6 +139,7 @@ class GUI(QDialog):
             view_menu.addAction(action)
 
         settings_menu = menu_bar.addMenu("Ustawienia")
+
         options = [
             [
                 "Przyśpieszony zegar",
@@ -177,11 +181,33 @@ class GUI(QDialog):
             [
                 "Tryb ustawiania pełnego układu",
                 [
-                    ["mode=1", "Tryb 1", True],
-                    ["mode=2", "Tryb 2"],
-                    ["mode=3", "Tryb 3"],
-                    ["mode=4", "Tryb 4"],
-                    ["mode=5", "Tryb 5"]
+                    ["mode=1",  "Tryb  1: Stop(700) Korekta(700) C(700) Enter(700)  Z(1500) Podnies(700)  = 5000", True],
+                    ["mode=2",  "Tryb  2: Stop(700) Korekta(300) C(300) Enter(700)  Z(1500) Podnies(300)  = 3800"],
+                    ["mode=3",  "Tryb  3: Stop(0)   Korekta(300) C(300) Enter(700)  Z(1500) Podnies(300)  = 3100"],
+                    ["mode=4",  "Tryb  4: Stop(0)   Korekta(200) C(200) Enter(700)  Z(1000) Podnies(200)  = 2300"],
+                    ["mode=5",  "Tryb  5: Stop(0)   Korekta(200) C(200) Enter(1000) Z(1000) Podnies(200)  = 2600"],
+                    ["mode=6",  "Tryb  6: Stop(0)   Korekta(200) C(200) Enter(1000) Z(200)  Podnies(200)  = 1800"],
+                    ["mode=7",  "Tryb  7: Stop(0)   Korekta(200) C(200) Enter(200)  Z(1000) Podnies(200)  = 1800"],
+                    ["mode=8",  "Tryb  8: Stop(0)   Korekta(200) C(200) Enter(200)  Z(200)  Podnies(1000) = 1800"],
+                    ["mode=9",  "Tryb  9: Stop(0)   Korekta(50)  C(50)  Enter(1000) Z(1000) Podnies(50)   = 2150"],
+                    ["mode=10", "Tryb 10: Stop(0)   Korekta(50)  C(50)  Enter(1000) Z(50)   Podnies(50)   = 1200"],
+                    ["mode=11", "Tryb 11: Stop(0)   Korekta(50)  C(50)  Enter(50)   Z(1000) Podnies(50)   = 1200"],
+                    ["mode=12", "Tryb 12: Stop(0)   Korekta(50)  C(50)  Enter(50)   Z(50)   Podnies(1000) = 1200"],
+                    ["mode=13", "Tryb 13: Stop(0)   Korekta(0)   C(0)   Enter(1000) Z(0)    Podnies(0)    = 1000"],
+                    ["mode=14", "Tryb 14: Stop(0)   Korekta(0)   C(0)   Enter(0)    Z(1000) Podnies(0)    = 1000"],
+                    ["mode=15", "Tryb 15: Stop(0)   Korekta(0)   C(0)   Enter(0)    Z(0)    Podnies(1000) = 1000"],
+                    ["mode=16", "Tryb 16: Stop(0)   Korekta(0)   C(0)   Enter(800)  Z(0)    Podnies(0)    =  800"],
+                    ["mode=17", "Tryb 17: Stop(0)   Korekta(0)   C(0)   Enter(0)    Z(800)  Podnies(0)    =  800"],
+                    ["mode=18", "Tryb 18: Stop(0)   Korekta(0)   C(0)   Enter(0)    Z(0)    Podnies(800)  =  800"],
+                    ["mode=19", "Tryb 19: Stop(0)   Korekta(0)   C(0)   Enter(700)  Z(0)    Podnies(0)    =  700"],
+                    ["mode=20", "Tryb 20: Stop(0)   Korekta(0)   C(0)   Enter(0)    Z(700)  Podnies(0)    =  700"],
+                    ["mode=21", "Tryb 21: Stop(0)   Korekta(0)   C(0)   Enter(0)    Z(0)    Podnies(700)  =  700"],
+                    ["mode=22", "Tryb 22: Stop(0)   Korekta(0)   C(0)   Enter(600)  Z(0)    Podnies(0)    =  600"],
+                    ["mode=23", "Tryb 23: Stop(0)   Korekta(0)   C(0)   Enter(0)    Z(600)  Podnies(0)    =  600"],
+                    ["mode=24", "Tryb 24: Stop(0)   Korekta(0)   C(0)   Enter(0)    Z(0)    Podnies(600)  =  600"],
+                    ["mode=25", "Tryb 25: Stop(0)   Korekta(0)   C(0)   Enter(500)  Z(0)    Podnies(0)    =  500"],
+                    ["mode=26", "Tryb 26: Stop(0)   Korekta(0)   C(0)   Enter(0)    Z(500)  Podnies(0)    =  500"],
+                    ["mode=27", "Tryb 27: Stop(0)   Korekta(0)   C(0)   Enter(0)    Z(0)    Podnies(500)  =  500"],
                 ],
                 "mode="
             ]
@@ -196,12 +222,15 @@ class GUI(QDialog):
         return menu_bar
 
     def __add_option_to_menubar(self, menubar, options):
+        font = QtGui.QFont("Consolas")  # lub "Consolas", "Monospace"
+        # font.setStyleHint(QtGui.QFont.Monospace)
         for option in options:
             if option is None:
                 menubar.addSeparator()
                 continue
             if type(option[1]) == list:
                 menubar_child = menubar.addMenu(option[0] + " | ")
+                menubar_child.setFont(font)
                 self.__settings_menu[option[2]] = menubar_child
                 self.__add_option_to_menubar(menubar_child, option[1])
                 continue
