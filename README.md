@@ -68,37 +68,39 @@ Program oferuje następujące tryby i modyfikacje gry:
 
 ## Tryby usawiania pełnego układu
 
-* Korekta układu - czyli kombinacja przycisków: "B_Korekta układu" -> "Clear" -> "Enter"
-* * Korekta układu v2  - czyli kombinacja przycisków: "B_Korekta układu" -> "Clear" -> "Podnieś"
-* Czas stop - czyli kliknięcie przycisku do zatrzymywania czasu
-* Podnieś - czyli kliknięcie przycisku do podnoszenia
-* Stop - czyli kliknięcie przycisku do zatrzymywania
-* Edycja wyniku - czyli przesłanie komunikatu, który odpowiednio zwiększa wynik i edytuje wyświetlany layout
+* Edycja_wyniku - czyli przesłanie komunikatu, który odpowiednio zwiększa wynik i edytuje wyświetlany layout
 
-| Opcja | Opis                                                            | Ilość komunikatów |
-|-------|-----------------------------------------------------------------|-------------------|
-| 1     | Stop -> Korekta układu -> Edycja wyniku -> Podnieś              | 6                 |
-| 2     | Stop -> Korekta układu -> Podnieś -> Edycja wyniku              | 6                 |
-| 3     | Edycja wyniku -> Stop -> Korekta układu -> Podnieś              | 6                 |
-| 4     | Stop -> Edycja wyniku -> Korekta układu -> Podnieś              | 6                 |
-| 5     | Stop -> Czas stop -> Korekta układu -> Edycja wyniku -> Podnieś | 7                 |
-| 6     | Stop -> Czas stop -> Korekta układu -> Podnieś -> Edycja wyniku | 7                 |
-| 7     | Stop -> Edycja wyniku  -> B_Korekta układu -> Enter -> Podnieś  | 5                 |
-| 8     | Edycja wyniku                                                   | 1                 |
-| 9     | Stop -> Edycja wyniku -> Podnieś                                | 3                 |
-| 10    | Stop -> Korekta układu v2  -> Edycja wyniku                     | 5                 |
-| 11    | Stop -> Korekta układu v2 -> Ping -> Edycja wyniku              | 6                 |
-| 12    | Stop -> Korekta układu v2 -> Ping -> Ping -> Edycja wyniku      | 7                 |
-| 13    | Stop ->  Edycja wyniku -> Korekta układu v2                     | 5                 |
-| 14    | Stop ->  Edycja wyniku -> Ping -> Korekta układu v2             | 6                 |
-| 15    | Stop ->  Edycja wyniku -> Ping -> Ping -> Korekta układu v2     | 7                 |
-| 16    | Stop ->  Edycja wyniku -> Korekta układu v2 -> Enter            | 6                 |
-| 17    | Stop -> Korekta układu -> Podnieś -> Edycja wyniku              | 6                 |
-| 18    | Stop -> Edycja wyniku -> Podnieś -> Korekta układ               | 6                 |
-| 19    | Stop -> Edycja wyniku -> Korekta układu -> 1x Ping -> Podnieś   | 7                 |
-| 20    | Stop -> Edycja wyniku -> Korekta układu -> 2x Ping -> Podnieś   | 8                 |
-| 21    | Stop -> Edycja wyniku -> Korekta układu -> 5x Ping -> Podnieś   | 11                |
-| 22    | Stop -> Edycja wyniku -> Korekta układu -> 10x Ping -> Podnieś  | 16                |
+| Opcja | Opis                                                                        | Minimalny czas [ms] |
+| ----- | --------------------------------------------------------------------------- | ------------------- |
+| 1     | Stop(700) Korekta(700) C(700) Enter(700)  Edycja_wyniku(1500) Podnies(700)  | 5000                |
+| 2     | Stop(700) Korekta(300) C(300) Enter(700)  Edycja_wyniku(1500) Podnies(300)  | 3800                |
+| 3     | Stop(0)   Korekta(300) C(300) Enter(700)  Edycja_wyniku(1500) Podnies(300)  | 3100                |
+| 4     | Stop(0)   Korekta(200) C(200) Enter(700)  Edycja_wyniku(1000) Podnies(200)  | 2300                |
+| 5     | Stop(0)   Korekta(200) C(200) Enter(1000) Edycja_wyniku(1000) Podnies(200)  | 2600                |
+| 6     | Stop(0)   Korekta(200) C(200) Enter(1000) Edycja_wyniku(200)  Podnies(200)  | 1800                |
+| 7     | Stop(0)   Korekta(200) C(200) Enter(200)  Edycja_wyniku(1000) Podnies(200)  | 1800                |
+| 8     | Stop(0)   Korekta(200) C(200) Enter(200)  Edycja_wyniku(200)  Podnies(1000) | 1800                |
+| 9     | Stop(0)   Korekta(50)  C(50)  Enter(1000) Edycja_wyniku(1000) Podnies(50)   | 2150                |
+| 10    | Stop(0)   Korekta(50)  C(50)  Enter(1000) Edycja_wyniku(50)   Podnies(50)   | 1200                |
+| 11    | Stop(0)   Korekta(50)  C(50)  Enter(50)   Edycja_wyniku(1000) Podnies(50)   | 1200                |
+| 12    | Stop(0)   Korekta(50)  C(50)  Enter(50)   Edycja_wyniku(50)   Podnies(1000) | 1200                |
+| 13    | Stop(0)   Korekta(0)   C(0)   Enter(1000) Edycja_wyniku(0)    Podnies(0)    | 1000                |
+| 14    | Stop(0)   Korekta(0)   C(0)   Enter(0)    Edycja_wyniku(1000) Podnies(0)    | 1000                |
+| 15    | Stop(0)   Korekta(0)   C(0)   Enter(0)    Edycja_wyniku(0)    Podnies(1000) | 1000                |
+| 16    | Stop(0)   Korekta(0)   C(0)   Enter(800)  Edycja_wyniku(0)    Podnies(0)    | 800                 |
+| 17    | Stop(0)   Korekta(0)   C(0)   Enter(0)    Edycja_wyniku(800)  Podnies(0)    | 800                 |
+| 18    | Stop(0)   Korekta(0)   C(0)   Enter(0)    Edycja_wyniku(0)    Podnies(800)  | 800                 |
+| 19    | Stop(0)   Korekta(0)   C(0)   Enter(700)  Edycja_wyniku(0)    Podnies(0)    | 700                 |
+| 20    | Stop(0)   Korekta(0)   C(0)   Enter(0)    Edycja_wyniku(700)  Podnies(0)    | 700                 |
+| 21    | Stop(0)   Korekta(0)   C(0)   Enter(0)    Edycja_wyniku(0)    Podnies(700)  | 700                 |
+| 22    | Stop(0)   Korekta(0)   C(0)   Enter(600)  Edycja_wyniku(0)    Podnies(0)    | 600                 |
+| 23    | Stop(0)   Korekta(0)   C(0)   Enter(0)    Edycja_wyniku(600)  Podnies(0)    | 600                 |
+| 24    | Stop(0)   Korekta(0)   C(0)   Enter(0)    Edycja_wyniku(0)    Podnies(600)  | 600                 |
+| 25    | Stop(0)   Korekta(0)   C(0)   Enter(500)  Edycja_wyniku(0)    Podnies(0)    | 500                 |
+| 26    | Stop(0)   Korekta(0)   C(0)   Enter(0)    Edycja_wyniku(500)  Podnies(0)    | 500                 |
+| 27    | Stop(0)   Korekta(0)   C(0)   Enter(0)    Edycja_wyniku(0)    Podnies(500)  | 500                 |
+
+
 
 
 
@@ -107,8 +109,9 @@ Program oferuje następujące tryby i modyfikacje gry:
 
 | Version          | Release Date      | Commits | Changes                                                                    |
 |------------------|-------------------|---------|----------------------------------------------------------------------------|
-| **v1.1.2.0**     | 🚧 In the future  |         |                                                                            |
-| **v1.1.1.0**     | 🚧 In development |         |                                                                            |
+| **v1.1.4.0**     | 🚧 In the future  |         |                                                                            |
+| **v1.1.3.0**     | 🚧 In development |         |                                                                            |
+| **v1.1.2.0**     | 2025-11-13        | 101     | Add more new modes                                                         |
 | **v1.1.0.1**     | 2025-11-06        | 98      | Correct func to set full layout                                            |
 | **v1.1.0.0**     | 2025-11-04        | 96      | Change method to recv/send message to lane                                 |
 | **v1.0.12.1**    | 2025-10-21        | 90      | Add modes form v1.0.12 to menu bar                                         |

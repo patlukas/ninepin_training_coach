@@ -1,1 +1,1 @@
-Correct func to set full layout
+Add more new modes
