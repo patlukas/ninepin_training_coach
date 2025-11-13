@@ -231,6 +231,26 @@ class _LaneCommunicationManager:
             time_wait
         )
 
+        pins = self.__count_beaten_pins(next_layout)
+        total_sum_1 = self.__add_to_hex(total_sum, pins)
+        lane_sum_1 = self.__add_to_hex(lane_sum, pins)
+
+        z_1 = lambda time_wait=-1, priority=5: self.__on_get_message(
+            self.__message_head +
+            b"Z" +
+            number_of_throw +
+            last_throw_result +
+            lane_sum_1 +
+            total_sum_1 +
+            next_layout +
+            number_of_x +
+            time_to_end +
+            fallen_pins +
+            options,
+            priority,
+            time_wait
+        )
+
         list_full_layout_modes = {
             1: [b_stop(), b_layout(), b_clear(), b_enter(), z(1500), b_pick_up()],  # A,5000
             2: [b_stop(), b_layout(300), b_clear(300), b_enter(), z(1500), b_pick_up(300)],  # B,3800
@@ -258,7 +278,37 @@ class _LaneCommunicationManager:
             24: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(0), b_pick_up(600)],  #
             25: [b_stop(0), b_layout(0), b_clear(0), b_enter(500), z(0), b_pick_up(0)],  #
             26: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(500), b_pick_up(0)],  #
-            27: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(0), b_pick_up(500)]  #
+            27: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(0), b_pick_up(500)],  #
+
+            28: [b_stop(800), z_1(1500), b_layout(800), b_clear(800), b_enter(800), b_pick_up(800)],  # Tryb 28
+            29: [b_stop(0), z_1(1500), b_layout(200), b_clear(200), b_enter(800), b_pick_up(800)],  # Tryb 29
+            30: [b_stop(0), z_1(1500), b_layout(800), b_clear(300), b_enter(800), b_pick_up(800)],  # Tryb 30
+            31: [b_stop(0), z_1(1500), b_layout(300), b_clear(300), b_enter(800), b_pick_up(800)],  # Tryb 31
+            32: [b_stop(0), z_1(1500), b_layout(300), b_clear(300), b_enter(300), b_pick_up(800)],  # Tryb 32
+            33: [b_stop(0), z_1(1500), b_layout(300), b_clear(300), b_enter(300), b_pick_up(300)],  # Tryb 33
+            34: [b_stop(0), z_1(800), b_layout(800), b_clear(0), b_enter(800), b_pick_up(800)],  # Tryb 34
+            35: [b_stop(0), z_1(800), b_layout(0), b_clear(0), b_enter(800), b_pick_up(800)],  # Tryb 35
+            36: [b_stop(0), z_1(800), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],  # Tryb 36
+            37: [b_stop(0), z_1(800), b_layout(0), b_clear(0), b_enter(800), b_pick_up(0)],  # Tryb 37
+            38: [b_stop(0), z_1(0), b_layout(800), b_clear(0), b_enter(800), b_pick_up(800)],  # Tryb 38
+            39: [b_stop(0), z_1(0), b_layout(800), b_clear(0), b_enter(800), b_pick_up(0)],  # Tryb 39
+            40: [b_stop(0), z_1(0), b_layout(800), b_clear(0), b_enter(0), b_pick_up(800)],  # Tryb 40
+            41: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(800), b_pick_up(800)],  # Tryb 41
+            42: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(800), b_pick_up(0)],  # Tryb 42
+            43: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],  # Tryb 43
+            44: [b_stop(0), z_1(700), b_layout(0), b_clear(0), b_enter(700), b_pick_up(700)],  # Tryb 44
+            45: [b_stop(0), z_1(700), b_layout(0), b_clear(0), b_enter(0), b_pick_up(700)],  # Tryb 45
+            46: [b_stop(0), z_1(700), b_layout(0), b_clear(0), b_enter(700), b_pick_up(0)],  # Tryb 46
+            47: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(700), b_pick_up(700)],  # Tryb 47
+            48: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(700), b_pick_up(0)],  # Tryb 48
+            49: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(700)],  # Tryb 49
+            50: [b_stop(0), z_1(600), b_layout(0), b_clear(0), b_enter(600), b_pick_up(600)],  # Tryb 50
+            51: [b_stop(0), z_1(600), b_layout(0), b_clear(0), b_enter(0), b_pick_up(600)],  # Tryb 51
+            52: [b_stop(0), z_1(600), b_layout(0), b_clear(0), b_enter(600), b_pick_up(0)],  # Tryb 52
+            53: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(600), b_pick_up(600)],  # Tryb 53
+            54: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(600), b_pick_up(0)],  # Tryb 54
+            55: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(600)],  # Tryb 55
+
         }
 
         if self.__full_layout_mode in list_full_layout_modes.keys():

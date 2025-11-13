@@ -99,6 +99,36 @@ Program oferuje następujące tryby i modyfikacje gry:
 | 25    | Stop(0)   Korekta(0)   C(0)   Enter(500)  Edycja_wyniku(0)    Podnies(0)    | 500                 |
 | 26    | Stop(0)   Korekta(0)   C(0)   Enter(0)    Edycja_wyniku(500)  Podnies(0)    | 500                 |
 | 27    | Stop(0)   Korekta(0)   C(0)   Enter(0)    Edycja_wyniku(0)    Podnies(500)  | 500                 |
+| 28    | Stop(800) Edycja_wyniku_1(1500) Korekta(800) C(800) Enter(800) Podnies(800) | 5500                |
+| 29    | Stop(0)   Edycja_wyniku_1(1500) Korekta(200) C(200) Enter(800) Podnies(800) | 3500                |
+| 30    | Stop(0)   Edycja_wyniku_1(1500) Korekta(800) C(300) Enter(800) Podnies(800) | 4200                |
+| 31    | Stop(0)   Edycja_wyniku_1(1500) Korekta(300) C(300) Enter(800) Podnies(800) | 3700                |
+| 32    | Stop(0)   Edycja_wyniku_1(1500) Korekta(300) C(300) Enter(300) Podnies(800) | 3200                |
+| 33    | Stop(0)   Edycja_wyniku_1(1500) Korekta(300) C(300) Enter(300) Podnies(300) | 2700                |
+| 34    | Stop(0)   Edycja_wyniku_1(800)  Korekta(800) C(0)   Enter(800) Podnies(800) | 3200                |
+| 35    | Stop(0)   Edycja_wyniku_1(800)  Korekta(0)   C(0)   Enter(800) Podnies(800) | 2400                |
+| 36    | Stop(0)   Edycja_wyniku_1(800)  Korekta(0)   C(0)   Enter(0)   Podnies(800) | 1600                |
+| 37    | Stop(0)   Edycja_wyniku_1(800)  Korekta(0)   C(0)   Enter(800) Podnies(0)   | 1600                |
+| 38    | Stop(0)   Edycja_wyniku_1(0)    Korekta(800) C(0)   Enter(800) Podnies(800) | 2400                |
+| 39    | Stop(0)   Edycja_wyniku_1(0)    Korekta(800) C(0)   Enter(800) Podnies(0)   | 1600                |
+| 40    | Stop(0)   Edycja_wyniku_1(0)    Korekta(800) C(0)   Enter(0)   Podnies(800) | 1600                |
+| 41    | Stop(0)   Edycja_wyniku_1(0)    Korekta(0)   C(0)   Enter(800) Podnies(800) | 1600                |
+| 42    | Stop(0)   Edycja_wyniku_1(0)    Korekta(0)   C(0)   Enter(800) Podnies(0)   | 1600                |
+| 43    | Stop(0)   Edycja_wyniku_1(0)    Korekta(0)   C(0)   Enter(0)   Podnies(800) | 800                 |
+| 44    | Stop(0)   Edycja_wyniku_1(700)  Korekta(0)   C(0)   Enter(700) Podnies(700) | 2100                |
+| 45    | Stop(0)   Edycja_wyniku_1(700)  Korekta(0)   C(0)   Enter(0)   Podnies(700) | 1400                |
+| 46    | Stop(0)   Edycja_wyniku_1(700)  Korekta(0)   C(0)   Enter(700) Podnies(0)   | 1400                |
+| 47    | Stop(0)   Edycja_wyniku_1(0)    Korekta(0)   C(0)   Enter(700) Podnies(700) | 1400                |
+| 48    | Stop(0)   Edycja_wyniku_1(0)    Korekta(0)   C(0)   Enter(700) Podnies(0)   | 700                 |
+| 49    | Stop(0)   Edycja_wyniku_1(0)    Korekta(0)   C(0)   Enter(0)   Podnies(700) | 700                 |
+| 50    | Stop(0)   Edycja_wyniku_1(600)  Korekta(0)   C(0)   Enter(600) Podnies(600) | 1800                |
+| 51    | Stop(0)   Edycja_wyniku_1(600)  Korekta(0)   C(0)   Enter(0)   Podnies(600) | 1200                |
+| 52    | Stop(0)   Edycja_wyniku_1(600)  Korekta(0)   C(0)   Enter(600) Podnies(0)   | 1200                |
+| 53    | Stop(0)   Edycja_wyniku_1(0)    Korekta(0)   C(0)   Enter(600) Podnies(600) | 1200                |
+| 54    | Stop(0)   Edycja_wyniku_1(0)    Korekta(0)   C(0)   Enter(600) Podnies(0)   | 600                 |
+| 55    | Stop(0)   Edycja_wyniku_1(0)    Korekta(0)   C(0)   Enter(0)   Podnies(600) | 600                 |
+
+
 
 
 
@@ -109,8 +139,9 @@ Program oferuje następujące tryby i modyfikacje gry:
 
 | Version          | Release Date      | Commits | Changes                                                                    |
 |------------------|-------------------|---------|----------------------------------------------------------------------------|
-| **v1.1.4.0**     | 🚧 In the future  |         |                                                                            |
-| **v1.1.3.0**     | 🚧 In development |         |                                                                            |
+| **v1.1.5.0**     | 🚧 In the future  |         |                                                                            |
+| **v1.1.4.0**     | 🚧 In development |         |                                                                            |
+| **v1.1.3.0**     | 2025-11-13        | 104     | Add more new modes                                                         |
 | **v1.1.2.0**     | 2025-11-13        | 103     | Add more new modes                                                         |
 | **v1.1.0.1**     | 2025-11-06        | 98      | Correct func to set full layout                                            |
 | **v1.1.0.0**     | 2025-11-04        | 96      | Change method to recv/send message to lane                                 |

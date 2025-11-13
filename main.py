@@ -21,7 +21,7 @@ from log_management import LogManagement
 
 APP_NAME = "NTC"
 EXE_NAME = "TK"
-APP_VERSION = "1.1.2"
+APP_VERSION = "1.1.3"
 
 
 class WorkerThread(QThread):
@@ -208,6 +208,35 @@ class GUI(QDialog):
                     ["mode=25", "Tryb 25: Stop(0)   Korekta(0)   C(0)   Enter(500)  Z(0)    Podnies(0)    =  500"],
                     ["mode=26", "Tryb 26: Stop(0)   Korekta(0)   C(0)   Enter(0)    Z(500)  Podnies(0)    =  500"],
                     ["mode=27", "Tryb 27: Stop(0)   Korekta(0)   C(0)   Enter(0)    Z(0)    Podnies(500)  =  500"],
+
+                    ["mode=28", "Tryb 28: Stop(800) Z_1(1500) Korekta(800) C(800) Enter(800) Podnies(800) =  5500"],
+                    ["mode=29", "Tryb 29: Stop(0)   Z_1(1500) Korekta(200) C(200) Enter(800) Podnies(800) =  3500"],
+                    ["mode=30", "Tryb 30: Stop(0)   Z_1(1500) Korekta(800) C(300) Enter(800) Podnies(800) =  4200"],
+                    ["mode=31", "Tryb 31: Stop(0)   Z_1(1500) Korekta(300) C(300) Enter(800) Podnies(800) =  3700"],
+                    ["mode=32", "Tryb 32: Stop(0)   Z_1(1500) Korekta(300) C(300) Enter(300) Podnies(800) =  3200"],
+                    ["mode=33", "Tryb 33: Stop(0)   Z_1(1500) Korekta(300) C(300) Enter(300) Podnies(300) =  2700"],
+                    ["mode=34", "Tryb 34: Stop(0)   Z_1(800)  Korekta(800) C(0)   Enter(800) Podnies(800) =  3200"],
+                    ["mode=35", "Tryb 35: Stop(0)   Z_1(800)  Korekta(0)   C(0)   Enter(800) Podnies(800) =  2400"],
+                    ["mode=36", "Tryb 36: Stop(0)   Z_1(800)  Korekta(0)   C(0)   Enter(0)   Podnies(800) =  1600"],
+                    ["mode=37", "Tryb 37: Stop(0)   Z_1(800)  Korekta(0)   C(0)   Enter(800) Podnies(0)   =  1600"],
+                    ["mode=38", "Tryb 38: Stop(0)   Z_1(0)    Korekta(800) C(0)   Enter(800) Podnies(800) =  2400"],
+                    ["mode=39", "Tryb 39: Stop(0)   Z_1(0)    Korekta(800) C(0)   Enter(800) Podnies(0)   =  1600"],
+                    ["mode=40", "Tryb 40: Stop(0)   Z_1(0)    Korekta(800) C(0)   Enter(0)   Podnies(800) =  1600"],
+                    ["mode=41", "Tryb 41: Stop(0)   Z_1(0)    Korekta(0)   C(0)   Enter(800) Podnies(800) =  1600"],
+                    ["mode=42", "Tryb 42: Stop(0)   Z_1(0)    Korekta(0)   C(0)   Enter(800) Podnies(0)   =  1600"],
+                    ["mode=43", "Tryb 43: Stop(0)   Z_1(0)    Korekta(0)   C(0)   Enter(0)   Podnies(800) =  800"],
+                    ["mode=44", "Tryb 44: Stop(0)   Z_1(700)  Korekta(0)   C(0)   Enter(700) Podnies(700) =  2100"],
+                    ["mode=45", "Tryb 45: Stop(0)   Z_1(700)  Korekta(0)   C(0)   Enter(0)   Podnies(700) =  1400"],
+                    ["mode=46", "Tryb 46: Stop(0)   Z_1(700)  Korekta(0)   C(0)   Enter(700) Podnies(0)   =  1400"],
+                    ["mode=47", "Tryb 47: Stop(0)   Z_1(0)    Korekta(0)   C(0)   Enter(700) Podnies(700) =  1400"],
+                    ["mode=48", "Tryb 48: Stop(0)   Z_1(0)    Korekta(0)   C(0)   Enter(700) Podnies(0)   =  700"],
+                    ["mode=49", "Tryb 49: Stop(0)   Z_1(0)    Korekta(0)   C(0)   Enter(0)   Podnies(700) =  700"],
+                    ["mode=50", "Tryb 50: Stop(0)   Z_1(600)  Korekta(0)   C(0)   Enter(600) Podnies(600) =  1800"],
+                    ["mode=51", "Tryb 51: Stop(0)   Z_1(600)  Korekta(0)   C(0)   Enter(0)   Podnies(600) =  1200"],
+                    ["mode=52", "Tryb 52: Stop(0)   Z_1(600)  Korekta(0)   C(0)   Enter(600) Podnies(0)   =  1200"],
+                    ["mode=53", "Tryb 53: Stop(0)   Z_1(0)    Korekta(0)   C(0)   Enter(600) Podnies(600) =  1200"],
+                    ["mode=54", "Tryb 54: Stop(0)   Z_1(0)    Korekta(0)   C(0)   Enter(600) Podnies(0)   =  600"],
+                    ["mode=55", "Tryb 55: Stop(0)   Z_1(0)    Korekta(0)   C(0)   Enter(0)   Podnies(600) =  600"],
                 ],
                 "mode="
             ]
