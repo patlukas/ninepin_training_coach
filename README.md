@@ -111,7 +111,7 @@ Program oferuje następujące tryby i modyfikacje gry:
 |------------------|-------------------|---------|----------------------------------------------------------------------------|
 | **v1.1.4.0**     | 🚧 In the future  |         |                                                                            |
 | **v1.1.3.0**     | 🚧 In development |         |                                                                            |
-| **v1.1.2.0**     | 2025-11-13        | 101     | Add more new modes                                                         |
+| **v1.1.2.0**     | 2025-11-13        | 103     | Add more new modes                                                         |
 | **v1.1.0.1**     | 2025-11-06        | 98      | Correct func to set full layout                                            |
 | **v1.1.0.0**     | 2025-11-04        | 96      | Change method to recv/send message to lane                                 |
 | **v1.0.12.1**    | 2025-10-21        | 90      | Add modes form v1.0.12 to menu bar                                         |
