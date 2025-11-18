@@ -252,63 +252,74 @@ class _LaneCommunicationManager:
         )
 
         list_full_layout_modes = {
-            1: [b_stop(), b_layout(), b_clear(), b_enter(), z(1500), b_pick_up()],  # A,5000
-            2: [b_stop(), b_layout(300), b_clear(300), b_enter(), z(1500), b_pick_up(300)],  # B,3800
-            3: [b_stop(0), b_layout(300), b_clear(300), b_enter(), z(1500), b_pick_up(300)],  # C,3100
-            4: [b_stop(0), b_layout(200), b_clear(200), b_enter(), z(1000), b_pick_up(200)],  # D,2300
-            5: [b_stop(0), b_layout(200), b_clear(200), b_enter(1000), z(1000), b_pick_up(200)],  # E,2600
-            6: [b_stop(0), b_layout(200), b_clear(200), b_enter(1000), z(200), b_pick_up(200)],  # F,1800
-            7: [b_stop(0), b_layout(200), b_clear(200), b_enter(200), z(1000), b_pick_up(200)],  # G,1800
-            8: [b_stop(0), b_layout(200), b_clear(200), b_enter(200), z(200), b_pick_up(1000)],  # H,1800
-            9: [b_stop(0), b_layout(50), b_clear(50), b_enter(1000), z(1000), b_pick_up(50)],  # I,2150
-            10: [b_stop(0), b_layout(50), b_clear(50), b_enter(1000), z(50), b_pick_up(50)],  # J,1200
-            11: [b_stop(0), b_layout(50), b_clear(50), b_enter(50), z(1000), b_pick_up(50)],  # K,1200
-            12: [b_stop(0), b_layout(50), b_clear(50), b_enter(50), z(50), b_pick_up(1000)],  # L,1200
-            13: [b_stop(0), b_layout(0), b_clear(0), b_enter(1000), z(0), b_pick_up(0)],  #
-            14: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(1000), b_pick_up(0)],  #
-            15: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(0), b_pick_up(1000)],  #
-            16: [b_stop(0), b_layout(0), b_clear(0), b_enter(800), z(0), b_pick_up(0)],  #
-            17: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(800), b_pick_up(0)],  #
-            18: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(0), b_pick_up(800)],  #
-            19: [b_stop(0), b_layout(0), b_clear(0), b_enter(700), z(0), b_pick_up(0)],  #
-            20: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(700), b_pick_up(0)],  #
-            21: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(0), b_pick_up(700)],  #
-            22: [b_stop(0), b_layout(0), b_clear(0), b_enter(600), z(0), b_pick_up(0)],  #
-            23: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(600), b_pick_up(0)],  #
-            24: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(0), b_pick_up(600)],  #
-            25: [b_stop(0), b_layout(0), b_clear(0), b_enter(500), z(0), b_pick_up(0)],  #
-            26: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(500), b_pick_up(0)],  #
-            27: [b_stop(0), b_layout(0), b_clear(0), b_enter(0), z(0), b_pick_up(500)],  #
-
-            28: [b_stop(800), z_1(1500), b_layout(800), b_clear(800), b_enter(800), b_pick_up(800)],  # Tryb 28
-            29: [b_stop(0), z_1(1500), b_layout(200), b_clear(200), b_enter(800), b_pick_up(800)],  # Tryb 29
-            30: [b_stop(0), z_1(1500), b_layout(800), b_clear(300), b_enter(800), b_pick_up(800)],  # Tryb 30
-            31: [b_stop(0), z_1(1500), b_layout(300), b_clear(300), b_enter(800), b_pick_up(800)],  # Tryb 31
-            32: [b_stop(0), z_1(1500), b_layout(300), b_clear(300), b_enter(300), b_pick_up(800)],  # Tryb 32
-            33: [b_stop(0), z_1(1500), b_layout(300), b_clear(300), b_enter(300), b_pick_up(300)],  # Tryb 33
-            34: [b_stop(0), z_1(800), b_layout(800), b_clear(0), b_enter(800), b_pick_up(800)],  # Tryb 34
-            35: [b_stop(0), z_1(800), b_layout(0), b_clear(0), b_enter(800), b_pick_up(800)],  # Tryb 35
-            36: [b_stop(0), z_1(800), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],  # Tryb 36
-            37: [b_stop(0), z_1(800), b_layout(0), b_clear(0), b_enter(800), b_pick_up(0)],  # Tryb 37
-            38: [b_stop(0), z_1(0), b_layout(800), b_clear(0), b_enter(800), b_pick_up(800)],  # Tryb 38
-            39: [b_stop(0), z_1(0), b_layout(800), b_clear(0), b_enter(800), b_pick_up(0)],  # Tryb 39
-            40: [b_stop(0), z_1(0), b_layout(800), b_clear(0), b_enter(0), b_pick_up(800)],  # Tryb 40
-            41: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(800), b_pick_up(800)],  # Tryb 41
-            42: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(800), b_pick_up(0)],  # Tryb 42
-            43: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],  # Tryb 43
-            44: [b_stop(0), z_1(700), b_layout(0), b_clear(0), b_enter(700), b_pick_up(700)],  # Tryb 44
-            45: [b_stop(0), z_1(700), b_layout(0), b_clear(0), b_enter(0), b_pick_up(700)],  # Tryb 45
-            46: [b_stop(0), z_1(700), b_layout(0), b_clear(0), b_enter(700), b_pick_up(0)],  # Tryb 46
-            47: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(700), b_pick_up(700)],  # Tryb 47
-            48: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(700), b_pick_up(0)],  # Tryb 48
-            49: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(700)],  # Tryb 49
-            50: [b_stop(0), z_1(600), b_layout(0), b_clear(0), b_enter(600), b_pick_up(600)],  # Tryb 50
-            51: [b_stop(0), z_1(600), b_layout(0), b_clear(0), b_enter(0), b_pick_up(600)],  # Tryb 51
-            52: [b_stop(0), z_1(600), b_layout(0), b_clear(0), b_enter(600), b_pick_up(0)],  # Tryb 52
-            53: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(600), b_pick_up(600)],  # Tryb 53
-            54: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(600), b_pick_up(0)],  # Tryb 54
-            55: [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(600)],  # Tryb 55
-
+            0: [
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],
+            ],
+            1: [
+                [b_pick_up(0), b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],
+            ], 
+            2: [
+                [b_pick_up(0), b_stop(200), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],
+            ],
+            3: [
+                [b_pick_up(0), b_stop(400), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],
+            ],
+            4: [
+                [b_pick_up(0), b_stop(600), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],
+            ],
+            5: [
+                [b_pick_up(0), b_stop(800), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(800)],
+            ],
+            6: [
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(750)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(750)],
+            ],  
+            7: [
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(700)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(700)],
+            ],  
+            8: [
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(650)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(650)],
+            ],  
+            9: [
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(600)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(600)],
+            ],  
+            10: [
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(550)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(550)],
+            ],  
+            11: [
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(500)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(500)],
+            ],  
+            12: [
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(450)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(450)],
+            ],  
+            13: [
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(400)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(400)],
+            ],  
+            14: [
+                [b_stop(0), z_1(0), b_layout(0), b_clear(-2), b_enter(0), b_pick_up(800)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(-2), b_enter(0), b_pick_up(800)],
+            ],  
+            15: [
+                [b_stop(0), z_1(0), b_layout(0), b_clear(-2), b_enter(-2), b_pick_up(800)],
+                [b_stop(0), z_1(0), b_layout(0), b_clear(-2), b_enter(-2), b_pick_up(800)],
+            ],  
+            16: [
+                [b_stop(0), z_1(-2), b_layout(-2), b_clear(-2), b_enter(-2), b_pick_up(800)],
+                [b_stop(0), z_1(-2), b_layout(-2), b_clear(-2), b_enter(-2), b_pick_up(800)],
+            ],  
         }
 
         if self.__full_layout_mode in list_full_layout_modes.keys():
@@ -316,7 +327,10 @@ class _LaneCommunicationManager:
         else:
             mode = list_full_layout_modes[1]
 
-        return mode, []
+        if fallen_pins == b"000":
+            return mode[0], []
+
+        return mode[1], []
 
     @staticmethod
     def __count_beaten_pins(layout):
