@@ -198,9 +198,15 @@ class ComManager:
             if msg_lane_index == -1:
                 return 0, b""
 
-            sent_bytes = self.__list_to_send[msg_lane_index]["messages"][0]["message"]
+            sent_bytes = b""
+            while True:
+                sent_bytes += self.__list_to_send[msg_lane_index]["messages"][0]["message"]
+                self.__list_to_send[msg_lane_index]["messages"].pop(0)
+                if len(self.__list_to_send[msg_lane_index]["messages"]) == 0:
+                    break
+                if self.__list_to_send[msg_lane_index]["messages"][0]["time_wait"] != -2:
+                    break
             number_sent_bytes = self.__com_port.write(sent_bytes)
-            self.__list_to_send[msg_lane_index]["messages"].pop(0)
             self.__list_to_send[msg_lane_index]["time_last_send"] = time_now
 
             if len(sent_bytes) != number_sent_bytes:
@@ -229,6 +235,7 @@ class ComManager:
         while b"\r" in self.__waiting_bytes_to_send:
             index_first_special_sign = self.__waiting_bytes_to_send.index(b"\r") + 1
             msg = self.__waiting_bytes_to_send[:index_first_special_sign]
+            self.__add_log(4, "MSG_SEND", "{}".format(msg))
             self.__waiting_bytes_to_send = self.__waiting_bytes_to_send[index_first_special_sign:]
             list_front_msg, list_end_msg = self.__analyze_special_msg_to_send(msg)
             if len(list_front_msg) + len(list_end_msg) == 0:
@@ -262,6 +269,7 @@ class ComManager:
         while b"\r" in self.__waiting_bytes_to_recv:
             index_first_special_sign = self.__waiting_bytes_to_recv.index(b"\r") + 1
             msg = self.__waiting_bytes_to_recv[:index_first_special_sign]
+            self.__add_log(4, "MSG_RECV", "{}".format(msg))
             self.__waiting_bytes_to_recv = self.__waiting_bytes_to_recv[index_first_special_sign:]
             list_front_msg_to_send, list_end_msg_to_send = self.__analyze_special_msg_to_recv(msg)
             self.__list_to_recv.append(msg)
