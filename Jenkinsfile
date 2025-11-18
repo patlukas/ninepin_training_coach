@@ -74,7 +74,7 @@ pipeline {
         stage('Build EXE') {
             steps {
                 bat '''
-                "%PYTHON34%\\Scripts\\pyinstaller.exe" --distpath . --onefile --icon=icon/icon.ico --noconsole --name "%EXE_NAME%" main.py
+                "%PYTHON34%\\Scripts\\pyinstaller.exe" --clean --distpath . --onefile --icon=icon/icon.ico --noconsole --name "%EXE_NAME%" main.py
                 '''
             }
         }
