@@ -21,7 +21,7 @@ from log_management import LogManagement
 
 APP_NAME = "NTC"
 EXE_NAME = "TK"
-APP_VERSION = "1.1.3"
+APP_VERSION = "1.1.4"
 
 
 class WorkerThread(QThread):
