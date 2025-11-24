@@ -249,6 +249,17 @@ class ComManager:
             except ValueError as e:
                 self.__add_log(10, "NEW_1", "Error: {}".format(e))
                 return
+        for b_index in range(len(self.__list_to_send)):
+            seen_msg = set()
+            i = 0
+            while i < len(self.__list_to_send[b_index]["messages"]):
+                m = self.__list_to_send[b_index]["messages"][i]["message"]
+                if m in seen_msg:
+                    self.__add_log(5, "COM_SEND_inQUEUE", "Wiadomość '{}' już jest w kolejce, więc duplikat zostaje usunięty".format(m))
+                    del self.__list_to_send[b_index]["messages"][i]
+                else:
+                    seen_msg.add(m)
+                    i += 1
 
     def __analyze_special_msg_to_send(self, msg):
         # TODO: Add more logs
