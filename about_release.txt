@@ -1,1 +1,2 @@
-Add more new modes
+Fix bugs (#49 #50)
+Add option to select structure "IG" message

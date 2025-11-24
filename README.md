@@ -78,8 +78,9 @@ Program oferuje następujące tryby i modyfikacje gry:
 
 | Version          | Release Date      | Commits | Changes                                                                    |
 |------------------|-------------------|---------|----------------------------------------------------------------------------|
-| **v1.1.6.0**     | 🚧 In the future  |         |                                                                            |
-| **v1.1.5.0**     | 🚧 In development |         |                                                                            |
+| **v1.1.7.0**     | 🚧 In the future  |         |                                                                            |
+| **v1.1.6.0**     | 🚧 In development |         |                                                                            |
+| **v1.1.5.0**     | 2025-11-24        | 113     | Fix bugs and add option to select structure "IG" message                   |
 | **v1.1.4.0**     | 2025-11-18        | 108     | New modes and possibility to send many messages in one time                |
 | **v1.1.3.0**     | 2025-11-13        | 104     | Add more new modes                                                         |
 | **v1.1.2.0**     | 2025-11-13        | 103     | Add more new modes                                                         |
