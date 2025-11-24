@@ -207,7 +207,7 @@ class _LaneCommunicationManager:
                                      number_of_x, time_to_end, fallen_pins, options):
         time_to_end = self.__get_time(time_to_end)
 
-        b_click = lambda msg, priority=3, time_wait=-1: self.__on_get_message(self.__message_head + msg, priority, time_wait)
+        b_click = lambda msg, priority=3, time_wait=-1: self.__on_get_message(self.__message_head + msg, priority, time_wait, True)
 
         b_stop = lambda time_wait=-1, priority=9: b_click(b"T40", priority, time_wait)
         b_layout = lambda time_wait=-1, priority=5: b_click(b"T16", priority, time_wait)
@@ -228,7 +228,8 @@ class _LaneCommunicationManager:
             fallen_pins +
             options,
             priority,
-            time_wait
+            time_wait,
+            True
         )
 
         pins = self.__count_beaten_pins(next_layout)
@@ -248,7 +249,8 @@ class _LaneCommunicationManager:
             fallen_pins +
             options,
             priority,
-            time_wait
+            time_wait,
+            True
         )
 
         list_full_layout_modes = {
@@ -303,11 +305,11 @@ class _LaneCommunicationManager:
             12: [
                 [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(450)],
                 [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(450)],
-            ],  
+            ],  # b_pick_up jest za szybko
             13: [
                 [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(400)],
                 [b_stop(0), z_1(0), b_layout(0), b_clear(0), b_enter(0), b_pick_up(400)],
-            ],  
+            ],  # b_pick_up jest za szybko
             14: [
                 [b_stop(0), z_1(0), b_layout(0), b_clear(-2), b_enter(0), b_pick_up(800)],
                 [b_stop(0), z_1(0), b_layout(0), b_clear(-2), b_enter(0), b_pick_up(800)],
@@ -315,11 +317,11 @@ class _LaneCommunicationManager:
             15: [
                 [b_stop(0), z_1(0), b_layout(0), b_clear(-2), b_enter(-2), b_pick_up(800)],
                 [b_stop(0), z_1(0), b_layout(0), b_clear(-2), b_enter(-2), b_pick_up(800)],
-            ],  
+            ],  # wiadomość zwrotna pokrywa się
             16: [
                 [b_stop(0), z_1(-2), b_layout(-2), b_clear(-2), b_enter(-2), b_pick_up(800)],
                 [b_stop(0), z_1(-2), b_layout(-2), b_clear(-2), b_enter(-2), b_pick_up(800)],
-            ],  
+            ],  # nie działa
         }
 
         if self.__full_layout_mode in list_full_layout_modes.keys():

@@ -259,8 +259,9 @@ class GUI(QDialog):
         self.__log_management.add_log(priority, "ADD MSG", message)
         self.__com_manager.add_bytes_to_send(message + self.__calculate_control_sum(message) + b"\r")
 
-    def __on_get_message_to_send(self, message, priority=5, time_wait=-1):
-        self.__log_management.add_log(5, "GET MSG", message)
+    def __on_get_message_to_send(self, message, priority=5, time_wait=-1, disable_log=False):
+        if not disable_log:
+            self.__log_management.add_log(5, "GET MSG", message)
         msg = message + self.__calculate_control_sum(message) + b"\r"
         return {"message": msg, "time_wait": time_wait, "priority": priority}
 
