@@ -92,6 +92,10 @@ class _LaneCommunicationManager:
         self.__add_removed_pins = "no"
         self.__full_layout_mode = 1
         self.__time_break_after_recv = 0.3
+        self.__bit1 = b"0"
+        self.__bit2 = b"0"
+        self.__bit3 = b"0"
+        self.__bit4 = b"0"
 
     def trial(self):
         self.__on_send_message(self.__message_head + b"E1")
@@ -108,7 +112,7 @@ class _LaneCommunicationManager:
         self.__run = True
 
         self.__on_send_message(self.__message_head + b"E1")
-        self.__on_send_message(self.__message_head + b"IG0000633E70000000000")
+        self.__on_send_message(self.__message_head + b"IG0000633E7000000" + self.__bit1 + self.__bit2 + self.__bit3 + self.__bit4)
 
     def stop(self):
         self.__on_send_message(self.__message_head + b"E0")
@@ -422,6 +426,14 @@ class _LaneCommunicationManager:
             self.__add_removed_pins = name.split("=")[1]
         elif name.split("=")[0] == "time_wait":
             self.__time_break_after_recv = float(name.split("=")[1])
+        elif name.split("=")[0] == "bit1":
+            self.__bit1 = name.split("=")[1].encode()
+        elif name.split("=")[0] == "bit2":
+            self.__bit2 = name.split("=")[1].encode()
+        elif name.split("=")[0] == "bit3":
+            self.__bit3 = name.split("=")[1].encode()
+        elif name.split("=")[0] == "bit4":
+            self.__bit4 = name.split("=")[1].encode()
 
 
 class LaneController:
